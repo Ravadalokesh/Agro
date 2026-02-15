@@ -1375,52 +1375,52 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
 
     const DELIVERY_CHARGE = 50;
 
-    // 1️⃣ Get all orders
+    // ===============================
+    // 1️⃣ DELIVERY FROM ALL ORDERS
+    // ===============================
     const orders = await Order.find();
 
     let totalDeliveryRevenue = 0;
-    let totalItemsSold = 0;
 
     for (const order of orders) {
       for (const item of order.products) {
         const qty = Number(item.quantity) || 1;
-
-        totalItemsSold += qty;
-
-        // ₹50 per item
         totalDeliveryRevenue += qty * DELIVERY_CHARGE;
       }
     }
 
-    // 2️⃣ Get ONLY AgroMart (admin) products
+    // ===============================
+    // 2️⃣ ADMIN PRODUCTS ONLY
+    // ===============================
     const adminProducts = await Product.find({ isAgroMart: true });
 
     let adminProductEarnings = 0;
     let adminProductsSold = 0;
 
-    adminProducts.forEach((p) => {
-      adminProductEarnings += p.earnings || 0;
-      adminProductsSold += p.sold || 0;
+    adminProducts.forEach((product) => {
+      adminProductEarnings += product.earnings || 0;
+      adminProductsSold += product.sold || 0;
     });
 
-    // 3️⃣ Final admin earnings
+    // ===============================
+    // 3️⃣ FINAL ADMIN EARNINGS
+    // ===============================
     const totalAdminEarnings =
       adminProductEarnings + totalDeliveryRevenue;
 
     res.json({
-      adminProductEarnings,
-      totalDeliveryRevenue,
-      totalAdminEarnings,
-      totalItemsSold,
-      adminProductsSold,
+      adminProductEarnings,      // Only admin products
+      totalDeliveryRevenue,      // All products delivery
+      totalAdminEarnings,        // Final
+      totalItemsSold: adminProductsSold,  // Only admin products sold
       totalAdminProducts: adminProducts.length,
       deliveryChargePerItem: DELIVERY_CHARGE,
     });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
