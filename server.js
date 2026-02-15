@@ -309,7 +309,10 @@ app.post("/api/forgot-password", async (req, res) => {
 
     // In production, send email with reset link
     // For development, return the token
-    const baseUrl = (process.env.APP_BASE_URL || "").trim();
+    const baseUrl = (process.env.APP_BASE_URL || "")
+      .replace(/\r?\n/g, "")  // remove newlines
+      .trim();                // remove spaces
+    
     const resetUrl = `${baseUrl}/reset-password.html?token=${resetToken}`;
 
     res.json({
