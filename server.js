@@ -1018,32 +1018,36 @@ app.post("/api/orders", requireAuth, async (req, res) => {
       return res.status(400).json({ error: "No products found in order" });
     }
 
-    // Helper to validate MongoDB ObjectIds
     const isValidObjectId = (id) =>
       mongoose.Types.ObjectId.isValid(id) && String(id).length === 24;
 
-    // Pre-validate stock for all DB-backed products so users
-    // cannot purchase more than available stock.
     const dbUpdates = [];
+
+    // ================= STOCK VALIDATION =================
     for (const item of rawItems) {
       const productId = item.productId != null ? String(item.productId) : "";
       const qty = Number(item.quantity);
+
       if (!Number.isInteger(qty) || qty <= 0) {
         return res.status(400).json({ error: "Invalid quantity in order" });
       }
 
       if (productId && isValidObjectId(productId)) {
         const product = await Product.findById(productId);
+
         if (!product || !product.approved) {
-          return res
-            .status(400)
-            .json({ error: "One or more products are unavailable" });
+          return res.status(400).json({
+            error: "One or more products are unavailable",
+          });
         }
+
         if (
           product.sellerId &&
           product.sellerId.toString() === req.session.userId
         ) {
-          return res.status(400).json({ error: "You cannot buy your own product" });
+          return res
+            .status(400)
+            .json({ error: "You cannot buy your own product" });
         }
 
         const available = product.stock || 0;
@@ -1058,47 +1062,106 @@ app.post("/api/orders", requireAuth, async (req, res) => {
         dbUpdates.push({
           product,
           qty,
-          price: Number(item.price) || product.price || 0,
         });
       }
     }
 
-    // Normalize items stored on the order
-    const products = rawItems.map((item) => ({
-      productId: String(item.productId != null ? item.productId : ""),
-      name: item.name,
-      price: Number(item.price) || 0,
-      quantity: Number(item.quantity) || 1,
-    }));
+    // ================= EARNINGS LOGIC =================
+
+    const DELIVERY_CHARGE = 50; // fixed per order
+
+    let adminProductEarnings = 0;
+    let sellerCommissionEarnings = 0;
+    const sellerEarningsMap = {};
+
+    for (const entry of dbUpdates) {
+      const product = entry.product;
+      const qty = entry.qty;
+      const totalPrice = product.price * qty;
+
+      // Reduce stock
+      product.stock -= qty;
+
+      // Increase sold count
+      product.sold = (product.sold || 0) + qty;
+
+      await product.save();
+
+      // Admin product
+      if (product.isAgroMart === true) {
+        adminProductEarnings += totalPrice;
+      }
+
+      // Seller product
+      else if (product.sellerId) {
+        const sellerId = product.sellerId.toString();
+
+        if (!sellerEarningsMap[sellerId]) {
+          sellerEarningsMap[sellerId] = 0;
+        }
+
+        sellerEarningsMap[sellerId] += totalPrice;
+
+        // Admin gets ₹50 commission per seller product (not per quantity)
+        sellerCommissionEarnings += 50;
+      }
+    }
+
+    // Update Seller earnings
+    for (const sellerId in sellerEarningsMap) {
+      await User.findByIdAndUpdate(sellerId, {
+        $inc: { earnings: sellerEarningsMap[sellerId] },
+      });
+    }
+
+    // Update Admin earnings (delivery charge only once per order)
+    await User.updateOne(
+      { userType: "admin" },
+      {
+        $inc: {
+          earnings:
+            adminProductEarnings +
+            sellerCommissionEarnings +
+            DELIVERY_CHARGE,
+        },
+      }
+    );
+
+    // ================= ORDER TOTAL CALCULATION =================
+
+    const productsTotal = dbUpdates.reduce(
+      (sum, entry) => sum + entry.product.price * entry.qty,
+      0
+    );
+
+    const grandTotal = productsTotal + DELIVERY_CHARGE;
+
+    // ================= CREATE ORDER =================
 
     const order = new Order({
-      userId: req.session.userId,
-      products,
-      total: Number(req.body.total) || 0,
-      deliveryAddress: req.body.deliveryAddress || {},
-      paymentMethod: req.body.paymentMethod || "Cash on Delivery",
+      user: req.session.userId,
+      products: rawItems,
+      productTotal: productsTotal,
+      deliveryCharge: DELIVERY_CHARGE,
+      totalAmount: grandTotal,
+      status: "Placed",
+      createdAt: new Date(),
     });
 
     await order.save();
 
-    // Apply stock, sold, and earnings updates for DB-backed products
-    for (const { product, qty, price } of dbUpdates) {
-      product.sold += qty;
-      product.earnings += price * qty;
-      product.stock = Math.max(0, (product.stock || 0) - qty);
-      await product.save();
-    }
-
-    // Clear cart after successful order
-    user.cart = [];
-    await user.save();
-
-    res.json(order);
+    res.json({
+      success: true,
+      message: "Order placed successfully",
+      orderId: order._id,
+      productTotal: productsTotal,
+      deliveryCharge: DELIVERY_CHARGE,
+      totalAmount: grandTotal,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-// app.post("/api/orders", requireAuth, async (req, res) => {
+});// app.post("/api/orders", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
 
