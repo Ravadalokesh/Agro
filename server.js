@@ -383,7 +383,7 @@ app.get("/api/user", requireAuth, async (req, res) => {
     const user = await User.findById(req.session.userId)
       .select("-password")
       .lean();
-
+    
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
