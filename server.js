@@ -1169,40 +1169,49 @@ app.get("/api/orders", requireAuth, async (req, res) => {
 app.get("/api/seller/earnings", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
-    // Sellers see earnings for their own products.
-    // Admins see earnings for AgroMart products they manage.
-    if (user.userType !== "seller" && user.userType !== "admin") {
-      return res
-        .status(403)
-        .json({ error: "Only sellers or admins can view earnings" });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
     let products;
+
     if (user.userType === "admin") {
-      products = await Product.find({ isAgroMart: true });
-    } else {
+      // Only admin-owned AgroMart products
+      products = await Product.find({
+        $or: [
+          { isAgroMart: true },
+          { sellerId: req.session.userId }
+        ]
+      });
+    } else if (user.userType === "seller") {
       products = await Product.find({ sellerId: req.session.userId });
+    } else {
+      return res.status(403).json({
+        error: "Only sellers or admins can view earnings",
+      });
     }
+
     const totalEarnings = products.reduce(
       (sum, product) => sum + (product.earnings || 0),
-      0,
+      0
     );
+
     const totalSold = products.reduce(
       (sum, product) => sum + (product.sold || 0),
-      0,
+      0
     );
 
     res.json({
       totalEarnings,
       totalSold,
-      products: products.length,
+      totalProducts: products.length,
       productsList: products,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
 // Admin: Get all users
 app.get("/api/admin/users", requireAuth, async (req, res) => {
   try {
