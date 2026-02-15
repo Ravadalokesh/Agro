@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <title>Admin Dashboard - AgroMart</title>
     <link rel="icon" href="images/convertico-logo2.ico" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
     <link rel="stylesheet" href="styles/variables.css" />
     <link rel="stylesheet" href="styles/common.css" />
     <link rel="stylesheet" href="styles/header.css" />
@@ -16,8 +19,8 @@
         max-width: 1400px;
         margin: 2rem auto;
         padding: 0 2rem;
-        width:100%;
-        box-sizing:border-box;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .dashboard-header {
@@ -97,7 +100,7 @@
         font-size: 1.1rem;
         color: var(--text-dark);
         font-weight: 600;
-	word-break:break-word;
+        word-break: break-word;
       }
 
       .pending-products-list {
@@ -143,14 +146,14 @@
         font-weight: 700;
         color: var(--text-dark);
         margin-bottom: 0.5rem;
-	word-break:break-word;
+        word-break: break-word;
       }
 
       .product-seller {
         color: var(--text-light);
         font-size: 0.9rem;
         margin-bottom: 0.5rem;
-	word-break:break-word;
+        word-break: break-word;
       }
 
       .product-price {
@@ -230,20 +233,27 @@
       .users-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 1rem;
-        min-width:700px;
+        margin-top: 0;
+        min-width: 700px;
       }
-       .table-wrapper{
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-      }	
+      .table-wrapper {
+        margin-top: 1rem;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg-white);
+      }
 
       .users-table th,
       .users-table td {
         padding: 1rem;
         text-align: left;
         border-bottom: 1px solid var(--border);
+        white-space: nowrap;
       }
 
       .users-table th {
@@ -291,24 +301,24 @@
       .seller-stat strong {
         color: var(--primary-light);
       }
-      @media(max-width:1024px) {
-          .dashboard-container{
-          padding:0 1.25rem;
-          }
-          .dashboard-header{
-          padding:2.25rem 1.5 rem;
-          }
-          .dashboard-section{
-          padding:1.5rem;
-          }
-          .pending-product-card{
-          grid-template-columns:120px 1fr auto;
-          gap:1rem;
-          }
-          .product-image{
-          width:120px;
-          height:120px;
-          }
+      @media (max-width: 1024px) {
+        .dashboard-container {
+          padding: 0 1.25rem;
+        }
+        .dashboard-header {
+          padding: 2.25rem 1.5 rem;
+        }
+        .dashboard-section {
+          padding: 1.5rem;
+        }
+        .pending-product-card {
+          grid-template-columns: 120px 1fr auto;
+          gap: 1rem;
+        }
+        .product-image {
+          width: 120px;
+          height: 120px;
+        }
       }
       @media (max-width: 768px) {
         .pending-product-card {
@@ -341,7 +351,9 @@
     <div class="dashboard-container">
       <div class="dashboard-header">
         <h1><i class="bi bi-shield-check"></i> Admin Dashboard</h1>
-        <p style="margin-top: 0.5rem; opacity: 0.9;">Manage AgroMart platform and user products</p>
+        <p style="margin-top: 0.5rem; opacity: 0.9">
+          Manage AgroMart platform and user products
+        </p>
       </div>
 
       <div class="dashboard-stats">
@@ -441,26 +453,34 @@
 
       async function loadAdminData() {
         try {
-          const userResponse = await fetch('/api/user', { credentials: 'include' });
+          const userResponse = await fetch("/api/user", {
+            credentials: "include",
+          });
           if (!userResponse.ok || userResponse.status === 401) {
-            window.location.href = '/';
+            window.location.href = "/";
             return;
           }
 
           currentAdmin = await userResponse.json();
-          
-          if (currentAdmin.userType !== 'admin') {
-            alert('Admin access required');
-            window.location.href = 'home.html';
+
+          if (currentAdmin.userType !== "admin") {
+            alert("Admin access required");
+            window.location.href = "home.html";
             return;
           }
 
           // Load admin info from database record (includes first/last name)
-          document.getElementById('adminUsername').textContent = currentAdmin.username;
-          document.getElementById('adminEmail').textContent = currentAdmin.email;
-          document.getElementById('adminSince').textContent = new Date(currentAdmin.createdAt).toLocaleDateString();
-          const fullName = `${currentAdmin.firstName || ''} ${currentAdmin.lastName || ''}`.trim();
-          document.getElementById('adminFullName').textContent = fullName || currentAdmin.username;
+          document.getElementById("adminUsername").textContent =
+            currentAdmin.username;
+          document.getElementById("adminEmail").textContent =
+            currentAdmin.email;
+          document.getElementById("adminSince").textContent = new Date(
+            currentAdmin.createdAt,
+          ).toLocaleDateString();
+          const fullName =
+            `${currentAdmin.firstName || ""} ${currentAdmin.lastName || ""}`.trim();
+          document.getElementById("adminFullName").textContent =
+            fullName || currentAdmin.username;
 
           // Load pending products
           await loadPendingProducts();
@@ -473,20 +493,22 @@
           await loadSellers();
           await loadAllProducts();
         } catch (error) {
-          console.error('Error loading admin data:', error);
-          window.location.href = '/';
+          console.error("Error loading admin data:", error);
+          window.location.href = "/";
         }
       }
 
       async function loadPendingProducts() {
         try {
-          const response = await fetch('/api/products/pending', { credentials: 'include' });
+          const response = await fetch("/api/products/pending", {
+            credentials: "include",
+          });
           if (!response.ok) {
-            throw new Error('Failed to load pending products');
+            throw new Error("Failed to load pending products");
           }
 
           const products = await response.json();
-          const container = document.getElementById('pendingProductsList');
+          const container = document.getElementById("pendingProductsList");
 
           if (products.length === 0) {
             container.innerHTML = `
@@ -498,24 +520,26 @@
             return;
           }
 
-          container.innerHTML = products.map(product => `
+          container.innerHTML = products
+            .map(
+              (product) => `
             <div class="pending-product-card" data-product-id="${product._id}">
               <div class="product-image">
-                <img src="${product.image || 'images/home-pages pics/seeds.jpg'}" alt="${product.name}" />
+                <img src="${product.image || "images/home-pages pics/seeds.jpg"}" alt="${product.name}" />
               </div>
               <div class="product-details">
                 <h3 class="product-name">${product.name}</h3>
                 <div class="product-seller">
                   <i class="bi bi-person"></i> 
-                  Seller: ${product.sellerId ? product.sellerId.username : 'Unknown'} 
-                  ${product.sellerId && product.sellerId.email ? `(${product.sellerId.email})` : ''}
+                  Seller: ${product.sellerId ? product.sellerId.username : "Unknown"} 
+                  ${product.sellerId && product.sellerId.email ? `(${product.sellerId.email})` : ""}
                 </div>
-                <div class="product-price">₹${product.price.toLocaleString('en-IN')}</div>
-                <p style="color: var(--text-light); margin: 0.5rem 0;">${product.description || 'No description'}</p>
+                <div class="product-price">₹${product.price.toLocaleString("en-IN")}</div>
+                <p style="color: var(--text-light); margin: 0.5rem 0;">${product.description || "No description"}</p>
                 <div class="product-meta">
                   <span class="meta-badge"><i class="bi bi-box"></i> Stock: ${product.stock}</span>
                   <span class="meta-badge"><i class="bi bi-tag"></i> ${product.category}</span>
-                  ${product.subcategory ? `<span class="meta-badge">${product.subcategory}</span>` : ''}
+                  ${product.subcategory ? `<span class="meta-badge">${product.subcategory}</span>` : ""}
                 </div>
               </div>
               <div class="product-actions">
@@ -527,10 +551,12 @@
                 </button>
               </div>
             </div>
-          `).join('');
+          `,
+            )
+            .join("");
         } catch (error) {
-          console.error('Error loading pending products:', error);
-          document.getElementById('pendingProductsList').innerHTML = `
+          console.error("Error loading pending products:", error);
+          document.getElementById("pendingProductsList").innerHTML = `
             <div class="empty-state">
               <i class="bi bi-exclamation-circle"></i>
               <p>Failed to load pending products</p>
@@ -541,31 +567,38 @@
 
       async function loadStatistics() {
         try {
-          const response = await fetch('/api/admin/statistics', { credentials: 'include' });
+          const response = await fetch("/api/admin/statistics", {
+            credentials: "include",
+          });
           if (!response.ok) {
-            throw new Error('Failed to load statistics');
+            throw new Error("Failed to load statistics");
           }
-          
+
           const stats = await response.json();
-          
-          document.getElementById('pendingCount').textContent = stats.pendingProducts;
-          document.getElementById('approvedCount').textContent = stats.approvedProducts;
-          document.getElementById('totalUsers').textContent = stats.totalUsers;
-          document.getElementById('totalSellers').textContent = stats.totalSellers;
+
+          document.getElementById("pendingCount").textContent =
+            stats.pendingProducts;
+          document.getElementById("approvedCount").textContent =
+            stats.approvedProducts;
+          document.getElementById("totalUsers").textContent = stats.totalUsers;
+          document.getElementById("totalSellers").textContent =
+            stats.totalSellers;
         } catch (error) {
-          console.error('Error loading statistics:', error);
+          console.error("Error loading statistics:", error);
         }
       }
 
       async function loadUsers() {
         try {
-          const response = await fetch('/api/admin/users', { credentials: 'include' });
+          const response = await fetch("/api/admin/users", {
+            credentials: "include",
+          });
           if (!response.ok) {
-            throw new Error('Failed to load users');
+            throw new Error("Failed to load users");
           }
 
           const users = await response.json();
-          const container = document.getElementById('usersList');
+          const container = document.getElementById("usersList");
 
           if (users.length === 0) {
             container.innerHTML = `
@@ -578,34 +611,40 @@
           }
 
           container.innerHTML = `
-            <table class="users-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Phone</th>
-                  <th>Joined</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${users.map(user => `
+            <div class="table-wrapper" role="region" aria-label="All users table" tabindex="0">
+              <table class="users-table">
+                <thead>
                   <tr>
-                    <td><strong>${user.username}</strong></td>
-                    <td>${user.email}</td>
-                    <td>${user.firstName || ''} ${user.lastName || ''}</td>
-                    <td><span class="user-badge ${user.userType}">${user.userType}</span></td>
-                    <td>${user.phone || '-'}</td>
-                    <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Phone</th>
+                    <th>Joined</th>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  ${users
+                    .map(
+                      (user) => `
+                    <tr>
+                      <td><strong>${user.username}</strong></td>
+                      <td>${user.email}</td>
+                      <td>${user.firstName || ""} ${user.lastName || ""}</td>
+                      <td><span class="user-badge ${user.userType}">${user.userType}</span></td>
+                      <td>${user.phone || "-"}</td>
+                      <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                    </tr>
+                  `,
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
           `;
         } catch (error) {
-          console.error('Error loading users:', error);
-          document.getElementById('usersList').innerHTML = `
+          console.error("Error loading users:", error);
+          document.getElementById("usersList").innerHTML = `
             <div class="empty-state">
               <i class="bi bi-exclamation-circle"></i>
               <p>Failed to load users</p>
@@ -616,13 +655,15 @@
 
       async function loadSellers() {
         try {
-          const response = await fetch('/api/admin/sellers', { credentials: 'include' });
+          const response = await fetch("/api/admin/sellers", {
+            credentials: "include",
+          });
           if (!response.ok) {
-            throw new Error('Failed to load sellers');
+            throw new Error("Failed to load sellers");
           }
 
           const sellers = await response.json();
-          const container = document.getElementById('sellersList');
+          const container = document.getElementById("sellersList");
 
           if (sellers.length === 0) {
             container.innerHTML = `
@@ -635,7 +676,8 @@
           }
 
           container.innerHTML = `
-            <table class="users-table">
+            <div class="table-wrapper" role="region" aria-label="All sellers table" tabindex="0">
+              <table class="users-table">
               <thead>
                 <tr>
                   <th>Username</th>
@@ -647,11 +689,13 @@
                 </tr>
               </thead>
               <tbody>
-                ${sellers.map(seller => `
+                ${sellers
+                  .map(
+                    (seller) => `
                   <tr>
                     <td><strong>${seller.username}</strong></td>
                     <td>${seller.email}</td>
-                    <td>${seller.firstName || ''} ${seller.lastName || ''}</td>
+                    <td>${seller.firstName || ""} ${seller.lastName || ""}</td>
                     <td>
                       <div class="seller-stats">
                         <span class="seller-stat"><strong>${seller.totalProducts}</strong> Total</span>
@@ -659,16 +703,19 @@
                         <span class="seller-stat"><strong>${seller.pendingProducts}</strong> Pending</span>
                       </div>
                     </td>
-                    <td><strong>₹${seller.totalEarnings.toLocaleString('en-IN')}</strong></td>
+                    <td><strong>₹${seller.totalEarnings.toLocaleString("en-IN")}</strong></td>
                     <td>${new Date(seller.createdAt).toLocaleDateString()}</td>
                   </tr>
-                `).join('')}
+                `,
+                  )
+                  .join("")}
               </tbody>
-            </table>
+              </table>
+            </div>
           `;
         } catch (error) {
-          console.error('Error loading sellers:', error);
-          document.getElementById('sellersList').innerHTML = `
+          console.error("Error loading sellers:", error);
+          document.getElementById("sellersList").innerHTML = `
             <div class="empty-state">
               <i class="bi bi-exclamation-circle"></i>
               <p>Failed to load sellers</p>
@@ -679,13 +726,15 @@
 
       async function loadAllProducts() {
         try {
-          const response = await fetch('/api/products', { credentials: 'include' });
+          const response = await fetch("/api/products", {
+            credentials: "include",
+          });
           if (!response.ok) {
-            throw new Error('Failed to load products');
+            throw new Error("Failed to load products");
           }
 
           const products = await response.json();
-          const container = document.getElementById('allProductsList');
+          const container = document.getElementById("allProductsList");
 
           if (!products.length) {
             container.innerHTML = `
@@ -697,37 +746,41 @@
             return;
           }
 
-          container.innerHTML = products.map(p => `
+          container.innerHTML = products
+            .map(
+              (p) => `
             <div class="pending-product-card">
               <div class="product-image">
-                <img src="${p.image || 'images/home-pages pics/seeds.jpg'}" alt="${p.name}" />
+                <img src="${p.image || "images/home-pages pics/seeds.jpg"}" alt="${p.name}" />
               </div>
               <div class="product-details">
                 <h3 class="product-name">${p.name}</h3>
                 <div class="product-seller">
                   <i class="bi bi-person-circle"></i>
-                  Seller: ${p.isAgroMart || !p.sellerId ? 'AgroMart' : (p.sellerId.username || 'Seller')}
+                  Seller: ${p.isAgroMart || !p.sellerId ? "AgroMart" : p.sellerId.username || "Seller"}
                 </div>
-                <div class="product-price">₹${(p.price || 0).toLocaleString('en-IN')}</div>
+                <div class="product-price">₹${(p.price || 0).toLocaleString("en-IN")}</div>
                 <div class="product-meta">
                   <span class="meta-badge"><i class="bi bi-box"></i> Stock: ${p.stock || 0}</span>
                   <span class="meta-badge"><i class="bi bi-bag-check"></i> Sold: ${p.sold || 0}</span>
-                  <span class="meta-badge"><i class="bi bi-cash-stack"></i> Earned: ₹${(p.earnings || 0).toLocaleString('en-IN')}</span>
+                  <span class="meta-badge"><i class="bi bi-cash-stack"></i> Earned: ₹${(p.earnings || 0).toLocaleString("en-IN")}</span>
                   <span class="meta-badge"><i class="bi bi-tag"></i> ${p.category}</span>
-                  ${p.subcategory ? `<span class="meta-badge">${p.subcategory}</span>` : ''}
-                  <span class="meta-badge"><i class="bi bi-check-circle"></i> ${p.approved ? 'Approved' : 'Pending'}</span>
+                  ${p.subcategory ? `<span class="meta-badge">${p.subcategory}</span>` : ""}
+                  <span class="meta-badge"><i class="bi bi-check-circle"></i> ${p.approved ? "Approved" : "Pending"}</span>
                 </div>
               </div>
               <div class="product-actions">
-                <button class="btn-reject" onclick="adminDeleteProduct('${p._id}', '${(p.name || '').replace(/'/g, "\\'")}')">
+                <button class="btn-reject" onclick="adminDeleteProduct('${p._id}', '${(p.name || "").replace(/'/g, "\\'")}')">
                   <i class="bi bi-trash"></i> Delete
                 </button>
               </div>
             </div>
-          `).join('');
+          `,
+            )
+            .join("");
         } catch (error) {
-          console.error('Error loading all products:', error);
-          document.getElementById('allProductsList').innerHTML = `
+          console.error("Error loading all products:", error);
+          document.getElementById("allProductsList").innerHTML = `
             <div class="empty-state">
               <i class="bi bi-exclamation-circle"></i>
               <p>Failed to load products</p>
@@ -737,77 +790,80 @@
       }
 
       async function adminDeleteProduct(productId, productName) {
-        if (!confirm(`Are you sure you want to delete "${productName}"?`)) return;
+        if (!confirm(`Are you sure you want to delete "${productName}"?`))
+          return;
 
         try {
           const response = await fetch(`/api/products/${productId}`, {
-            method: 'DELETE',
-            credentials: 'include'
+            method: "DELETE",
+            credentials: "include",
           });
 
           if (response.ok) {
-            alert('Product deleted successfully!');
+            alert("Product deleted successfully!");
             await loadAllProducts();
             await loadStatistics();
           } else {
             const error = await response.json();
-            alert(error.error || 'Failed to delete product');
+            alert(error.error || "Failed to delete product");
           }
         } catch (error) {
-          console.error('Error deleting product:', error);
-          alert('Failed to delete product');
+          console.error("Error deleting product:", error);
+          alert("Failed to delete product");
         }
       }
 
       async function approveProduct(productId) {
-        if (!confirm('Are you sure you want to approve this product?')) return;
+        if (!confirm("Are you sure you want to approve this product?")) return;
 
         try {
           const response = await fetch(`/api/products/${productId}/approve`, {
-            method: 'PUT',
-            credentials: 'include'
+            method: "PUT",
+            credentials: "include",
           });
 
           if (response.ok) {
-            alert('Product approved successfully!');
+            alert("Product approved successfully!");
             await loadPendingProducts();
             await loadStatistics();
           } else {
             const error = await response.json();
-            alert(error.error || 'Failed to approve product');
+            alert(error.error || "Failed to approve product");
           }
         } catch (error) {
-          console.error('Error approving product:', error);
-          alert('Failed to approve product');
+          console.error("Error approving product:", error);
+          alert("Failed to approve product");
         }
       }
 
-      
       async function rejectProduct(productId) {
-        if (!confirm('Are you sure you want to reject and delete this product?')) return;
+        if (
+          !confirm("Are you sure you want to reject and delete this product?")
+        )
+          return;
 
         try {
           const response = await fetch(`/api/products/${productId}`, {
-            method: 'DELETE',
-            credentials: 'include'
+            method: "DELETE",
+            credentials: "include",
           });
 
           if (response.ok) {
-            alert('Product rejected and deleted successfully!');
+            alert("Product rejected and deleted successfully!");
             await loadPendingProducts();
             await loadStatistics();
           } else {
             const error = await response.json();
-            alert(error.error || 'Failed to reject product');
+            alert(error.error || "Failed to reject product");
           }
         } catch (error) {
-          console.error('Error rejecting product:', error);
-          alert('Failed to reject product');
+          console.error("Error rejecting product:", error);
+          alert("Failed to reject product");
         }
       }
 
       // Initialize
-      document.addEventListener('DOMContentLoaded', loadAdminData);
+      document.addEventListener("DOMContentLoaded", loadAdminData);
     </script>
   </body>
 </html>
