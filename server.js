@@ -1060,158 +1060,71 @@ app.post("/api/orders", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
 
-    // Admin cannot place orders
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     if (user.userType === "admin") {
       return res.status(403).json({ error: "Admin cannot place orders" });
     }
 
-    const rawItems = Array.isArray(req.body.products) ? req.body.products : [];
-    if (rawItems.length === 0) {
+    const items = req.body.products;
+    if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: "No products found in order" });
     }
 
-    const isValidObjectId = (id) =>
-      mongoose.Types.ObjectId.isValid(id) && String(id).length === 24;
+    let subtotal = 0;
+    const orderProducts = [];
 
-    const dbUpdates = [];
+    for (const item of items) {
+      const product = await Product.findById(item.productId);
 
-    // ================= STOCK VALIDATION =================
-    for (const item of rawItems) {
-      const productId = item.productId != null ? String(item.productId) : "";
-      const qty = Number(item.quantity);
-
-      if (!Number.isInteger(qty) || qty <= 0) {
-        return res.status(400).json({ error: "Invalid quantity in order" });
+      if (!product || !product.approved) {
+        return res.status(400).json({ error: "Product unavailable" });
       }
 
-      if (productId && isValidObjectId(productId)) {
-        const product = await Product.findById(productId);
-
-        if (!product || !product.approved) {
-          return res.status(400).json({
-            error: "One or more products are unavailable",
-          });
-        }
-
-        if (
-          product.sellerId &&
-          product.sellerId.toString() === req.session.userId
-        ) {
-          return res
-            .status(400)
-            .json({ error: "You cannot buy your own product" });
-        }
-
-        const available = product.stock || 0;
-        if (available < qty) {
-          return res.status(400).json({
-            error: `Only ${available} unit${
-              available === 1 ? "" : "s"
-            } available for ${product.name}`,
-          });
-        }
-
-        dbUpdates.push({
-          product,
-          qty,
-        });
+      if (product.stock < item.quantity) {
+        return res.status(400).json({ error: "Insufficient stock" });
       }
-    }
 
-    // ================= EARNINGS LOGIC =================
-
-    const DELIVERY_CHARGE = 50; // fixed per order
-
-    let adminProductEarnings = 0;
-    let sellerCommissionEarnings = 0;
-    const sellerEarningsMap = {};
-
-    for (const entry of dbUpdates) {
-      const product = entry.product;
-      const qty = entry.qty;
-      const totalPrice = product.price * qty;
-
-      // Reduce stock
-      product.stock -= qty;
-
-      // Increase sold count
-      product.sold = (product.sold || 0) + qty;
-
+      product.stock -= item.quantity;
       await product.save();
 
-      // Admin product
-      if (product.isAgroMart === true) {
-        adminProductEarnings += totalPrice;
-      }
+      subtotal += product.price * item.quantity;
 
-      // Seller product
-      else if (product.sellerId) {
-        const sellerId = product.sellerId.toString();
-
-        if (!sellerEarningsMap[sellerId]) {
-          sellerEarningsMap[sellerId] = 0;
-        }
-
-        sellerEarningsMap[sellerId] += totalPrice;
-
-        // Admin gets ₹50 commission per seller product (not per quantity)
-        sellerCommissionEarnings += 50;
-      }
-    }
-
-    // Update Seller earnings
-    for (const sellerId in sellerEarningsMap) {
-      await User.findByIdAndUpdate(sellerId, {
-        $inc: { earnings: sellerEarningsMap[sellerId] },
+      orderProducts.push({
+        productId: product._id,
+        sellerId: product.sellerId || null,
+        price: product.price,
+        quantity: item.quantity,
       });
     }
 
-    // Update Admin earnings (delivery charge only once per order)
-    await User.updateOne(
-      { userType: "admin" },
-      {
-        $inc: {
-          earnings:
-            adminProductEarnings + sellerCommissionEarnings + DELIVERY_CHARGE,
-        },
-      },
-    );
+    const DELIVERY_CHARGE = 50; // per order
+    const totalAmount = subtotal + DELIVERY_CHARGE;
 
-    // ================= ORDER TOTAL CALCULATION =================
-
-    const productsTotal = dbUpdates.reduce(
-      (sum, entry) => sum + entry.product.price * entry.qty,
-      0,
-    );
-
-    const grandTotal = productsTotal + DELIVERY_CHARGE;
-
-    // ================= CREATE ORDER =================
-
-    const order = new Order({
-      user: req.session.userId,
-      products: rawItems,
-      productTotal: productsTotal,
+    const newOrder = new Order({
+      userId: req.session.userId,   // ✅ FIXED
+      products: orderProducts,
+      totalAmount,
       deliveryCharge: DELIVERY_CHARGE,
-      totalAmount: grandTotal,
-      status: "Placed",
-      createdAt: new Date(),
+      deliveryAddress: req.body.deliveryAddress,
+      paymentMethod: req.body.paymentMethod,
+      status: "placed",
     });
 
-    await order.save();
+    await newOrder.save();
 
     res.json({
       success: true,
       message: "Order placed successfully",
-      orderId: order._id,
-      productTotal: productsTotal,
-      deliveryCharge: DELIVERY_CHARGE,
-      totalAmount: grandTotal,
     });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}); // app.post("/api/orders", requireAuth, async (req, res) => {
+});
+// app.post("/api/orders", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
 
@@ -1285,41 +1198,34 @@ app.get("/api/orders", requireAuth, async (req, res) => {
 // Seller earnings endpoint
 app.get("/api/seller/earnings", requireAuth, async (req, res) => {
   try {
-    const user = await User.findById(req.session.userId);
-    // Sellers see earnings for their own products.
-    // Admins see earnings for AgroMart products they manage.
-    if (user.userType !== "seller" && user.userType !== "admin") {
-      return res
-        .status(403)
-        .json({ error: "Only sellers or admins can view earnings" });
-    }
+    const sellerId = req.session.userId;
 
-    let products;
-    if (user.userType === "admin") {
-      products = await Product.find({ isAgroMart: true });
-    } else {
-      products = await Product.find({ sellerId: req.session.userId });
-    }
-    const totalEarnings = products.reduce(
-      (sum, product) => sum + (product.earnings || 0),
-      0,
-    );
-    const totalSold = products.reduce(
-      (sum, product) => sum + (product.sold || 0),
-      0,
-    );
+    const orders = await Order.find({
+      "products.sellerId": sellerId,
+      status: "placed",
+    });
+
+    let totalEarnings = 0;
+    let totalSold = 0;
+
+    orders.forEach(order => {
+      order.products.forEach(item => {
+        if (item.sellerId && item.sellerId.toString() === sellerId) {
+          totalEarnings += item.price * item.quantity;
+          totalSold += item.quantity;
+        }
+      });
+    });
 
     res.json({
       totalEarnings,
       totalSold,
-      products: products.length,
-      productsList: products,
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
-
 // Admin: Get all users
 app.get("/api/admin/users", requireAuth, async (req, res) => {
   try {
@@ -1435,46 +1341,44 @@ app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 // Admin: Total earnings (platform earnings)
 app.get("/api/admin/earnings", requireAuth, async (req, res) => {
   try {
-    const admin = await User.findById(req.session.userId);
-    if (!admin || admin.userType !== "admin") {
-      return res.status(403).json({ error: "Admin access required" });
-    }
+    const adminId = req.session.userId;
 
-    const orders = await Order.find();
+    const orders = await Order.find({ status: "placed" });
 
-    let totalRevenue = 0;
-    let totalItemsSold = 0;
-
-    for (const order of orders) {
-      for (const item of order.products) {
-        totalRevenue +=
-          (Number(item.price) || 0) * (Number(item.quantity) || 1);
-        totalItemsSold += Number(item.quantity) || 1;
-      }
-    }
-
-    const agroMartProducts = await Product.find({ isAgroMart: true });
-    let totalEarnings = 0;
+    let adminProductEarnings = 0;
+    let deliveryEarnings = 0;
     let totalSold = 0;
-    agroMartProducts.forEach((p) => {
-      totalEarnings += p.earnings || 0;
-      totalSold += p.sold || 0;
+
+    orders.forEach(order => {
+      let hasSellerProduct = false;
+
+      order.products.forEach(item => {
+        // Admin product
+        if (!item.sellerId) {
+          adminProductEarnings += item.price * item.quantity;
+          totalSold += item.quantity;
+        } else {
+          hasSellerProduct = true;
+        }
+      });
+
+      // Delivery charge once per order
+      if (hasSellerProduct) {
+        deliveryEarnings += order.deliveryCharge || 50;
+      }
     });
 
     res.json({
-      totalEarnings,
-      totalRevenue,
-      totalOrders: orders.length,
-      totalItemsSold,
+      totalEarnings: adminProductEarnings + deliveryEarnings,
+      adminProductEarnings,
+      deliveryEarnings,
       totalSold,
-      totalProducts: agroMartProducts.length,
-      products: agroMartProducts,
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
-
 // app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
