@@ -312,7 +312,7 @@ app.post("/api/forgot-password", async (req, res) => {
     const baseUrl = (process.env.APP_BASE_URL|| "")
       .replace(/\r?\n/g, "")  // remove newlines
       .trim();                // remove spaces
-    
+    console.log("APP_BASE_URL value:", JSON.stringify(process.env.APP_BASE_URL));
     const resetUrl = `${baseUrl}/reset-password.html?token=${resetToken}`;
 
     res.json({
