@@ -7,7 +7,9 @@ const path = require("path");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT ||5000;
+const PORT = process.env.PORT || 5000;
+const SESSION_SECRET =
+  process.env.SESSION_SECRET || "agromart-secret-key-2024";
 app.set("trust proxy",1);
 // Middleware
 app.use(cors());
@@ -17,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // Session configuration
 app.use(
   session({
-    secret: "agromart-secret-key-2024",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -381,7 +383,7 @@ app.get("/api/user", requireAuth, async (req, res) => {
     const user = await User.findById(req.session.userId)
       .select("-password")
       .lean();
-    
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -1468,7 +1470,11 @@ app.get("/api/categories", async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Start server only when run directly (not when imported by other files)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
