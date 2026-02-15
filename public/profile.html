@@ -925,79 +925,176 @@
         }
       }
 
+
       async function loadEarnings() {
-        try {
-          const endpoint =
-            currentUser && currentUser.userType === "admin"
-              ? "/api/admin/earnings"
-              : "/api/seller/earnings";
-          const response = await fetch(endpoint, { credentials: "include" });
-          const earnings = await response.json().catch(() => ({}));
+  try {
+    const endpoint =
+      currentUser && currentUser.userType === "admin"
+        ? "/api/admin/earnings"
+        : "/api/seller/earnings";
 
-          if (!response.ok) {
-            throw new Error(earnings.error || "Failed to load earnings");
-          }
+    const response = await fetch(endpoint, { credentials: "include" });
+    const earnings = await response.json().catch(() => ({}));
 
-          let list = earnings.productsList || earnings.products || [];
-          const totalEarnings = Number(
-            currentUser && currentUser.userType === "admin"
-              ? (earnings.totalRevenue ?? earnings.totalEarnings ?? 0)
-              : (earnings.totalEarnings ?? earnings.totalRevenue ?? 0),
-          );
-          const totalSold = Number(
-            currentUser && currentUser.userType === "admin"
-              ? (earnings.totalItemsSold ?? 0)
-              : (earnings.totalSold ?? earnings.totalItemsSold ?? 0),
-          );
-          let totalProducts = Array.isArray(list)
-            ? list.length
-            : Number(earnings.totalProducts ?? earnings.products ?? 0);
+    if (!response.ok) {
+      throw new Error(earnings.error || "Failed to load earnings");
+    }
 
-          // Keep admin earnings product count aligned with "My Products" tab source.
-          if (currentUser && currentUser.userType === "admin") {
-            const adminProductsRes = await fetch("/api/products/seller", {
-              credentials: "include",
-            });
-            if (adminProductsRes.ok) {
-              const adminProducts = await adminProductsRes.json();
-              if (Array.isArray(adminProducts)) {
-                list = adminProducts;
-                totalProducts = adminProducts.length;
-              }
-            }
-          }
+    let list = earnings.productsList || earnings.products || [];
 
-          document.getElementById("totalEarnings").textContent =
-            `\u20B9${totalEarnings.toLocaleString("en-IN")}`;
-          document.getElementById("totalSold").textContent = totalSold;
-          document.getElementById("totalProducts").textContent = totalProducts;
+    let totalEarnings = 0;
+    let totalSold = 0;
+    let totalProducts = 0;
 
-          const earningsContent = document.getElementById("earningsContent");
-          if (!Array.isArray(list) || list.length === 0) {
-            earningsContent.innerHTML = "<p>No products yet.</p>";
-            return;
-          }
+    // ================================
+    // ✅ ADMIN LOGIC
+    // ================================
+    if (currentUser && currentUser.userType === "admin") {
 
-          earningsContent.innerHTML = `
-            <div class="product-list">
-              ${list
-                .map(
-                  (product) => `
-                <div class="product-item">
-                  <div class="product-item-details">
-                    <h3>${product.name}</h3>
-                    <p>Sold: ${Number(product.sold || 0)} units | Earnings: \u20B9${Number(product.earnings || 0).toLocaleString("en-IN")}</p>
-                  </div>
-                </div>
-              `,
-                )
-                .join("")}
-            </div>
-          `;
-        } catch (error) {
-          console.error("Error loading earnings:", error);
+      totalEarnings = Number(earnings.totalAdminEarnings ?? 0);
+      totalSold = Number(earnings.totalItemsSold ?? 0);
+
+      // For admin, fetch their own added products
+      const adminProductsRes = await fetch("/api/products/seller", {
+        credentials: "include",
+      });
+
+      if (adminProductsRes.ok) {
+        const adminProducts = await adminProductsRes.json();
+        if (Array.isArray(adminProducts)) {
+          list = adminProducts;
+          totalProducts = adminProducts.length;
         }
       }
+
+    }
+    // ================================
+    // ✅ SELLER LOGIC
+    // ================================
+    else {
+
+      totalEarnings = Number(earnings.totalEarnings ?? 0);
+      totalSold = Number(earnings.totalSold ?? 0);
+      totalProducts = Number(earnings.totalProducts ?? 0);
+
+    }
+
+    // ================================
+    // ✅ UPDATE UI
+    // ================================
+    document.getElementById("totalEarnings").textContent =
+      `₹${totalEarnings.toLocaleString("en-IN")}`;
+
+    document.getElementById("totalSold").textContent =
+      totalSold;
+
+    document.getElementById("totalProducts").textContent =
+      totalProducts;
+
+    const earningsContent = document.getElementById("earningsContent");
+
+    if (!Array.isArray(list) || list.length === 0) {
+      earningsContent.innerHTML = "<p>No products yet.</p>";
+      return;
+    }
+
+    earningsContent.innerHTML = `
+      <div class="product-list">
+        ${list
+          .map(
+            (product) => `
+              <div class="product-item">
+                <div class="product-item-details">
+                  <h3>${product.name}</h3>
+                  <p>
+                    Sold: ${Number(product.sold || 0)} units |
+                    Earnings: ₹${Number(product.earnings || 0).toLocaleString("en-IN")}
+                  </p>
+                </div>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+
+  } catch (error) {
+    console.error("Error loading earnings:", error);
+  }
+}
+      // async function loadEarnings() {
+      //   try {
+      //     const endpoint =
+      //       currentUser && currentUser.userType === "admin"
+      //         ? "/api/admin/earnings"
+      //         : "/api/seller/earnings";
+      //     const response = await fetch(endpoint, { credentials: "include" });
+      //     const earnings = await response.json().catch(() => ({}));
+
+      //     if (!response.ok) {
+      //       throw new Error(earnings.error || "Failed to load earnings");
+      //     }
+
+      //     let list = earnings.productsList || earnings.products || [];
+      //     const totalEarnings = Number(
+      //       currentUser && currentUser.userType === "admin"
+      //         ? (earnings.totalRevenue ?? earnings.totalEarnings ?? 0)
+      //         : (earnings.totalEarnings ?? earnings.totalRevenue ?? 0),
+      //     );
+      //     const totalSold = Number(
+      //       currentUser && currentUser.userType === "admin"
+      //         ? (earnings.totalItemsSold ?? 0)
+      //         : (earnings.totalSold ?? earnings.totalItemsSold ?? 0),
+      //     );
+      //     let totalProducts = Array.isArray(list)
+      //       ? list.length
+      //       : Number(earnings.totalProducts ?? earnings.products ?? 0);
+
+      //     // Keep admin earnings product count aligned with "My Products" tab source.
+      //     if (currentUser && currentUser.userType === "admin") {
+      //       const adminProductsRes = await fetch("/api/products/seller", {
+      //         credentials: "include",
+      //       });
+      //       if (adminProductsRes.ok) {
+      //         const adminProducts = await adminProductsRes.json();
+      //         if (Array.isArray(adminProducts)) {
+      //           list = adminProducts;
+      //           totalProducts = adminProducts.length;
+      //         }
+      //       }
+      //     }
+
+      //     document.getElementById("totalEarnings").textContent =
+      //       `\u20B9${totalEarnings.toLocaleString("en-IN")}`;
+      //     document.getElementById("totalSold").textContent = totalSold;
+      //     document.getElementById("totalProducts").textContent = totalProducts;
+
+      //     const earningsContent = document.getElementById("earningsContent");
+      //     if (!Array.isArray(list) || list.length === 0) {
+      //       earningsContent.innerHTML = "<p>No products yet.</p>";
+      //       return;
+      //     }
+
+      //     earningsContent.innerHTML = `
+      //       <div class="product-list">
+      //         ${list
+      //           .map(
+      //             (product) => `
+      //           <div class="product-item">
+      //             <div class="product-item-details">
+      //               <h3>${product.name}</h3>
+      //               <p>Sold: ${Number(product.sold || 0)} units | Earnings: \u20B9${Number(product.earnings || 0).toLocaleString("en-IN")}</p>
+      //             </div>
+      //           </div>
+      //         `,
+      //           )
+      //           .join("")}
+      //       </div>
+      //     `;
+      //   } catch (error) {
+      //     console.error("Error loading earnings:", error);
+      //   }
+      // }
 
       async function updateCartQuantity(productId, quantity) {
         try {
@@ -1210,3 +1307,4 @@
     </script>
   </body>
 </html>
+
