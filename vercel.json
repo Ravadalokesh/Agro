@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://YOUR-RENDER-SERVICE.onrender.com/api/$1"
+    },
+    {
+      "source": "/styles/(.*)",
+      "destination": "/src/styles/$1"
+    },
+    {
+      "source": "/components/(.*)",
+      "destination": "/src/components/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/src/js/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/public/images/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
+    }
+  ]
+}
