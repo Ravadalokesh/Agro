@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://agro-xrei.onrender.com/api/$1"
+      "destination": "https://agromart-api-jx6p.onrender.com/api/$1"
     }
   ]
 }
