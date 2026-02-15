@@ -314,7 +314,7 @@ app.post("/api/forgot-password", async (req, res) => {
       .trim();                // remove spaces
     console.log("APP_BASE_URL value:", JSON.stringify(process.env.APP_BASE_URL));
     const resetUrl = `${baseUrl}/reset-password.html?token=${resetToken}`;
-
+    console.log("Final resetUrl:", resetUrl);
     res.json({
       success: true,
       message: "Password reset link generated",
