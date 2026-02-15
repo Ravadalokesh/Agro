@@ -422,7 +422,16 @@
           </div>
           <div class="form-group">
             <label>Phone</label>
-            <input type="tel" name="phone" />
+            <input
+              type="tel"
+              name="phone"
+              required
+              inputmode="numeric"
+              maxlength="10"
+              minlength="10"
+              pattern="[1-9][0-9]{9}"
+              title="Phone number must be exactly 10 digits and cannot start with 0"
+            />
           </div>
           <button type="submit" class="submit-btn">Sign Up</button>
         </form>
@@ -523,6 +532,12 @@
         return 'Cannot connect to server. Please run "npm start" in your project folder, then open http://localhost:3000 in your browser.';
       }
 
+      function normalizeAndValidatePhone(phoneValue) {
+        const digitsOnly = String(phoneValue || "").replace(/\D/g, "");
+        const valid = /^[1-9][0-9]{9}$/.test(digitsOnly);
+        return { valid, value: digitsOnly };
+      }
+
       function switchTab(tab) {
         document
           .querySelectorAll(".auth-tab")
@@ -602,13 +617,21 @@
         successDiv.classList.remove("show");
 
         const formData = new FormData(event.target);
+        const phoneCheck = normalizeAndValidatePhone(formData.get("phone"));
+        if (!phoneCheck.valid) {
+          errorDiv.textContent =
+            "Phone number must be exactly 10 digits and cannot start with 0.";
+          errorDiv.classList.add("show");
+          return;
+        }
+
         const data = {
           username: formData.get("username"),
           email: formData.get("email"),
           password: formData.get("password"),
           firstName: formData.get("firstName"),
           lastName: formData.get("lastName"),
-          phone: formData.get("phone"),
+          phone: phoneCheck.value,
         };
 
         try {

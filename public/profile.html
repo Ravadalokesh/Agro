@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <title>My Profile - AgroMart</title>
     <link rel="icon" href="images/convertico-logo2.ico" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
     <!-- External CSS Files (served from src/ at root) -->
     <link rel="stylesheet" href="styles/variables.css" />
     <link rel="stylesheet" href="styles/common.css" />
@@ -20,7 +23,11 @@
       }
 
       .profile-header {
-        background: linear-gradient(135deg, var(--primary-light), var(--accent));
+        background: linear-gradient(
+          135deg,
+          var(--primary-light),
+          var(--accent)
+        );
         color: white;
         padding: 3rem 2rem;
         border-radius: var(--radius);
@@ -330,29 +337,74 @@
         </div>
         <h1 id="userName">Loading...</h1>
         <p id="userEmail"></p>
-        <span id="userTypeBadge" style="display: inline-block; margin-top: 0.5rem; padding: 0.25rem 1rem; background: rgba(255,255,255,0.2); border-radius: 20px;"></span>
-        <button type="button" class="btn-signout" onclick="signOut()" title="Sign out">
+        <span
+          id="userTypeBadge"
+          style="
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.25rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+          "
+        ></span>
+        <button
+          type="button"
+          class="btn-signout"
+          onclick="signOut()"
+          title="Sign out"
+        >
           <i class="bi bi-box-arrow-right"></i> Sign Out
         </button>
       </div>
 
       <div class="profile-tabs">
-        <button class="profile-tab active" onclick="switchTab('info')">Profile Info</button>
+        <button class="profile-tab active" onclick="switchTab('info')">
+          Profile Info
+        </button>
         <button class="profile-tab" onclick="switchTab('cart')">My Cart</button>
-        <button class="profile-tab" onclick="switchTab('wishlist')">Wishlist</button>
-        <button class="profile-tab seller-tab" onclick="switchTab('products')" style="display: none;">My Products</button>
-        <button class="profile-tab seller-tab" onclick="switchTab('earnings')" style="display: none;">Earnings</button>
-        <button class="profile-tab admin-tab" onclick="window.location.href='admin-dashboard.html'" style="display: none;">
+        <button class="profile-tab" onclick="switchTab('wishlist')">
+          Wishlist
+        </button>
+        <button
+          class="profile-tab seller-tab"
+          onclick="switchTab('products')"
+          style="display: none"
+        >
+          My Products
+        </button>
+        <button
+          class="profile-tab seller-tab"
+          onclick="switchTab('earnings')"
+          style="display: none"
+        >
+          Earnings
+        </button>
+        <button
+          class="profile-tab admin-tab"
+          onclick="window.location.href = 'admin-dashboard.html'"
+          style="display: none"
+        >
           <i class="bi bi-shield-check"></i> Admin Dashboard
         </button>
       </div>
 
       <!-- Profile Info Tab -->
       <div id="infoTab" class="profile-content active">
-        <div id="becomeSellerSection" class="profile-section" style="display: none;">
+        <div
+          id="becomeSellerSection"
+          class="profile-section"
+          style="display: none"
+        >
           <h2 class="section-title">Sell on AgroMart</h2>
-          <p style="margin-bottom: 1rem;">List your products and reach more customers. You can view your total products and earnings in your profile.</p>
-          <button type="button" class="add-product-btn" onclick="becomeSeller()">
+          <p style="margin-bottom: 1rem">
+            List your products and reach more customers. You can view your total
+            products and earnings in your profile.
+          </p>
+          <button
+            type="button"
+            class="add-product-btn"
+            onclick="becomeSeller()"
+          >
             <i class="bi bi-shop"></i> Start selling on AgroMart
           </button>
         </div>
@@ -379,9 +431,19 @@
             </div>
             <div class="form-group">
               <label>Phone</label>
-              <input type="tel" name="phone" id="phone" />
+              <input
+                type="tel"
+                name="phone"
+                id="phone"
+                required
+                inputmode="numeric"
+                maxlength="10"
+                minlength="10"
+                pattern="[1-9][0-9]{9}"
+                title="Phone number must be exactly 10 digits and cannot start with 0"
+              />
             </div>
-            <h3 class="section-title" style="margin-top: 2rem;">Address</h3>
+            <h3 class="section-title" style="margin-top: 2rem">Address</h3>
             <div class="form-group">
               <label>Street Address</label>
               <input type="text" name="street" id="street" />
@@ -403,7 +465,13 @@
               </div>
               <div class="form-group">
                 <label>Country</label>
-                <input type="text" name="country" id="country" value="India" readonly />
+                <input
+                  type="text"
+                  name="country"
+                  id="country"
+                  value="India"
+                  readonly
+                />
               </div>
             </div>
             <button type="submit" class="save-btn">Save Changes</button>
@@ -447,7 +515,7 @@
       <!-- Earnings Tab (Seller only) -->
       <div id="earningsTab" class="profile-content">
         <div class="earnings-card">
-          <h2 style="margin-bottom: 1rem;">Total Earnings</h2>
+          <h2 style="margin-bottom: 1rem">Total Earnings</h2>
           <div class="earnings-stats">
             <div class="earnings-stat">
               <div class="earnings-stat-value" id="totalEarnings">₹0</div>
@@ -477,7 +545,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 id="modalTitle">Add New Product</h2>
-          <button class="close-modal" onclick="closeProductModal()">&times;</button>
+          <button class="close-modal" onclick="closeProductModal()">
+            &times;
+          </button>
         </div>
         <form id="productForm" onsubmit="saveProduct(event)">
           <div class="form-group">
@@ -486,7 +556,16 @@
           </div>
           <div class="form-group">
             <label>Description</label>
-            <textarea name="description" rows="3" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px;"></textarea>
+            <textarea
+              name="description"
+              rows="3"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 2px solid var(--border);
+                border-radius: 8px;
+              "
+            ></textarea>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -501,7 +580,17 @@
           <div class="form-row">
             <div class="form-group">
               <label>Category *</label>
-              <select name="category" id="productCategorySelect" required style="width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px;">
+              <select
+                name="category"
+                id="productCategorySelect"
+                required
+                style="
+                  width: 100%;
+                  padding: 0.75rem;
+                  border: 2px solid var(--border);
+                  border-radius: 8px;
+                "
+              >
                 <option value="">Select Category</option>
                 <option value="vegetables-fruits">Vegetables & Fruits</option>
                 <option value="grains-pulses">Grains & Pulses</option>
@@ -516,13 +605,26 @@
               <input type="text" name="subcategory" />
             </div>
           </div>
-          <div class="form-group" id="customCategoryGroup" style="display: none;">
+          <div
+            class="form-group"
+            id="customCategoryGroup"
+            style="display: none"
+          >
             <label>Custom Category *</label>
-            <input type="text" name="customCategory" id="customCategoryInput" placeholder="Enter new category name" />
+            <input
+              type="text"
+              name="customCategory"
+              id="customCategoryInput"
+              placeholder="Enter new category name"
+            />
           </div>
           <div class="form-group">
             <label>Image URL</label>
-            <input type="url" name="image" placeholder="https://example.com/image.jpg" />
+            <input
+              type="url"
+              name="image"
+              placeholder="https://example.com/image.jpg"
+            />
           </div>
           <button type="submit" class="save-btn">Save Product</button>
         </form>
@@ -546,24 +648,34 @@
 
       async function signOut() {
         try {
-          await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+          await fetch("/api/logout", {
+            method: "POST",
+            credentials: "include",
+          });
         } catch (e) {}
-        window.location.href = '/';
+        window.location.href = "/";
       }
 
       async function becomeSeller() {
         try {
-          var res = await fetch('/api/user/become-seller', { method: 'PUT', credentials: 'include' });
+          var res = await fetch("/api/user/become-seller", {
+            method: "PUT",
+            credentials: "include",
+          });
           if (res.ok) {
             currentUser = await res.json();
             loadProfile();
-            alert('You are now a seller! You can add products from the My Products tab.');
+            alert(
+              "You are now a seller! You can add products from the My Products tab.",
+            );
           } else {
-            var err = await res.json().catch(function() { return {}; });
-            alert(err.error || 'Could not become a seller');
+            var err = await res.json().catch(function () {
+              return {};
+            });
+            alert(err.error || "Could not become a seller");
           }
         } catch (e) {
-          alert('Request failed');
+          alert("Request failed");
         }
       }
 
@@ -571,96 +683,123 @@
       async function loadUserProfile() {
         try {
           // const response = await fetch('/api/user');
-            const response = await fetch('/api/user', {
-              credentials: 'include'
-            });
+          const response = await fetch("/api/user", {
+            credentials: "include",
+          });
 
           if (!response.ok) {
-            window.location.href = 'index.html';
+            window.location.href = "index.html";
             return;
           }
           currentUser = await response.json();
           loadProfile();
         } catch (error) {
-          window.location.href = 'index.html';
+          window.location.href = "index.html";
         }
       }
 
       function switchTab(tab) {
-        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+        document
+          .querySelectorAll(".profile-tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".profile-content")
+          .forEach((c) => c.classList.remove("active"));
 
-        const tabBtn = document.querySelector(`[onclick="switchTab('${tab}')"]`);
+        const tabBtn = document.querySelector(
+          `[onclick="switchTab('${tab}')"]`,
+        );
         const tabContent = document.getElementById(`${tab}Tab`);
-        if (!tabBtn || !tabContent || tabBtn.style.display === 'none') {
+        if (!tabBtn || !tabContent || tabBtn.style.display === "none") {
           return;
         }
 
-        tabBtn.classList.add('active');
-        tabContent.classList.add('active');
+        tabBtn.classList.add("active");
+        tabContent.classList.add("active");
 
-        if (tab === 'cart') loadCart();
-        if (tab === 'wishlist') loadWishlist();
-        if (tab === 'products') loadProducts();
-        if (tab === 'earnings') loadEarnings();
+        if (tab === "cart") loadCart();
+        if (tab === "wishlist") loadWishlist();
+        if (tab === "products") loadProducts();
+        if (tab === "earnings") loadEarnings();
       }
 
       function loadProfile() {
         if (!currentUser) return;
 
-        document.getElementById('userName').textContent = 
-          `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() || currentUser.username;
-        document.getElementById('userEmail').textContent = currentUser.email;
-        
-        const badge = document.getElementById('userTypeBadge');
-        const becomeSellerSection = document.getElementById('becomeSellerSection');
-        const sellerTabs = document.querySelectorAll('.seller-tab');
-        const adminTabs = document.querySelectorAll('.admin-tab');
-        
-        // Get cart and wishlist tab buttons
-        const cartTab = document.querySelector('[onclick="switchTab(\'cart\')"]');
-        const wishlistTab = document.querySelector('[onclick="switchTab(\'wishlist\')"]');
+        document.getElementById("userName").textContent =
+          `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
+          currentUser.username;
+        document.getElementById("userEmail").textContent = currentUser.email;
 
-        if (currentUser.userType === 'seller') {
-          badge.textContent = 'Seller';
-          sellerTabs.forEach(function(el) { el.style.display = 'block'; });
-          if (becomeSellerSection) becomeSellerSection.style.display = 'none';
+        const badge = document.getElementById("userTypeBadge");
+        const becomeSellerSection = document.getElementById(
+          "becomeSellerSection",
+        );
+        const sellerTabs = document.querySelectorAll(".seller-tab");
+        const adminTabs = document.querySelectorAll(".admin-tab");
+
+        // Get cart and wishlist tab buttons
+        const cartTab = document.querySelector(
+          "[onclick=\"switchTab('cart')\"]",
+        );
+        const wishlistTab = document.querySelector(
+          "[onclick=\"switchTab('wishlist')\"]",
+        );
+
+        if (currentUser.userType === "seller") {
+          badge.textContent = "Seller";
+          sellerTabs.forEach(function (el) {
+            el.style.display = "block";
+          });
+          if (becomeSellerSection) becomeSellerSection.style.display = "none";
           // Show cart and wishlist for sellers
-          if (cartTab) cartTab.style.display = 'block';
-          if (wishlistTab) wishlistTab.style.display = 'block';
-        } else if (currentUser.userType === 'admin') {
-          badge.textContent = 'Admin';
-          sellerTabs.forEach(function(el) { el.style.display = 'block'; });
-          adminTabs.forEach(function(el) { el.style.display = 'block'; });
-          if (becomeSellerSection) becomeSellerSection.style.display = 'none';
+          if (cartTab) cartTab.style.display = "block";
+          if (wishlistTab) wishlistTab.style.display = "block";
+        } else if (currentUser.userType === "admin") {
+          badge.textContent = "Admin";
+          sellerTabs.forEach(function (el) {
+            el.style.display = "block";
+          });
+          adminTabs.forEach(function (el) {
+            el.style.display = "block";
+          });
+          if (becomeSellerSection) becomeSellerSection.style.display = "none";
           // Hide cart and wishlist tabs for admin
-          if (cartTab) cartTab.style.display = 'none';
-          if (wishlistTab) wishlistTab.style.display = 'none';
+          if (cartTab) cartTab.style.display = "none";
+          if (wishlistTab) wishlistTab.style.display = "none";
         } else {
-          badge.textContent = 'Customer';
-          if (becomeSellerSection) becomeSellerSection.style.display = 'block';
+          badge.textContent = "Customer";
+          if (becomeSellerSection) becomeSellerSection.style.display = "block";
           // Show cart and wishlist for regular users
-          if (cartTab) cartTab.style.display = 'block';
-          if (wishlistTab) wishlistTab.style.display = 'block';
+          if (cartTab) cartTab.style.display = "block";
+          if (wishlistTab) wishlistTab.style.display = "block";
         }
 
         // Fill form
-        document.getElementById('firstName').value = currentUser.firstName || '';
-        document.getElementById('lastName').value = currentUser.lastName || '';
-        document.getElementById('email').value = currentUser.email || '';
-        document.getElementById('username').value = currentUser.username || '';
-        document.getElementById('phone').value = currentUser.phone || '';
-        
+        document.getElementById("firstName").value =
+          currentUser.firstName || "";
+        document.getElementById("lastName").value = currentUser.lastName || "";
+        document.getElementById("email").value = currentUser.email || "";
+        document.getElementById("username").value = currentUser.username || "";
+        document.getElementById("phone").value = currentUser.phone || "";
+
         if (currentUser.address) {
-          document.getElementById('street').value = currentUser.address.street || '';
-          document.getElementById('city').value = currentUser.address.city || '';
-          document.getElementById('state').value = currentUser.address.state || '';
-          document.getElementById('pincode').value = currentUser.address.pincode || '';
-          document.getElementById('country').value = currentUser.address.country || 'India';
+          document.getElementById("street").value =
+            currentUser.address.street || "";
+          document.getElementById("city").value =
+            currentUser.address.city || "";
+          document.getElementById("state").value =
+            currentUser.address.state || "";
+          document.getElementById("pincode").value =
+            currentUser.address.pincode || "";
+          document.getElementById("country").value =
+            currentUser.address.country || "India";
         }
 
         if (!window.__profileTabApplied) {
-          const requestedTab = new URLSearchParams(window.location.search).get('tab');
+          const requestedTab = new URLSearchParams(window.location.search).get(
+            "tab",
+          );
           if (requestedTab) {
             window.__profileTabApplied = true;
             switchTab(requestedTab);
@@ -670,24 +809,26 @@
 
       async function loadCart() {
         try {
-          const response = await fetch('/api/cart');
+          const response = await fetch("/api/cart");
           const cart = await response.json();
-          const cartContent = document.getElementById('cartContent');
+          const cartContent = document.getElementById("cartContent");
 
           if (cart.length === 0) {
-            cartContent.innerHTML = '<p>Your cart is empty.</p>';
+            cartContent.innerHTML = "<p>Your cart is empty.</p>";
             return;
           }
 
-          cartContent.innerHTML = cart.map(item => `
+          cartContent.innerHTML = cart
+            .map(
+              (item) => `
             <div class="product-item">
               <div class="product-item-image">
-                <img src="${item.image || 'images/home-pages pics/seeds.jpg'}" alt="${item.name}" />
+                <img src="${item.image || "images/home-pages pics/seeds.jpg"}" alt="${item.name}" />
               </div>
               <div class="product-item-details">
                 <h3>${item.name}</h3>
-                <p>₹${item.price.toLocaleString('en-IN')} x ${item.quantity}</p>
-                <p><strong>Total: ₹${(item.price * item.quantity).toLocaleString('en-IN')}</strong></p>
+                <p>₹${item.price.toLocaleString("en-IN")} x ${item.quantity}</p>
+                <p><strong>Total: ₹${(item.price * item.quantity).toLocaleString("en-IN")}</strong></p>
               </div>
               <div class="product-item-actions">
                 <button class="btn-edit" onclick="updateCartQuantity('${item.productId}', ${item.quantity - 1})">-</button>
@@ -696,67 +837,76 @@
                 <button class="btn-delete" onclick="removeFromCart('${item.productId}')">Remove</button>
               </div>
             </div>
-          `).join('');
+          `,
+            )
+            .join("");
         } catch (error) {
-          console.error('Error loading cart:', error);
+          console.error("Error loading cart:", error);
         }
       }
 
       async function loadWishlist() {
         try {
-          const response = await fetch('/api/wishlist');
+          const response = await fetch("/api/wishlist");
           const wishlist = await response.json();
-          const wishlistContent = document.getElementById('wishlistContent');
+          const wishlistContent = document.getElementById("wishlistContent");
 
           if (wishlist.length === 0) {
-            wishlistContent.innerHTML = '<p>Your wishlist is empty.</p>';
+            wishlistContent.innerHTML = "<p>Your wishlist is empty.</p>";
             return;
           }
 
-          wishlistContent.innerHTML = wishlist.map(item => `
+          wishlistContent.innerHTML = wishlist
+            .map(
+              (item) => `
             <div class="product-item">
               <div class="product-item-image">
-                <img src="${item.image || 'images/home-pages pics/seeds.jpg'}" alt="${item.name}" />
+                <img src="${item.image || "images/home-pages pics/seeds.jpg"}" alt="${item.name}" />
               </div>
               <div class="product-item-details">
                 <h3>${item.name}</h3>
-                <p>₹${item.price.toLocaleString('en-IN')}</p>
+                <p>₹${item.price.toLocaleString("en-IN")}</p>
               </div>
               <div class="product-item-actions">
                 <button class="btn-delete" onclick="removeFromWishlist('${item.productId}')">Remove</button>
               </div>
             </div>
-          `).join('');
+          `,
+            )
+            .join("");
         } catch (error) {
-          console.error('Error loading wishlist:', error);
+          console.error("Error loading wishlist:", error);
         }
       }
 
       async function loadProducts() {
         try {
-          const response = await fetch('/api/products/seller');
+          const response = await fetch("/api/products/seller");
           const products = await response.json();
-          const productsContent = document.getElementById('productsContent');
+          const productsContent = document.getElementById("productsContent");
 
           if (products.length === 0) {
-            productsContent.innerHTML = '<p>You haven\'t added any products yet.</p>';
+            productsContent.innerHTML =
+              "<p>You haven't added any products yet.</p>";
             return;
           }
 
           productsContent.innerHTML = `
             <div class="product-list">
-              ${products.map(product => `
+              ${products
+                .map(
+                  (product) => `
                 <div class="product-item">
                   <div class="product-item-image">
-                    <img src="${product.image || 'images/home-pages pics/seeds.jpg'}" alt="${product.name}" />
+                    <img src="${product.image || "images/home-pages pics/seeds.jpg"}" alt="${product.name}" />
                   </div>
                   <div class="product-item-details">
                     <h3>${product.name}</h3>
-                    <p>₹${product.price.toLocaleString('en-IN')} | Stock: ${product.stock} | Sold: ${product.sold}</p>
-                    <p style="color: var(--text-light); font-size: 0.9rem;">${product.description || ''}</p>
+                    <p>₹${product.price.toLocaleString("en-IN")} | Stock: ${product.stock} | Sold: ${product.sold}</p>
+                    <p style="color: var(--text-light); font-size: 0.9rem;">${product.description || ""}</p>
                     <p style="margin-top: 0.5rem;">
-                      <span style="padding: 0.25rem 0.75rem; background: ${product.approved ? '#4a9e2a' : '#f39c12'}; color: white; border-radius: 20px; font-size: 0.85rem;">
-                        ${product.approved ? '✓ Approved' : '⏳ Pending Approval'}
+                      <span style="padding: 0.25rem 0.75rem; background: ${product.approved ? "#4a9e2a" : "#f39c12"}; color: white; border-radius: 20px; font-size: 0.85rem;">
+                        ${product.approved ? "✓ Approved" : "⏳ Pending Approval"}
                       </span>
                     </p>
                   </div>
@@ -765,36 +915,49 @@
                     <button class="btn-delete" onclick="deleteProduct('${product._id}')">Delete</button>
                   </div>
                 </div>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </div>
           `;
         } catch (error) {
-          console.error('Error loading products:', error);
+          console.error("Error loading products:", error);
         }
       }
 
       async function loadEarnings() {
         try {
-          const endpoint = currentUser && currentUser.userType === 'admin'
-            ? '/api/admin/earnings'
-            : '/api/seller/earnings';
-          const response = await fetch(endpoint, { credentials: 'include' });
+          const endpoint =
+            currentUser && currentUser.userType === "admin"
+              ? "/api/admin/earnings"
+              : "/api/seller/earnings";
+          const response = await fetch(endpoint, { credentials: "include" });
           const earnings = await response.json().catch(() => ({}));
 
           if (!response.ok) {
-            throw new Error(earnings.error || 'Failed to load earnings');
+            throw new Error(earnings.error || "Failed to load earnings");
           }
 
           let list = earnings.productsList || earnings.products || [];
-          const totalEarnings = Number(currentUser && currentUser.userType === "admin" ? earnings.totalRevenue ?? earnings.totalEarnings ?? 0 : earnings.totalEarnings ?? earnings.totalRevenue ?? 0);
-          const totalSold = Number(currentUser && currentUser.userType === "admin" ? earnings.totalItemsSold ?? 0 : earnings.totalSold ?? earnings.totalItemsSold ?? 0);
+          const totalEarnings = Number(
+            currentUser && currentUser.userType === "admin"
+              ? (earnings.totalRevenue ?? earnings.totalEarnings ?? 0)
+              : (earnings.totalEarnings ?? earnings.totalRevenue ?? 0),
+          );
+          const totalSold = Number(
+            currentUser && currentUser.userType === "admin"
+              ? (earnings.totalItemsSold ?? 0)
+              : (earnings.totalSold ?? earnings.totalItemsSold ?? 0),
+          );
           let totalProducts = Array.isArray(list)
             ? list.length
             : Number(earnings.totalProducts ?? earnings.products ?? 0);
 
           // Keep admin earnings product count aligned with "My Products" tab source.
-          if (currentUser && currentUser.userType === 'admin') {
-            const adminProductsRes = await fetch('/api/products/seller', { credentials: 'include' });
+          if (currentUser && currentUser.userType === "admin") {
+            const adminProductsRes = await fetch("/api/products/seller", {
+              credentials: "include",
+            });
             if (adminProductsRes.ok) {
               const adminProducts = await adminProductsRes.json();
               if (Array.isArray(adminProducts)) {
@@ -804,196 +967,224 @@
             }
           }
 
-          document.getElementById('totalEarnings').textContent = `\u20B9${totalEarnings.toLocaleString('en-IN')}`;
-          document.getElementById('totalSold').textContent = totalSold;
-          document.getElementById('totalProducts').textContent = totalProducts;
+          document.getElementById("totalEarnings").textContent =
+            `\u20B9${totalEarnings.toLocaleString("en-IN")}`;
+          document.getElementById("totalSold").textContent = totalSold;
+          document.getElementById("totalProducts").textContent = totalProducts;
 
-          const earningsContent = document.getElementById('earningsContent');
+          const earningsContent = document.getElementById("earningsContent");
           if (!Array.isArray(list) || list.length === 0) {
-            earningsContent.innerHTML = '<p>No products yet.</p>';
+            earningsContent.innerHTML = "<p>No products yet.</p>";
             return;
           }
 
           earningsContent.innerHTML = `
             <div class="product-list">
-              ${list.map(product => `
+              ${list
+                .map(
+                  (product) => `
                 <div class="product-item">
                   <div class="product-item-details">
                     <h3>${product.name}</h3>
-                    <p>Sold: ${Number(product.sold || 0)} units | Earnings: \u20B9${Number(product.earnings || 0).toLocaleString('en-IN')}</p>
+                    <p>Sold: ${Number(product.sold || 0)} units | Earnings: \u20B9${Number(product.earnings || 0).toLocaleString("en-IN")}</p>
                   </div>
                 </div>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </div>
           `;
         } catch (error) {
-          console.error('Error loading earnings:', error);
+          console.error("Error loading earnings:", error);
         }
       }
 
       async function updateCartQuantity(productId, quantity) {
         try {
           await fetch(`/api/cart/${productId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ quantity })
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quantity }),
           });
           loadCart();
         } catch (error) {
-          console.error('Error updating cart:', error);
+          console.error("Error updating cart:", error);
         }
       }
 
       async function removeFromCart(productId) {
         try {
-          await fetch(`/api/cart/${productId}`, { method: 'DELETE' });
+          await fetch(`/api/cart/${productId}`, { method: "DELETE" });
           loadCart();
         } catch (error) {
-          console.error('Error removing from cart:', error);
+          console.error("Error removing from cart:", error);
         }
       }
 
       async function removeFromWishlist(productId) {
         try {
-          await fetch(`/api/wishlist/${productId}`, { method: 'DELETE' });
+          await fetch(`/api/wishlist/${productId}`, { method: "DELETE" });
           loadWishlist();
         } catch (error) {
-          console.error('Error removing from wishlist:', error);
+          console.error("Error removing from wishlist:", error);
         }
       }
 
       function openAddProductModal() {
         editingProductId = null;
-        document.getElementById('modalTitle').textContent = 'Add New Product';
-        document.getElementById('productForm').reset();
-        document.getElementById('productModal').classList.add('active');
+        document.getElementById("modalTitle").textContent = "Add New Product";
+        document.getElementById("productForm").reset();
+        document.getElementById("productModal").classList.add("active");
       }
 
       function closeProductModal() {
-        document.getElementById('productModal').classList.remove('active');
+        document.getElementById("productModal").classList.remove("active");
         editingProductId = null;
       }
 
       async function saveProduct(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
-        let category = formData.get('category');
-        if (category === 'other') {
-          category = (formData.get('customCategory') || '').trim();
+        let category = formData.get("category");
+        if (category === "other") {
+          category = (formData.get("customCategory") || "").trim();
           if (!category) {
-            alert('Please enter a custom category name.');
+            alert("Please enter a custom category name.");
             return;
           }
         }
         const data = {
-          name: formData.get('name'),
-          description: formData.get('description'),
-          price: parseFloat(formData.get('price')),
-          stock: parseInt(formData.get('stock')),
+          name: formData.get("name"),
+          description: formData.get("description"),
+          price: parseFloat(formData.get("price")),
+          stock: parseInt(formData.get("stock")),
           category,
-          subcategory: formData.get('subcategory'),
-          image: formData.get('image')
+          subcategory: formData.get("subcategory"),
+          image: formData.get("image"),
         };
 
         try {
-          const url = editingProductId ? `/api/products/${editingProductId}` : '/api/products';
-          const method = editingProductId ? 'PUT' : 'POST';
+          const url = editingProductId
+            ? `/api/products/${editingProductId}`
+            : "/api/products";
+          const method = editingProductId ? "PUT" : "POST";
 
           const response = await fetch(url, {
             method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
           });
 
           if (response.ok) {
             closeProductModal();
             if (!editingProductId) {
-              alert('Product submitted successfully! It will be visible to customers once approved by admin.');
+              alert(
+                "Product submitted successfully! It will be visible to customers once approved by admin.",
+              );
             } else {
-              alert('Product updated successfully!');
+              alert("Product updated successfully!");
             }
             loadProducts();
           } else {
-            alert('Error saving product');
+            alert("Error saving product");
           }
         } catch (error) {
-          console.error('Error saving product:', error);
-          alert('Error saving product');
+          console.error("Error saving product:", error);
+          alert("Error saving product");
         }
       }
 
       async function editProduct(productId) {
         try {
-          const response = await fetch('/api/products/seller');
+          const response = await fetch("/api/products/seller");
           const products = await response.json();
-          const product = products.find(p => p._id === productId);
+          const product = products.find((p) => p._id === productId);
 
           if (product) {
             editingProductId = productId;
-            document.getElementById('modalTitle').textContent = 'Edit Product';
+            document.getElementById("modalTitle").textContent = "Edit Product";
             document.querySelector('[name="name"]').value = product.name;
-            document.querySelector('[name="description"]').value = product.description || '';
+            document.querySelector('[name="description"]').value =
+              product.description || "";
             document.querySelector('[name="price"]').value = product.price;
             document.querySelector('[name="stock"]').value = product.stock;
-            document.querySelector('[name="category"]').value = product.category;
-            document.querySelector('[name="subcategory"]').value = product.subcategory || '';
-            document.querySelector('[name="image"]').value = product.image || '';
-            document.getElementById('productModal').classList.add('active');
+            document.querySelector('[name="category"]').value =
+              product.category;
+            document.querySelector('[name="subcategory"]').value =
+              product.subcategory || "";
+            document.querySelector('[name="image"]').value =
+              product.image || "";
+            document.getElementById("productModal").classList.add("active");
           }
         } catch (error) {
-          console.error('Error loading product:', error);
+          console.error("Error loading product:", error);
         }
       }
 
       async function deleteProduct(productId) {
-        if (!confirm('Are you sure you want to delete this product?')) return;
+        if (!confirm("Are you sure you want to delete this product?")) return;
 
         try {
-          const response = await fetch(`/api/products/${productId}`, { method: 'DELETE' });
+          const response = await fetch(`/api/products/${productId}`, {
+            method: "DELETE",
+          });
           if (response.ok) {
             loadProducts();
           }
         } catch (error) {
-          console.error('Error deleting product:', error);
+          console.error("Error deleting product:", error);
         }
       }
 
-      document.getElementById('profileForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = {
-          firstName: formData.get('firstName'),
-          lastName: formData.get('lastName'),
-          phone: formData.get('phone'),
-          address: {
-            street: formData.get('street'),
-            city: formData.get('city'),
-            state: formData.get('state'),
-            pincode: formData.get('pincode'),
-            country: formData.get('country')
+      document
+        .getElementById("profileForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const phoneDigits = String(formData.get("phone") || "").replace(
+            /\D/g,
+            "",
+          );
+          if (!/^[1-9][0-9]{9}$/.test(phoneDigits)) {
+            alert(
+              "Phone number must be exactly 10 digits and cannot start with 0.",
+            );
+            return;
           }
-        };
 
-        try {
-          const response = await fetch('/api/user', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
+          const data = {
+            firstName: formData.get("firstName"),
+            lastName: formData.get("lastName"),
+            phone: phoneDigits,
+            address: {
+              street: formData.get("street"),
+              city: formData.get("city"),
+              state: formData.get("state"),
+              pincode: formData.get("pincode"),
+              country: formData.get("country"),
+            },
+          };
 
-          if (response.ok) {
-            currentUser = await response.json();
-            loadProfile();
-            alert('Profile updated successfully!');
+          try {
+            const response = await fetch("/api/user", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+              currentUser = await response.json();
+              loadProfile();
+              alert("Profile updated successfully!");
+            }
+          } catch (error) {
+            console.error("Error updating profile:", error);
           }
-        } catch (error) {
-          console.error('Error updating profile:', error);
-        }
-      });
+        });
 
       // Close modal on outside click
-      document.getElementById('productModal').addEventListener('click', (e) => {
-        if (e.target.id === 'productModal') {
+      document.getElementById("productModal").addEventListener("click", (e) => {
+        if (e.target.id === "productModal") {
           closeProductModal();
         }
       });
@@ -1003,27 +1194,19 @@
 
       // Toggle custom category input based on dropdown selection
       (function () {
-        const categorySelect = document.getElementById('productCategorySelect');
-        const customGroup = document.getElementById('customCategoryGroup');
+        const categorySelect = document.getElementById("productCategorySelect");
+        const customGroup = document.getElementById("customCategoryGroup");
         if (!categorySelect || !customGroup) return;
-        categorySelect.addEventListener('change', function () {
-          if (this.value === 'other') {
-            customGroup.style.display = 'block';
+        categorySelect.addEventListener("change", function () {
+          if (this.value === "other") {
+            customGroup.style.display = "block";
           } else {
-            customGroup.style.display = 'none';
-            const input = document.getElementById('customCategoryInput');
-            if (input) input.value = '';
+            customGroup.style.display = "none";
+            const input = document.getElementById("customCategoryInput");
+            if (input) input.value = "";
           }
         });
       })();
-      
     </script>
   </body>
 </html>
-
-
-
-
-
-
-
