@@ -1008,75 +1008,81 @@ app.post("/api/orders", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
 
-    if (!user || user.userType === "admin") {
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    if (user.userType === "admin") {
       return res.status(403).json({ error: "Admin cannot place orders" });
     }
 
     const rawItems = Array.isArray(req.body.products) ? req.body.products : [];
+
     if (rawItems.length === 0) {
       return res.status(400).json({ error: "No products found in order" });
     }
 
-    const DELIVERY_CHARGE = 50;
+    const DELIVERY_CHARGE = 50; // fixed per order
+    let adminDeliveryEarnings = DELIVERY_CHARGE;
 
-    let productsTotal = 0;
-    let adminProductEarnings = 0;
-    let sellerCommission = 0;
-
-    const orderProducts = [];
+    let orderProducts = [];
+    let subtotal = 0;
 
     for (const item of rawItems) {
       const product = await Product.findById(item.productId);
+
       if (!product || !product.approved) {
-        return res.status(400).json({ error: "Invalid product in order" });
+        return res.status(400).json({ error: "Invalid product" });
       }
 
-      const qty = Number(item.quantity) || 1;
+      const qty = Number(item.quantity);
+      if (!Number.isInteger(qty) || qty <= 0) {
+        return res.status(400).json({ error: "Invalid quantity" });
+      }
+
       if (product.stock < qty) {
         return res.status(400).json({
-          error: `Only ${product.stock} left for ${product.name}`,
+          error: `Only ${product.stock} units available for ${product.name}`
         });
       }
 
-      const totalPrice = product.price * qty;
-      productsTotal += totalPrice;
+      const productTotal = product.price * qty;
+      subtotal += productTotal;
 
-      // Reduce stock & increase sold
+      // 🔥 UPDATE PRODUCT STATS
       product.stock -= qty;
-      product.sold += qty;
+      product.sold = (product.sold || 0) + qty;
 
-      // ===== EARNINGS LOGIC =====
+      // SELLER PRODUCT
+      if (product.sellerId && product.sellerId.toString() !== process.env.ADMIN_ID) {
+        product.earnings = (product.earnings || 0) + productTotal;
+      }
 
-      if (product.isAgroMart) {
-        adminProductEarnings += totalPrice;
-      } else {
-        // Seller earnings stored in product.earnings
-        product.earnings += totalPrice;
-
-        // Admin commission ₹50 per seller product
-        sellerCommission += 50;
+      // ADMIN PRODUCT
+      if (!product.sellerId) {
+        product.earnings = (product.earnings || 0) + productTotal;
       }
 
       await product.save();
 
       orderProducts.push({
-        productId: product._id.toString(),
-        name: product.name,
-        price: product.price,
+        productId: product._id,
         quantity: qty,
+        price: product.price,
+        sellerId: product.sellerId || null
       });
     }
 
-    const grandTotal = productsTotal + DELIVERY_CHARGE;
+    const total = subtotal + DELIVERY_CHARGE;
 
-    // Save order (correct schema fields)
+    // 🔥 CREATE ORDER
     const order = new Order({
-      userId: req.session.userId,
+      userId: user._id,
       products: orderProducts,
-      total: grandTotal,
-      deliveryAddress: req.body.deliveryAddress || {},
-      paymentMethod: req.body.paymentMethod || "Cash on Delivery",
-      status: "Placed",
+      subtotal,
+      deliveryCharge: DELIVERY_CHARGE,
+      total,
+      createdAt: new Date()
     });
 
     await order.save();
@@ -1084,10 +1090,11 @@ app.post("/api/orders", requireAuth, async (req, res) => {
     res.json({
       success: true,
       message: "Order placed successfully",
-      totalAmount: grandTotal,
-      deliveryCharge: DELIVERY_CHARGE,
+      orderId: order._id
     });
+
   } catch (error) {
+    console.error("Order Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -1168,32 +1175,30 @@ app.get("/api/seller/earnings", requireAuth, async (req, res) => {
     const user = await User.findById(req.session.userId);
 
     if (!user || user.userType !== "seller") {
-      return res.status(403).json({ error: "Seller access required" });
+      return res.status(403).json({ error: "Access denied" });
     }
 
-    const products = await Product.find({ sellerId: req.session.userId });
+    const products = await Product.find({ sellerId: user._id });
 
-    const totalEarnings = products.reduce(
-      (sum, p) => sum + (p.earnings || 0),
-      0
-    );
+    let totalEarnings = 0;
+    let totalSold = 0;
 
-    const totalSold = products.reduce(
-      (sum, p) => sum + (p.sold || 0),
-      0
-    );
+    for (const product of products) {
+      totalEarnings += product.earnings || 0;
+      totalSold += product.sold || 0;
+    }
 
     res.json({
       totalEarnings,
       totalSold,
       totalProducts: products.length,
-      products,
+      products
     });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-// Admin: Get all users
+});// Admin: Get all users
 app.get("/api/admin/users", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
@@ -1306,44 +1311,43 @@ app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 });
 
 // Admin: Total earnings (platform earnings)
+// Admin Earnings API
 app.get("/api/admin/earnings", requireAuth, async (req, res) => {
   try {
-    const admin = await User.findById(req.session.userId);
-    if (!admin || admin.userType !== "admin") {
-      return res.status(403).json({ error: "Admin access required" });
+    const user = await User.findById(req.session.userId);
+
+    if (!user || user.userType !== "admin") {
+      return res.status(403).json({ error: "Access denied" });
     }
 
-    const orders = await Order.find();
-    const agroProducts = await Product.find({ isAgroMart: true });
-    const sellerProducts = await Product.find({ isAgroMart: false });
+    const products = await Product.find();
 
-    const adminProductEarnings = agroProducts.reduce(
-      (sum, p) => sum + (p.sold * p.price),
-      0
-    );
+    let adminProductEarnings = 0;
+    let totalItemsSold = 0;
 
-    const sellerCommission = sellerProducts.reduce(
-      (sum, p) => sum + (p.sold * 50),
-      0
-    );
+    for (const product of products) {
+      if (!product.sellerId) {
+        adminProductEarnings += product.earnings || 0;
+        totalItemsSold += product.sold || 0;
+      }
+    }
 
-    const deliveryEarnings = orders.length * 50;
+    const totalOrders = await Order.countDocuments();
+    const deliveryEarnings = totalOrders * 50;
 
-    const totalAdminEarnings =
-      adminProductEarnings + sellerCommission + deliveryEarnings;
+    const totalAdminEarnings = adminProductEarnings + deliveryEarnings;
 
     res.json({
       totalAdminEarnings,
       adminProductEarnings,
-      sellerCommission,
       deliveryEarnings,
-      totalOrders: orders.length,
+      totalItemsSold
     });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
 // app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
