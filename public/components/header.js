@@ -27,8 +27,8 @@ async function loadHeader() {
   if (isAdmin) {
     // Admin navigation
     navMenuHTML = `
+      <li><a href="home.html" ${currentPage === 'home.html' ? 'class="active"' : ''}>Home</a></li>
       <li><a href="admin-dashboard.html" ${currentPage === 'admin-dashboard.html' ? 'class="active"' : ''}>Dashboard</a></li>
-      <li><a href="home.html" ${currentPage === 'home.html' ? 'class="active"' : ''}>Browse Products</a></li>
     `;
     
     headerActionsHTML = `
