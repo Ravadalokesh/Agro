@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -8,9 +8,8 @@ const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const SESSION_SECRET =
-  process.env.SESSION_SECRET || "agromart-secret-key-2024";
-app.set("trust proxy",1);
+const SESSION_SECRET = process.env.SESSION_SECRET || "agromart-secret-key-2024";
+app.set("trust proxy", 1);
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -24,7 +23,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: "auto", // Set to true if using HTTPS
-      sameSite:"lax",
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   }),
@@ -181,6 +180,14 @@ const requireAuth = (req, res, next) => {
   }
 };
 
+function normalizePhone(phoneValue) {
+  return String(phoneValue || "").replace(/\D/g, "");
+}
+
+function isValidPhone(phoneDigits) {
+  return /^[1-9][0-9]{9}$/.test(phoneDigits);
+}
+
 // Routes
 
 // Serve index.html for root
@@ -192,6 +199,13 @@ app.get("/", (req, res) => {
 app.post("/api/signup", async (req, res) => {
   try {
     const { username, email, password, firstName, lastName, phone } = req.body;
+    const normalizedPhone = normalizePhone(phone);
+
+    if (!isValidPhone(normalizedPhone)) {
+      return res.status(400).json({
+        error: "Phone number must be exactly 10 digits and cannot start with 0",
+      });
+    }
 
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
@@ -208,7 +222,7 @@ app.post("/api/signup", async (req, res) => {
       userType: "user",
       firstName,
       lastName,
-      phone,
+      phone: normalizedPhone,
       cart: [],
       wishlist: [],
     });
@@ -259,7 +273,9 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid username or password" });
     }
     if (user.userType === "admin") {
-      return res.status(401).json({ error: "Use Admin login for admin account" });
+      return res
+        .status(401)
+        .json({ error: "Use Admin login for admin account" });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
@@ -309,10 +325,13 @@ app.post("/api/forgot-password", async (req, res) => {
 
     // In production, send email with reset link
     // For development, return the token
-    const baseUrl = (process.env.APP_BASE_URL|| "")
-      .replace(/\r?\n/g, "")  // remove newlines
-      .trim();                // remove spaces
-    console.log("APP_BASE_URL value:", JSON.stringify(process.env.APP_BASE_URL));
+    const baseUrl = (process.env.APP_BASE_URL || "")
+      .replace(/\r?\n/g, "") // remove newlines
+      .trim(); // remove spaces
+    console.log(
+      "APP_BASE_URL value:",
+      JSON.stringify(process.env.APP_BASE_URL),
+    );
     const resetUrl = `${baseUrl}/reset-password.html?token=${resetToken}`;
     console.log("Final resetUrl:", resetUrl);
     res.json({
@@ -387,7 +406,7 @@ app.get("/api/user", requireAuth, async (req, res) => {
     const user = await User.findById(req.session.userId)
       .select("-password")
       .lean();
-    
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -402,7 +421,20 @@ app.get("/api/user", requireAuth, async (req, res) => {
 // Update user profile
 app.put("/api/user", requireAuth, async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.session.userId, req.body, {
+    const updates = { ...req.body };
+
+    if (Object.prototype.hasOwnProperty.call(updates, "phone")) {
+      const normalizedPhone = normalizePhone(updates.phone);
+      if (!isValidPhone(normalizedPhone)) {
+        return res.status(400).json({
+          error:
+            "Phone number must be exactly 10 digits and cannot start with 0",
+        });
+      }
+      updates.phone = normalizedPhone;
+    }
+
+    const user = await User.findByIdAndUpdate(req.session.userId, updates, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -890,9 +922,29 @@ app.get("/api/products/search", async (req, res) => {
         "fruit",
         "fruits",
       ],
-      "grains-pulses": ["grain", "grains", "pulse", "pulses", "dal", "lentil", "lentils"],
-      "seeds-fertilizers": ["seed", "seeds", "fertilizer", "fertilizers", "manure"],
-      "tools-equipment": ["tool", "tools", "equipment", "equipments", "farm tool"],
+      "grains-pulses": [
+        "grain",
+        "grains",
+        "pulse",
+        "pulses",
+        "dal",
+        "lentil",
+        "lentils",
+      ],
+      "seeds-fertilizers": [
+        "seed",
+        "seeds",
+        "fertilizer",
+        "fertilizers",
+        "manure",
+      ],
+      "tools-equipment": [
+        "tool",
+        "tools",
+        "equipment",
+        "equipments",
+        "farm tool",
+      ],
       livestock: ["livestock", "cattle", "poultry", "goat", "goats", "animal"],
     };
 
@@ -1120,18 +1172,16 @@ app.post("/api/orders", requireAuth, async (req, res) => {
       {
         $inc: {
           earnings:
-            adminProductEarnings +
-            sellerCommissionEarnings +
-            DELIVERY_CHARGE,
+            adminProductEarnings + sellerCommissionEarnings + DELIVERY_CHARGE,
         },
-      }
+      },
     );
 
     // ================= ORDER TOTAL CALCULATION =================
 
     const productsTotal = dbUpdates.reduce(
       (sum, entry) => sum + entry.product.price * entry.qty,
-      0
+      0,
     );
 
     const grandTotal = productsTotal + DELIVERY_CHARGE;
@@ -1161,7 +1211,7 @@ app.post("/api/orders", requireAuth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});// app.post("/api/orders", requireAuth, async (req, res) => {
+}); // app.post("/api/orders", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
 
@@ -1397,7 +1447,8 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
 
     for (const order of orders) {
       for (const item of order.products) {
-        totalRevenue += (Number(item.price) || 0) * (Number(item.quantity) || 1);
+        totalRevenue +=
+          (Number(item.price) || 0) * (Number(item.quantity) || 1);
         totalItemsSold += Number(item.quantity) || 1;
       }
     }
@@ -1423,7 +1474,6 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
