@@ -1369,16 +1369,23 @@ app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 app.get("/api/admin/earnings", requireAuth, async (req, res) => {
   try {
     const admin = await User.findById(req.session.userId);
+
     if (!admin || admin.userType !== "admin") {
       return res.status(403).json({ error: "Admin access required" });
     }
 
     const DELIVERY_CHARGE_PER_ORDER = 50;
 
-    const orders = await Order.find();
-    const adminProducts = await Product.find({ isAgroMart: true });
+    // ✅ Get products created by admin
+    const adminProducts = await Product.find({
+      sellerId: admin._id
+    });
 
-    const adminProductIds = adminProducts.map(p => p._id.toString());
+    const adminProductIds = adminProducts.map(p =>
+      p._id.toString()
+    );
+
+    const orders = await Order.find();
 
     let totalAdminEarnings = 0;
     let totalAdminItemsSold = 0;
@@ -1391,6 +1398,7 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
       for (const item of order.products) {
 
         if (adminProductIds.includes(item.productId)) {
+
           const qty = Number(item.quantity) || 1;
           const price = Number(item.price) || 0;
 
@@ -1400,7 +1408,7 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
         }
       }
 
-      // If order contains at least one admin product
+      // Add ₹50 once per order if it contains admin product
       if (hasAdminProduct) {
         totalAdminEarnings += adminOrderAmount + DELIVERY_CHARGE_PER_ORDER;
       }
@@ -1410,14 +1418,13 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
       totalAdminEarnings,
       totalItemsSold: totalAdminItemsSold,
       totalAdminProducts: adminProducts.length,
-      products: adminProducts,
+      products: adminProducts
     });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-// app.get("/api/admin/statistics", requireAuth, async (req, res) => {
+});// app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
 //     if (user.userType !== "admin") {
