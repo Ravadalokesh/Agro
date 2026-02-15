@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -8,8 +8,9 @@ const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const SESSION_SECRET = process.env.SESSION_SECRET || "agromart-secret-key-2024";
-app.set("trust proxy", 1);
+const SESSION_SECRET =
+  process.env.SESSION_SECRET || "agromart-secret-key-2024";
+app.set("trust proxy",1);
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -23,7 +24,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: "auto", // Set to true if using HTTPS
-      sameSite: "lax",
+      sameSite:"lax",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   }),
@@ -180,14 +181,6 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-function normalizePhone(phoneValue) {
-  return String(phoneValue || "").replace(/\D/g, "");
-}
-
-function isValidPhone(phoneDigits) {
-  return /^[1-9][0-9]{9}$/.test(phoneDigits);
-}
-
 // Routes
 
 // Serve index.html for root
@@ -199,13 +192,6 @@ app.get("/", (req, res) => {
 app.post("/api/signup", async (req, res) => {
   try {
     const { username, email, password, firstName, lastName, phone } = req.body;
-    const normalizedPhone = normalizePhone(phone);
-
-    if (!isValidPhone(normalizedPhone)) {
-      return res.status(400).json({
-        error: "Phone number must be exactly 10 digits and cannot start with 0",
-      });
-    }
 
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
@@ -222,7 +208,7 @@ app.post("/api/signup", async (req, res) => {
       userType: "user",
       firstName,
       lastName,
-      phone: normalizedPhone,
+      phone,
       cart: [],
       wishlist: [],
     });
@@ -273,9 +259,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid username or password" });
     }
     if (user.userType === "admin") {
-      return res
-        .status(401)
-        .json({ error: "Use Admin login for admin account" });
+      return res.status(401).json({ error: "Use Admin login for admin account" });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
@@ -325,13 +309,10 @@ app.post("/api/forgot-password", async (req, res) => {
 
     // In production, send email with reset link
     // For development, return the token
-    const baseUrl = (process.env.APP_BASE_URL || "")
-      .replace(/\r?\n/g, "") // remove newlines
-      .trim(); // remove spaces
-    console.log(
-      "APP_BASE_URL value:",
-      JSON.stringify(process.env.APP_BASE_URL),
-    );
+    const baseUrl = (process.env.APP_BASE_URL|| "")
+      .replace(/\r?\n/g, "")  // remove newlines
+      .trim();                // remove spaces
+    console.log("APP_BASE_URL value:", JSON.stringify(process.env.APP_BASE_URL));
     const resetUrl = `${baseUrl}/reset-password.html?token=${resetToken}`;
     console.log("Final resetUrl:", resetUrl);
     res.json({
@@ -406,7 +387,7 @@ app.get("/api/user", requireAuth, async (req, res) => {
     const user = await User.findById(req.session.userId)
       .select("-password")
       .lean();
-
+    
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -421,20 +402,7 @@ app.get("/api/user", requireAuth, async (req, res) => {
 // Update user profile
 app.put("/api/user", requireAuth, async (req, res) => {
   try {
-    const updates = { ...req.body };
-
-    if (Object.prototype.hasOwnProperty.call(updates, "phone")) {
-      const normalizedPhone = normalizePhone(updates.phone);
-      if (!isValidPhone(normalizedPhone)) {
-        return res.status(400).json({
-          error:
-            "Phone number must be exactly 10 digits and cannot start with 0",
-        });
-      }
-      updates.phone = normalizedPhone;
-    }
-
-    const user = await User.findByIdAndUpdate(req.session.userId, updates, {
+    const user = await User.findByIdAndUpdate(req.session.userId, req.body, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -922,29 +890,9 @@ app.get("/api/products/search", async (req, res) => {
         "fruit",
         "fruits",
       ],
-      "grains-pulses": [
-        "grain",
-        "grains",
-        "pulse",
-        "pulses",
-        "dal",
-        "lentil",
-        "lentils",
-      ],
-      "seeds-fertilizers": [
-        "seed",
-        "seeds",
-        "fertilizer",
-        "fertilizers",
-        "manure",
-      ],
-      "tools-equipment": [
-        "tool",
-        "tools",
-        "equipment",
-        "equipments",
-        "farm tool",
-      ],
+      "grains-pulses": ["grain", "grains", "pulse", "pulses", "dal", "lentil", "lentils"],
+      "seeds-fertilizers": ["seed", "seeds", "fertilizer", "fertilizers", "manure"],
+      "tools-equipment": ["tool", "tools", "equipment", "equipments", "farm tool"],
       livestock: ["livestock", "cattle", "poultry", "goat", "goats", "animal"],
     };
 
@@ -1060,66 +1008,85 @@ app.post("/api/orders", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
 
-    if (!user) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    if (user.userType === "admin") {
+    if (!user || user.userType === "admin") {
       return res.status(403).json({ error: "Admin cannot place orders" });
     }
 
-    const items = req.body.products;
-    if (!Array.isArray(items) || items.length === 0) {
+    const rawItems = Array.isArray(req.body.products) ? req.body.products : [];
+    if (rawItems.length === 0) {
       return res.status(400).json({ error: "No products found in order" });
     }
 
-    let subtotal = 0;
+    const DELIVERY_CHARGE = 50;
+
+    let productsTotal = 0;
+    let adminProductEarnings = 0;
+    let sellerCommission = 0;
+
     const orderProducts = [];
 
-    for (const item of items) {
+    for (const item of rawItems) {
       const product = await Product.findById(item.productId);
-
       if (!product || !product.approved) {
-        return res.status(400).json({ error: "Product unavailable" });
+        return res.status(400).json({ error: "Invalid product in order" });
       }
 
-      if (product.stock < item.quantity) {
-        return res.status(400).json({ error: "Insufficient stock" });
+      const qty = Number(item.quantity) || 1;
+      if (product.stock < qty) {
+        return res.status(400).json({
+          error: `Only ${product.stock} left for ${product.name}`,
+        });
       }
 
-      product.stock -= item.quantity;
+      const totalPrice = product.price * qty;
+      productsTotal += totalPrice;
+
+      // Reduce stock & increase sold
+      product.stock -= qty;
+      product.sold += qty;
+
+      // ===== EARNINGS LOGIC =====
+
+      if (product.isAgroMart) {
+        adminProductEarnings += totalPrice;
+      } else {
+        // Seller earnings stored in product.earnings
+        product.earnings += totalPrice;
+
+        // Admin commission ₹50 per seller product
+        sellerCommission += 50;
+      }
+
       await product.save();
 
-      subtotal += product.price * item.quantity;
-
       orderProducts.push({
-        productId: product._id,
-        sellerId: product.sellerId || null,
+        productId: product._id.toString(),
+        name: product.name,
         price: product.price,
-        quantity: item.quantity,
+        quantity: qty,
       });
     }
 
-    const DELIVERY_CHARGE = 50; // per order
-    const totalAmount = subtotal + DELIVERY_CHARGE;
+    const grandTotal = productsTotal + DELIVERY_CHARGE;
 
-    const newOrder = new Order({
-      userId: req.session.userId,   // ✅ FIXED
+    // Save order (correct schema fields)
+    const order = new Order({
+      userId: req.session.userId,
       products: orderProducts,
-      totalAmount,
-      deliveryCharge: DELIVERY_CHARGE,
-      deliveryAddress: req.body.deliveryAddress,
-      paymentMethod: req.body.paymentMethod,
-      status: "placed",
+      total: grandTotal,
+      deliveryAddress: req.body.deliveryAddress || {},
+      paymentMethod: req.body.paymentMethod || "Cash on Delivery",
+      status: "Placed",
     });
 
-    await newOrder.save();
+    await order.save();
 
     res.json({
       success: true,
       message: "Order placed successfully",
+      totalAmount: grandTotal,
+      deliveryCharge: DELIVERY_CHARGE,
     });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1198,32 +1165,32 @@ app.get("/api/orders", requireAuth, async (req, res) => {
 // Seller earnings endpoint
 app.get("/api/seller/earnings", requireAuth, async (req, res) => {
   try {
-    const sellerId = req.session.userId;
+    const user = await User.findById(req.session.userId);
 
-    const orders = await Order.find({
-      "products.sellerId": sellerId,
-      status: "placed",
-    });
+    if (!user || user.userType !== "seller") {
+      return res.status(403).json({ error: "Seller access required" });
+    }
 
-    let totalEarnings = 0;
-    let totalSold = 0;
+    const products = await Product.find({ sellerId: req.session.userId });
 
-    orders.forEach(order => {
-      order.products.forEach(item => {
-        if (item.sellerId && item.sellerId.toString() === sellerId) {
-          totalEarnings += item.price * item.quantity;
-          totalSold += item.quantity;
-        }
-      });
-    });
+    const totalEarnings = products.reduce(
+      (sum, p) => sum + (p.earnings || 0),
+      0
+    );
+
+    const totalSold = products.reduce(
+      (sum, p) => sum + (p.sold || 0),
+      0
+    );
 
     res.json({
       totalEarnings,
       totalSold,
+      totalProducts: products.length,
+      products,
     });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 // Admin: Get all users
@@ -1341,44 +1308,42 @@ app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 // Admin: Total earnings (platform earnings)
 app.get("/api/admin/earnings", requireAuth, async (req, res) => {
   try {
-    const adminId = req.session.userId;
+    const admin = await User.findById(req.session.userId);
+    if (!admin || admin.userType !== "admin") {
+      return res.status(403).json({ error: "Admin access required" });
+    }
 
-    const orders = await Order.find({ status: "placed" });
+    const orders = await Order.find();
+    const agroProducts = await Product.find({ isAgroMart: true });
+    const sellerProducts = await Product.find({ isAgroMart: false });
 
-    let adminProductEarnings = 0;
-    let deliveryEarnings = 0;
-    let totalSold = 0;
+    const adminProductEarnings = agroProducts.reduce(
+      (sum, p) => sum + (p.sold * p.price),
+      0
+    );
 
-    orders.forEach(order => {
-      let hasSellerProduct = false;
+    const sellerCommission = sellerProducts.reduce(
+      (sum, p) => sum + (p.sold * 50),
+      0
+    );
 
-      order.products.forEach(item => {
-        // Admin product
-        if (!item.sellerId) {
-          adminProductEarnings += item.price * item.quantity;
-          totalSold += item.quantity;
-        } else {
-          hasSellerProduct = true;
-        }
-      });
+    const deliveryEarnings = orders.length * 50;
 
-      // Delivery charge once per order
-      if (hasSellerProduct) {
-        deliveryEarnings += order.deliveryCharge || 50;
-      }
-    });
+    const totalAdminEarnings =
+      adminProductEarnings + sellerCommission + deliveryEarnings;
 
     res.json({
-      totalEarnings: adminProductEarnings + deliveryEarnings,
+      totalAdminEarnings,
       adminProductEarnings,
+      sellerCommission,
       deliveryEarnings,
-      totalSold,
+      totalOrders: orders.length,
     });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
+
 // app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
