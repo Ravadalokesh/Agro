@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Seeds & Fertilizers - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <!-- External CSS Files (served from src/ at root) -->
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <link rel="stylesheet" href="styles/category-pages.css" />
+    <link rel="stylesheet" href="styles/product-cards.css" />
+    <style>
+      .page-header {
+        background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header will be loaded by header.js -->
+    <div id="header-placeholder"></div>
+
+    <div class="page-header">
+      <h1 class="page-title">Seeds & Fertilizers</h1>
+      <p class="page-subtitle">
+        Premium Quality Seeds & Organic Fertilizers for Your Garden
+      </p>
+    </div>
+
+    <div class="container-custom">
+      <div class="filter-section">
+        <div class="row g-3">
+          <div class="col-md-3 col-6">
+            <select class="form-select" id="categoryFilter">
+              <option value="all">All Categories</option>
+              <option value="seeds">Seeds</option>
+              <option value="fertilizers">Fertilizers</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-6">
+            <select class="form-select" id="subCategoryFilter">
+              <option value="all">All Sub-Categories</option>
+              <option value="vegetable-seeds" data-parent="seeds">
+                Vegetable Seeds
+              </option>
+              <option value="flower-seeds" data-parent="seeds">
+                Flower Seeds
+              </option>
+              <option value="organic-fertilizers" data-parent="fertilizers">
+                Organic Fertilizers
+              </option>
+              <option value="npk-fertilizers" data-parent="fertilizers">
+                NPK Fertilizers
+              </option>
+            </select>
+          </div>
+          <div class="col-md-3 col-6">
+            <select class="form-select" id="sortFilter">
+              <option value="default">Sort by Price</option>
+              <option value="low-high">Price: Low to High</option>
+              <option value="high-low">Price: High to Low</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-6">
+            <select class="form-select" id="ratingFilter">
+              <option value="all">All Ratings</option>
+              <option value="4">4+ Stars</option>
+              <option value="3">3+ Stars</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="seeds"
+          data-subcategory="vegetable-seeds"
+          data-product-id="seeds-tomato-001"
+          data-price="414"
+          data-rating="5"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img src="images/home-pages pics/seeds.jpg" alt="Tomato Seeds" />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Tomato Seeds</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(324)</span>
+              </div>
+              <div class="product-price">₹414</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="fertilizers"
+          data-subcategory="organic-fertilizers"
+          data-product-id="fertilizer-allpurpose-002"
+          data-price="1992"
+          data-rating="4"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/fertilizer.jpg"
+                alt="All-Purpose Fertilizer"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">All-Purpose Fertilizer</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(289)</span>
+              </div>
+              <div class="product-price">₹1,992</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="seeds"
+          data-subcategory="vegetable-seeds"
+          data-product-id="seeds-cucumber-001"
+          data-price="456"
+          data-rating="5"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/tomato-seeds.jpg"
+                alt="Cucumber Seeds"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Cucumber Seeds</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(256)</span>
+              </div>
+              <div class="product-price">₹456</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="fertilizers"
+          data-subcategory="organic-fertilizers"
+          data-product-id="fertilizer-compost-001"
+          data-price="1576"
+          data-rating="4"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/rangeeggs.jpg"
+                alt="Compost Fertilizer"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Compost</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(198)</span>
+              </div>
+              <div class="product-price">₹1,576</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="seeds"
+          data-subcategory="vegetable-seeds"
+          data-product-id="seeds-pepper-001"
+          data-price="580"
+          data-rating="5"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/tools&equipment.jpg"
+                alt="Pepper Seeds"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Bell Pepper Seeds</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(267)</span>
+              </div>
+              <div class="product-price">₹580</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="fertilizers"
+          data-subcategory="npk-fertilizers"
+          data-product-id="fertilizer-npk-001"
+          data-price="2406"
+          data-rating="4"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/live-stock.jpg"
+                alt="NPK Fertilizer"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">NPK 19-19-19 Fertilizer</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(203)</span>
+              </div>
+              <div class="product-price">₹2,406</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="seeds"
+          data-subcategory="vegetable-seeds"
+          data-product-id="seeds-carrot-001"
+          data-price="331"
+          data-rating="5"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/allpurpose.jpg"
+                alt="Carrot Seeds"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Carrot Seeds</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(242)</span>
+              </div>
+              <div class="product-price">₹331</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-category="seeds"
+          data-subcategory="vegetable-seeds"
+          data-product-id="seeds-lettuce-001"
+          data-price="373"
+          data-rating="4"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/gardenhandsettools.jpg"
+                alt="Lettuce Seeds"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Lettuce Seeds Mix</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(178)</span>
+              </div>
+              <div class="product-price">₹373</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer will be loaded by footer.js -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Component Scripts -->
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/admin-restrictions.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Page Specific Scripts -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get category from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get("category");
+
+        const categoryFilter = document.getElementById("categoryFilter");
+        const subCategoryFilter = document.getElementById("subCategoryFilter");
+        const sortFilter = document.getElementById("sortFilter");
+        const ratingFilter = document.getElementById("ratingFilter");
+
+        // Set default category if coming from featured categories
+        if (categoryParam === "seeds" || categoryParam === "fertilizers") {
+          categoryFilter.value = categoryParam;
+          updateSubCategories();
+          filterProducts();
+        }
+
+        // Update sub-categories based on main category
+        function updateSubCategories() {
+          const selectedCategory = categoryFilter.value;
+          const subOptions = subCategoryFilter.querySelectorAll(
+            "option[data-parent]",
+          );
+
+          subCategoryFilter.innerHTML =
+            '<option value="all">All Sub-Categories</option>';
+
+          subOptions.forEach((option) => {
+            if (
+              selectedCategory === "all" ||
+              option.getAttribute("data-parent") === selectedCategory
+            ) {
+              const newOption = option.cloneNode(true);
+              subCategoryFilter.appendChild(newOption);
+            }
+          });
+
+          subCategoryFilter.value = "all";
+        }
+
+        // Filter products based on selected filters
+        function filterProducts() {
+          const selectedCategory = categoryFilter.value;
+          const selectedSubCategory = subCategoryFilter.value;
+          const selectedRating = ratingFilter.value;
+          const products = document.querySelectorAll("[data-category]");
+
+          products.forEach((product) => {
+            let show = true;
+
+            // Category filter
+            if (
+              selectedCategory !== "all" &&
+              product.getAttribute("data-category") !== selectedCategory
+            ) {
+              show = false;
+            }
+
+            // Sub-category filter
+            if (
+              selectedSubCategory !== "all" &&
+              product.getAttribute("data-subcategory") !== selectedSubCategory
+            ) {
+              show = false;
+            }
+
+            // Rating filter
+            if (selectedRating !== "all") {
+              const rating = parseInt(product.getAttribute("data-rating"));
+              if (rating < parseInt(selectedRating)) {
+                show = false;
+              }
+            }
+
+            // Show/hide product
+            product.style.display = show ? "" : "none";
+          });
+
+          // Sort products
+          const visibleProducts = Array.from(products).filter(
+            (p) => p.style.display !== "none",
+          );
+          const container = document.querySelector(".row.g-4.mb-5");
+
+          if (sortFilter.value === "low-high") {
+            visibleProducts.sort(
+              (a, b) =>
+                parseFloat(a.getAttribute("data-price")) -
+                parseFloat(b.getAttribute("data-price")),
+            );
+          } else if (sortFilter.value === "high-low") {
+            visibleProducts.sort(
+              (a, b) =>
+                parseFloat(b.getAttribute("data-price")) -
+                parseFloat(a.getAttribute("data-price")),
+            );
+          }
+
+          visibleProducts.forEach((product) => container.appendChild(product));
+        }
+
+        // Event listeners
+        categoryFilter.addEventListener("change", function () {
+          updateSubCategories();
+          filterProducts();
+        });
+
+        subCategoryFilter.addEventListener("change", filterProducts);
+        sortFilter.addEventListener("change", filterProducts);
+        ratingFilter.addEventListener("change", filterProducts);
+      });
+    </script>
+  </body>
+</html>

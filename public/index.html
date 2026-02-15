@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Login / Signup - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <!-- External CSS Files (served from src/ at root) -->
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <style>
+      .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        padding: 2rem;
+      }
+
+      .auth-card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        padding: 3rem;
+        max-width: 450px;
+        width: 100%;
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .auth-header img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 1rem;
+      }
+
+      .auth-header h1 {
+        font-size: 2rem;
+        color: var(--primary-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .auth-header p {
+        color: var(--text-light);
+      }
+
+      .auth-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .auth-tab {
+        flex: 1;
+        padding: 1rem;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: var(--transition);
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+      }
+
+      .auth-tab.active {
+        color: var(--primary-light);
+        border-bottom-color: var(--primary-light);
+      }
+
+      .auth-form {
+        display: none;
+      }
+
+      .auth-form.active {
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #c5c5c5;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: var(--transition);
+        background: #fff;
+        box-sizing: border-box;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+
+      .form-group input:hover,
+      .form-group select:hover {
+        border-color: #a8a8a8;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        border-width: 2px;
+        box-shadow: 0 0 0 3px rgba(63, 123, 29, 0.15);
+      }
+
+      .user-type-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .user-type-option {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #c5c5c5;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: #fff;
+      }
+
+      .user-type-option:hover {
+        border-color: #a8a8a8;
+      }
+
+      .user-type-option input[type="radio"] {
+        display: none;
+      }
+
+      .user-type-option.selected {
+        border-color: var(--primary-light);
+        background: var(--bg-light);
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 1rem;
+        background: var(--primary-light);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 1rem;
+      }
+
+      .submit-btn:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(74, 158, 42, 0.3);
+      }
+
+      .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: none;
+        border: 1px solid #f5c6cb;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .success-message {
+        background: #efe;
+        color: #2d6a2d;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: none;
+        border: 1px solid #c3e6cb;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+
+      .forgot-links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+      }
+
+      .forgot-link {
+        color: var(--primary-light);
+        text-decoration: none;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .forgot-link:hover {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: var(--radius);
+        padding: 2rem;
+        max-width: 450px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-header h2 {
+        color: var(--primary-dark);
+        font-size: 1.5rem;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: var(--transition);
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-modal:hover {
+        color: var(--text-dark);
+      }
+
+      .reset-url-container {
+        background: var(--bg-light);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 2px dashed var(--primary-light);
+        margin: 1rem 0;
+      }
+
+      .reset-url-container p {
+        font-size: 0.9rem;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .reset-url-link {
+        display: block;
+        word-break: break-all;
+        color: var(--primary-light);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.5rem;
+        background: white;
+        border-radius: 6px;
+        margin-top: 0.5rem;
+      }
+
+      .reset-url-link:hover {
+        background: var(--bg-section);
+      }
+
+      .username-display {
+        background: var(--bg-light);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        margin: 1rem 0;
+        border: 2px solid var(--primary-light);
+      }
+
+      .username-display label {
+        display: block;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 0.5rem;
+      }
+
+      .username-display .username-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+
+      @media (max-width: 768px) {
+        .auth-card {
+          padding: 2rem 1.5rem;
+        }
+        
+        .forgot-links {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: center;
+        }
+
+        .modal-content {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <img src="images/logo1.ico" alt="AgroMart Logo" />
+          <h1>AgroMart</h1>
+          <p>Fresh From Farm to Your Home</p>
+        </div>
+
+        <div class="login-type-group" style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Login as</label>
+          <div style="display: flex; gap: 1rem;">
+            <label class="user-type-option selected" id="loginTypeUser" onclick="setLoginType('user', this)">
+              <input type="radio" name="loginType" value="user" checked />
+              <i class="bi bi-person" style="font-size: 1.25rem; display: block; margin-bottom: 0.25rem;"></i>
+              <span>User</span>
+            </label>
+            <label class="user-type-option" id="loginTypeAdmin" onclick="setLoginType('admin', this)">
+              <input type="radio" name="loginType" value="admin" />
+              <i class="bi bi-shield-lock" style="font-size: 1.25rem; display: block; margin-bottom: 0.25rem;"></i>
+              <span>Admin</span>
+            </label>
+          </div>
+          <p id="adminHint" style="display: none; font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">No registration for admin. Login only.</p>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+          <button class="auth-tab" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+          <input type="hidden" name="loginType" id="loginTypeInput" value="user" />
+          <div class="error-message" id="loginError"></div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" id="loginUsername" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required />
+          </div>
+          <div class="forgot-links">
+            <a class="forgot-link" onclick="showForgotPasswordModal()">Forgot Password?</a>
+            <a class="forgot-link" onclick="showForgotUsernameModal()">Forgot Username?</a>
+          </div>
+          <button type="submit" class="submit-btn">Login</button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+          <div class="error-message" id="signupError"></div>
+          <div class="success-message" id="signupSuccess"></div>
+          <div class="form-group">
+            <label>Username *</label>
+            <input type="text" name="username" required />
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" name="password" required minlength="6" />
+          </div>
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="firstName" />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="lastName" />
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" name="phone" />
+          </div>
+          <button type="submit" class="submit-btn">Sign Up</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Forgot Password</h2>
+          <button class="close-modal" onclick="closeForgotPasswordModal()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="error-message" id="forgotPasswordError"></div>
+        <div class="success-message" id="forgotPasswordSuccess"></div>
+        <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" id="forgotPasswordEmail" required placeholder="Enter your registered email" />
+          </div>
+          <button type="submit" class="submit-btn">Send Reset Link</button>
+        </form>
+        <div id="resetUrlDisplay" style="display: none;">
+          <div class="reset-url-container">
+            <p><strong>Password Reset Link:</strong></p>
+          
+            <a id="resetUrlLink" class="reset-url-link" target="_blank">Open Reset Password Page</a>
+          </div>
+          <button class="submit-btn" onclick="closeForgotPasswordModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forgot Username Modal -->
+    <div id="forgotUsernameModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Forgot Username</h2>
+          <button class="close-modal" onclick="closeForgotUsernameModal()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="error-message" id="forgotUsernameError"></div>
+        <form id="forgotUsernameForm" onsubmit="handleForgotUsername(event)">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" id="forgotUsernameEmail" required placeholder="Enter your registered email" />
+          </div>
+          <button type="submit" class="submit-btn">Recover Username</button>
+        </form>
+        <div id="usernameDisplay" style="display: none;">
+          <div class="username-display">
+            <label>Your Username:</label>
+            <div class="username-value" id="usernameValue"></div>
+          </div>
+          <button class="submit-btn" onclick="copyUsernameAndClose()">Copy & Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Server notice (shown when opened as file) -->
+    <div
+      id="serverNotice"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #e74c3c;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        z-index: 9999;
+        font-weight: 600;
+      "
+    >
+      You are viewing this page as a file. Login/Signup need the server. Run
+      <strong>npm start</strong> in the project folder, then open
+      <strong>http://localhost:3000</strong> in your browser.
+    </div>
+
+    <script>
+      // API base URL: use current origin when served from server (e.g. http://localhost:3000), else fallback for file://
+      const API_BASE =
+        window.location.protocol === "http:" ||
+        window.location.protocol === "https:"
+          ? window.location.origin
+          : "http://localhost:3000";
+
+      function apiUrl(path) {
+        return API_BASE + (path.startsWith("/") ? path : "/" + path);
+      }
+
+      function getNetworkErrorMessage() {
+        return 'Cannot connect to server. Please run "npm start" in your project folder, then open http://localhost:3000 in your browser.';
+      }
+
+      function switchTab(tab) {
+        document
+          .querySelectorAll(".auth-tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".auth-form")
+          .forEach((f) => f.classList.remove("active"));
+
+        if (tab === "login") {
+          document.querySelector(".auth-tab").classList.add("active");
+          document.getElementById("loginForm").classList.add("active");
+        } else {
+          document.querySelectorAll(".auth-tab")[1].classList.add("active");
+          document.getElementById("signupForm").classList.add("active");
+        }
+      }
+
+      function setLoginType(type, element) {
+        document.querySelectorAll("#loginTypeUser, #loginTypeAdmin").forEach((opt) => opt.classList.remove("selected"));
+        element.classList.add("selected");
+        document.querySelector(`input[name="loginType"][value="${type}"]`).checked = true;
+        document.getElementById("loginTypeInput").value = type;
+        var signupTab = document.getElementById("signupTabBtn");
+        var adminHint = document.getElementById("adminHint");
+        if (type === "admin") {
+          if (signupTab) signupTab.style.display = "none";
+          if (adminHint) adminHint.style.display = "block";
+        } else {
+          if (signupTab) signupTab.style.display = "block";
+          if (adminHint) adminHint.style.display = "none";
+        }
+      }
+
+      async function handleLogin(event) {
+        event.preventDefault();
+        const errorDiv = document.getElementById("loginError");
+        errorDiv.classList.remove("show");
+
+        const formData = new FormData(event.target);
+        const data = {
+          username: formData.get("username"),
+          password: formData.get("password"),
+          loginType: document.getElementById("loginTypeInput").value || "user",
+        };
+
+        try {
+          const response = await fetch(apiUrl("/api/login"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (response.ok) {
+            // Redirect admin to admin dashboard, others to home
+            if (result.user && result.user.userType === 'admin') {
+              window.location.href = "admin-dashboard.html";
+            } else {
+              window.location.href = "home.html";
+            }
+          } else {
+            errorDiv.textContent = result.error || "Login failed";
+            errorDiv.classList.add("show");
+          }
+        } catch (error) {
+          errorDiv.textContent = getNetworkErrorMessage();
+          errorDiv.classList.add("show");
+        }
+      }
+
+      async function handleSignup(event) {
+        event.preventDefault();
+        const errorDiv = document.getElementById("signupError");
+        const successDiv = document.getElementById("signupSuccess");
+        errorDiv.classList.remove("show");
+        successDiv.classList.remove("show");
+
+        const formData = new FormData(event.target);
+        const data = {
+          username: formData.get("username"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+          firstName: formData.get("firstName"),
+          lastName: formData.get("lastName"),
+          phone: formData.get("phone"),
+        };
+
+        try {
+          const response = await fetch(apiUrl("/api/signup"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (response.ok) {
+            successDiv.textContent =
+              "Account created successfully! Redirecting...";
+            successDiv.classList.add("show");
+            setTimeout(() => {
+              window.location.href = "home.html";
+            }, 1500);
+          } else {
+            errorDiv.textContent = result.error || "Signup failed";
+            errorDiv.classList.add("show");
+          }
+        } catch (error) {
+          errorDiv.textContent = getNetworkErrorMessage();
+          errorDiv.classList.add("show");
+        }
+      }
+
+      // Forgot Password Modal Functions
+      function showForgotPasswordModal() {
+        document.getElementById("forgotPasswordModal").classList.add("show");
+        document.getElementById("forgotPasswordForm").style.display = "block";
+        document.getElementById("resetUrlDisplay").style.display = "none";
+        document.getElementById("forgotPasswordError").classList.remove("show");
+        document.getElementById("forgotPasswordSuccess").classList.remove("show");
+        document.getElementById("forgotPasswordEmail").value = "";
+      }
+
+      function closeForgotPasswordModal() {
+        document.getElementById("forgotPasswordModal").classList.remove("show");
+      }
+
+      async function handleForgotPassword(event) {
+        event.preventDefault();
+        const errorDiv = document.getElementById("forgotPasswordError");
+        const successDiv = document.getElementById("forgotPasswordSuccess");
+        errorDiv.classList.remove("show");
+        successDiv.classList.remove("show");
+
+        const formData = new FormData(event.target);
+        const email = formData.get("email");
+
+        try {
+          const response = await fetch(apiUrl("/api/forgot-password"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (response.ok) {
+            document.getElementById("forgotPasswordForm").style.display = "none";
+            document.getElementById("resetUrlDisplay").style.display = "block";
+            document.getElementById("resetUrlLink").href = result.resetUrl;
+            document.getElementById("resetUrlLink").textContent = result.resetUrl;
+          } else {
+            errorDiv.textContent = result.error || "Failed to send reset link";
+            errorDiv.classList.add("show");
+          }
+        } catch (error) {
+          errorDiv.textContent = getNetworkErrorMessage();
+          errorDiv.classList.add("show");
+        }
+      }
+
+      // Forgot Username Modal Functions
+      function showForgotUsernameModal() {
+        document.getElementById("forgotUsernameModal").classList.add("show");
+        document.getElementById("forgotUsernameForm").style.display = "block";
+        document.getElementById("usernameDisplay").style.display = "none";
+        document.getElementById("forgotUsernameError").classList.remove("show");
+        document.getElementById("forgotUsernameEmail").value = "";
+      }
+
+      function closeForgotUsernameModal() {
+        document.getElementById("forgotUsernameModal").classList.remove("show");
+      }
+
+      async function handleForgotUsername(event) {
+        event.preventDefault();
+        const errorDiv = document.getElementById("forgotUsernameError");
+        errorDiv.classList.remove("show");
+
+        const formData = new FormData(event.target);
+        const email = formData.get("email");
+
+        try {
+          const response = await fetch(apiUrl("/api/forgot-username"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (response.ok) {
+            document.getElementById("forgotUsernameForm").style.display = "none";
+            document.getElementById("usernameDisplay").style.display = "block";
+            document.getElementById("usernameValue").textContent = result.username;
+          } else {
+            errorDiv.textContent = result.error || "Failed to recover username";
+            errorDiv.classList.add("show");
+          }
+        } catch (error) {
+          errorDiv.textContent = getNetworkErrorMessage();
+          errorDiv.classList.add("show");
+        }
+      }
+
+      function copyUsernameAndClose() {
+        const username = document.getElementById("usernameValue").textContent;
+        navigator.clipboard.writeText(username).then(() => {
+          document.getElementById("loginUsername").value = username;
+          closeForgotUsernameModal();
+          switchTab("login");
+        }).catch(() => {
+          // Fallback if clipboard API not available
+          document.getElementById("loginUsername").value = username;
+          closeForgotUsernameModal();
+          switchTab("login");
+        });
+      }
+
+      // Close modals when clicking outside
+      window.onclick = function(event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.classList.remove("show");
+        }
+      };
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        if (window.location.protocol === "file:") {
+          document.getElementById("serverNotice").style.display = "block";
+        }
+        setLoginType("user", document.getElementById("loginTypeUser"));
+
+        try {
+          const response = await fetch(apiUrl("/api/user"));
+          if (response.ok) {
+            const user = await response.json();
+            if (user.userType === 'admin') {
+              window.location.href = "admin-dashboard.html";
+            } else {
+              window.location.href = "home.html";
+            }
+          }
+        } catch (error) {
+          // Not logged in or server not running, stay on login page
+        }
+      });
+    </script>
+  </body>
+</html>

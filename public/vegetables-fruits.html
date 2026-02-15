@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Fresh Vegetables & Fruits - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <!-- External CSS Files (served from src/ at root) -->
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <link rel="stylesheet" href="styles/category-pages.css" />
+    <link rel="stylesheet" href="styles/product-cards.css" />
+    <style>
+      .page-header {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header will be loaded by header.js -->
+    <div id="header-placeholder"></div>
+
+    <div class="page-header">
+      <h1 class="page-title">Fresh Vegetables & Fruits</h1>
+      <p class="page-subtitle">100% Organic & Fresh from Local Farms</p>
+    </div>
+
+    <div class="container-custom">
+      <div class="filter-section">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <select class="form-select" id="categoryFilter">
+              <option>All Categories</option>
+              <option>Vegetables</option>
+              <option>Fruits</option>
+              <option>Leafy Greens</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" id="sortFilter">
+              <option>Sort by Price</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" id="ratingFilter">
+              <option>All Ratings</option>
+              <option>4+ Stars</option>
+              <option>3+ Stars</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-primary w-100" id="applyFiltersBtn">Apply Filters</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-tomatoes-001"
+          data-price="331"
+          data-rating="5"
+          data-category="vegetables"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/tomato-seeds.jpg"
+                alt="Organic Tomatoes"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Tomatoes</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(124)</span>
+              </div>
+              <div class="product-price">₹331 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-carrots-001"
+          data-price="207"
+          data-rating="4"
+          data-category="vegetables"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img src="images/home-pages pics/seeds.jpg" alt="Fresh Carrots" />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Fresh Carrots</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(89)</span>
+              </div>
+              <div class="product-price">₹207 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-spinach-001"
+          data-price="414"
+          data-rating="5"
+          data-category="leafy-greens"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/fertilizer.jpg"
+                alt="Organic Spinach"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Spinach</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(156)</span>
+              </div>
+              <div class="product-price">₹414 / bunch</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-peppers-001"
+          data-price="497"
+          data-rating="4"
+          data-category="vegetables"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/rangeeggs.jpg"
+                alt="Fresh Bell Peppers"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Fresh Bell Peppers</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(98)</span>
+              </div>
+              <div class="product-price">₹497 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-apples-001"
+          data-price="373"
+          data-rating="5"
+          data-category="fruits"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/tools&equipment.jpg"
+                alt="Organic Apples"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Apples</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(203)</span>
+              </div>
+              <div class="product-price">₹373 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-bananas-001"
+          data-price="165"
+          data-rating="4"
+          data-category="fruits"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/live-stock.jpg"
+                alt="Fresh Bananas"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Fresh Bananas</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(167)</span>
+              </div>
+              <div class="product-price">₹165 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-broccoli-001"
+          data-price="314"
+          data-rating="5"
+          data-category="vegetables"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/allpurpose.jpg"
+                alt="Organic Broccoli"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Broccoli</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(142)</span>
+              </div>
+              <div class="product-price">₹314 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="veg-strawberries-001"
+          data-price="580"
+          data-rating="5"
+          data-category="fruits"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/gardenhandsettools.jpg"
+                alt="Fresh Strawberries"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Fresh Strawberries</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(189)</span>
+              </div>
+              <div class="product-price">₹580 / lb</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer will be loaded by footer.js -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Component Scripts -->
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/admin-restrictions.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      (function () {
+        const categoryFilter = document.getElementById('categoryFilter');
+        const sortFilter = document.getElementById('sortFilter');
+        const ratingFilter = document.getElementById('ratingFilter');
+        const applyBtn = document.getElementById('applyFiltersBtn');
+        const productRows = Array.from(document.querySelectorAll('.row.g-4.mb-5 > [data-product-id]'));
+        const container = productRows.length ? productRows[0].parentElement : null;
+        if (!categoryFilter || !sortFilter || !ratingFilter || !applyBtn || !container) return;
+
+        function normalizeCategory(value) {
+          return (value || '').toLowerCase().replace(/\s+/g, '-');
+        }
+
+        function applyFilters() {
+          const categoryValue = normalizeCategory(categoryFilter.value);
+          const ratingValue = ratingFilter.value;
+          const minRating = ratingValue === '4+ Stars' ? 4 : ratingValue === '3+ Stars' ? 3 : 0;
+
+          const visible = [];
+          productRows.forEach((card) => {
+            const cardCategory = normalizeCategory(card.getAttribute('data-category'));
+            const cardRating = Number(card.getAttribute('data-rating') || 0);
+            const categoryMatch = categoryValue === 'all-categories' || cardCategory === categoryValue;
+            const ratingMatch = cardRating >= minRating;
+            const show = categoryMatch && ratingMatch;
+            card.style.display = show ? '' : 'none';
+            if (show) visible.push(card);
+          });
+
+          if (sortFilter.value === 'Price: Low to High') {
+            visible.sort((a, b) => Number(a.getAttribute('data-price') || 0) - Number(b.getAttribute('data-price') || 0));
+          } else if (sortFilter.value === 'Price: High to Low') {
+            visible.sort((a, b) => Number(b.getAttribute('data-price') || 0) - Number(a.getAttribute('data-price') || 0));
+          }
+
+          visible.forEach((card) => container.appendChild(card));
+        }
+
+        applyBtn.addEventListener('click', applyFilters);
+        categoryFilter.addEventListener('change', applyFilters);
+        sortFilter.addEventListener('change', applyFilters);
+        ratingFilter.addEventListener('change', applyFilters);
+      })();
+    </script>
+  </body>
+</html>

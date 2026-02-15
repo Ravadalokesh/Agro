@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Grains & Pulses - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <!-- External CSS Files (served from src/ at root) -->
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <link rel="stylesheet" href="styles/category-pages.css" />
+    <link rel="stylesheet" href="styles/product-cards.css" />
+    <style>
+      .page-header {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header will be loaded by header.js -->
+    <div id="header-placeholder"></div>
+
+    <div class="page-header">
+      <h1 class="page-title">Grains & Pulses</h1>
+      <p class="page-subtitle">
+        Premium Quality Grains & Pulses Direct from Farms
+      </p>
+    </div>
+
+    <div class="container-custom">
+      <div class="filter-section">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <select class="form-select" id="categoryFilter">
+              <option>All Categories</option>
+              <option>Rice</option>
+              <option>Wheat</option>
+              <option>Lentils</option>
+              <option>Beans</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" id="sortFilter">
+              <option>Sort by Price</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" id="ratingFilter">
+              <option>All Ratings</option>
+              <option>4+ Stars</option>
+              <option>3+ Stars</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-primary w-100" id="applyFiltersBtn">Apply Filters</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-basmati-001"
+          data-price="1079"
+          data-rating="5"
+          data-category="rice"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img src="images/home-pages pics/seeds.jpg" alt="Basmati Rice" />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Premium Basmati Rice</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(234)</span>
+              </div>
+              <div class="product-price">₹1,079 / 5kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-lentils-001"
+          data-price="746"
+          data-rating="4"
+          data-category="lentils"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/fertilizer.jpg"
+                alt="Red Lentils"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Red Lentils</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(189)</span>
+              </div>
+              <div class="product-price">₹746 / 2kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-blackbeans-001"
+          data-price="621"
+          data-rating="5"
+          data-category="beans"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/tomato-seeds.jpg"
+                alt="Black Beans"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Black Beans</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(156)</span>
+              </div>
+              <div class="product-price">₹621 / 2kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-wheat-001"
+          data-price="580"
+          data-rating="4"
+          data-category="wheat"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/rangeeggs.jpg"
+                alt="Whole Wheat"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Whole Wheat Flour</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(198)</span>
+              </div>
+              <div class="product-price">₹580 / 2kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-chickpeas-001"
+          data-price="829"
+          data-rating="5"
+          data-category="beans"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/tools&equipment.jpg"
+                alt="Chickpeas"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Chickpeas</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(167)</span>
+              </div>
+              <div class="product-price">₹829 / 2kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-quinoa-001"
+          data-price="1327"
+          data-rating="5"
+          data-category="beans"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img src="images/home-pages pics/live-stock.jpg" alt="Quinoa" />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Quinoa</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(203)</span>
+              </div>
+              <div class="product-price">₹1,327 / 1kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-brownrice-001"
+          data-price="954"
+          data-rating="4"
+          data-category="rice"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/allpurpose.jpg"
+                alt="Brown Rice"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Organic Brown Rice</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★☆</span>
+                <span style="color: #999; font-size: 0.9rem">(142)</span>
+              </div>
+              <div class="product-price">₹954 / 5kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-6 col-md-4 col-lg-3"
+          data-product-id="grain-moong-001"
+          data-price="705"
+          data-rating="5"
+          data-category="lentils"
+        >
+          <div class="product-card">
+            <button class="btn-wishlist" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="product-image">
+              <img
+                src="images/home-pages pics/gardenhandsettools.jpg"
+                alt="Green Moong"
+              />
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">Green Moong Dal</h3>
+              <div class="product-rating">
+                <span style="color: #ffc107">★★★★★</span>
+                <span style="color: #999; font-size: 0.9rem">(178)</span>
+              </div>
+              <div class="product-price">₹705 / 2kg</div>
+              <div class="product-actions">
+                <button class="btn-add-cart">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                  <i class="bi bi-bag-check"></i> Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer will be loaded by footer.js -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Component Scripts -->
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/admin-restrictions.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      (function () {
+        const categoryFilter = document.getElementById('categoryFilter');
+        const sortFilter = document.getElementById('sortFilter');
+        const ratingFilter = document.getElementById('ratingFilter');
+        const applyBtn = document.getElementById('applyFiltersBtn');
+        const productRows = Array.from(document.querySelectorAll('.row.g-4.mb-5 > [data-product-id]'));
+        const container = productRows.length ? productRows[0].parentElement : null;
+        if (!categoryFilter || !sortFilter || !ratingFilter || !applyBtn || !container) return;
+
+        function normalizeCategory(value) {
+          return (value || '').toLowerCase().replace(/\s+/g, '-');
+        }
+
+        function applyFilters() {
+          const categoryValue = normalizeCategory(categoryFilter.value);
+          const ratingValue = ratingFilter.value;
+          const minRating = ratingValue === '4+ Stars' ? 4 : ratingValue === '3+ Stars' ? 3 : 0;
+
+          const visible = [];
+          productRows.forEach((card) => {
+            const cardCategory = normalizeCategory(card.getAttribute('data-category'));
+            const cardRating = Number(card.getAttribute('data-rating') || 0);
+            const categoryMatch = categoryValue === 'all-categories' || cardCategory === categoryValue;
+            const ratingMatch = cardRating >= minRating;
+            const show = categoryMatch && ratingMatch;
+            card.style.display = show ? '' : 'none';
+            if (show) visible.push(card);
+          });
+
+          if (sortFilter.value === 'Price: Low to High') {
+            visible.sort((a, b) => Number(a.getAttribute('data-price') || 0) - Number(b.getAttribute('data-price') || 0));
+          } else if (sortFilter.value === 'Price: High to Low') {
+            visible.sort((a, b) => Number(b.getAttribute('data-price') || 0) - Number(a.getAttribute('data-price') || 0));
+          }
+
+          visible.forEach((card) => container.appendChild(card));
+        }
+
+        applyBtn.addEventListener('click', applyFilters);
+        categoryFilter.addEventListener('change', applyFilters);
+        sortFilter.addEventListener('change', applyFilters);
+        ratingFilter.addEventListener('change', applyFilters);
+      })();
+    </script>
+  </body>
+</html>

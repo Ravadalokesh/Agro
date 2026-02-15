@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta charset="UTF-8" />
+    <title>AgroMart-Fresh and Farm-grown Products</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link
+      rel="stylesheet"
+      href="../node_modules/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <style type="text/css">
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 2000;
+        display: flex;
+        flex-direction: row;
+        font-family: Arial, Helvetica, sans-serif;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        /* background-color: rgba(225, 217, 217, 0.952); */
+        background-color: #ededed;
+        margin: -8px;
+      }
+      .navigation {
+        display: flex;
+        font-weight: bold;
+        flex-direction: row;
+      }
+      .navigation img {
+        height: 32px;
+        width: 32px;
+        border-radius: 20px;
+      }
+      nav span {
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 15px;
+      }
+      /* .brand-title {
+        color: red;
+        font-family: Brush Script MT;
+        margin-right: 40px;
+        font-size: 20px;
+        margin-left: 30px;
+      } */
+      .search {
+        /* background-color: rgb(179, 179, 184); */
+        background-color: #d5d5d5;
+        padding: 10px;
+        display: flex;
+        width: 300px;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .search-bar span {
+        margin-right: 50px;
+      }
+      .short-cuts {
+        display: flex;
+        flex-direction: row;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+      }
+      .short-cuts div span {
+        margin-right: 10px;
+      }
+      .short-cuts div {
+        margin-right: 20px;
+      }
+      .header-nav {
+        margin-top: 6px;
+        margin-left: 10px;
+      }
+      section {
+        min-height: 400px;
+        margin: 0 -8px;
+        background: #fff;
+      }
+
+      /* ===== Home (excluding header) - matches provided design ===== */
+      .home {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #1d1d1f;
+        position: relative;
+        z-index: 0;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        background: #e9efe6;
+        border-top: 1px solid #e7e7e7;
+        border-bottom: 1px solid #e7e7e7;
+      }
+
+      .hero-media {
+        position: relative;
+        height: 320px;
+        overflow: hidden;
+      }
+
+      .hero-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .hero-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35); /* alpha value to darken image */
+        pointer-events: none;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        align-items: center;
+        padding: 32px 48px;
+      }
+
+      .hero-card {
+        max-width: 520px;
+        padding: 22px 26px;
+        background: rgba(35, 68, 18, 0.56);
+        color: #fff;
+        border-radius: 6px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      }
+
+      .hero-title {
+        margin: 0 0 14px 0;
+        font-size: 40px;
+        line-height: 1.02;
+        letter-spacing: -0.5px;
+        font-weight: 800;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #3f7b1d;
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        padding: 12px 22px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        user-select: none;
+      }
+      .btn-primary:hover {
+        background: #356a17;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        background: #f5f3ee;
+        border-bottom: 1px solid #e5e2da;
+      }
+
+      .feature {
+        padding: 18px 10px 16px 10px;
+        text-align: center;
+        border-right: 1px solid #e5e2da;
+      }
+      .feature:last-child {
+        border-right: 0;
+      }
+      .feature .bi {
+        font-size: 28px;
+        color: #2f6b16;
+        display: inline-block;
+        margin-bottom: 8px;
+      }
+      .feature span {
+        display: block;
+        font-size: 14px;
+        font-weight: 700;
+        color: #2b2b2b;
+      }
+
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 26px 18px 34px 18px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 800;
+        color: #2b2b2b;
+      }
+
+      .muted-link {
+        color: #9a9a9a;
+        font-size: 12px;
+        text-decoration: none;
+      }
+      .muted-link:hover {
+        color: #6e6e6e;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+
+      .card {
+        border: 1px solid #e8e6df;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      }
+
+      .card-media {
+        height: 118px;
+        position: relative;
+        overflow: hidden;
+      }
+      .card-media img {
+        width: 100%;
+        height: 100%;
+      }
+      .product-media {
+        height: 128px;
+        position: relative;
+        overflow: hidden;
+      }
+      .product-media img {
+        width: 100%;
+        height: 100%;
+      }
+      .media-icon {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 42px;
+        color: rgba(47, 107, 22, 0.85);
+        text-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+      }
+      .card-label {
+        background: #f5f3ee;
+        border-top: 1px solid #e5e2da;
+        padding: 10px 10px;
+        text-align: center;
+        font-weight: 800;
+        color: #2b2b2b;
+        font-size: 14px;
+      }
+
+      .products {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+
+      .product {
+        border: 1px solid #e8e6df;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      }
+
+      .product-body {
+        padding: 10px 12px 12px 12px;
+      }
+
+      .product-name {
+        font-weight: 800;
+        font-size: 14px;
+        margin: 0 0 6px 0;
+        color: #2b2b2b;
+      }
+
+      .product-price {
+        font-weight: 900;
+        color: #1e4d0e;
+      }
+
+      @media (max-width: 992px) {
+        .hero-title {
+          font-size: 44px;
+        }
+        .cards,
+        .products {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        section {
+          margin: 0;
+        }
+        .hero-overlay {
+          padding: 18px 14px;
+        }
+        .hero-title {
+          font-size: 36px;
+        }
+        .features {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .feature:nth-child(2) {
+          border-right: 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .cards,
+        .products {
+          grid-template-columns: 1fr;
+        }
+        .hero-media {
+          height: 280px;
+        }
+      }
+      footer {
+        color: #e9efe6;
+        background: linear-gradient(180deg, #3e6b2a 0%, #406733 100%);
+        display: grid;
+        grid-template-columns: 6fr 6fr;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 40px 0px 20px 0;
+        padding-bottom: 50px;
+        margin-bottom: -20px;
+        margin-left: -8px;
+        margin-right: -8px;
+      }
+
+      .footer-one {
+        display: grid;
+        grid-template-columns: 6fr 6fr;
+        margin-left: 60px;
+      }
+      .footer-two {
+        display: grid;
+        grid-template-columns: 2fr 2fr 2fr;
+      }
+      .footer-title {
+        color: #cfe3c3;
+        font-weight: bold;
+        font-size: 15px;
+        display: block;
+        margin-bottom: 10px;
+        margin-left: 38px;
+      }
+      .footer-title ~ span {
+        display: block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        margin-left: 40px;
+      }
+      .para {
+        margin-top: 20px;
+        margin-left: 60px;
+        font-size: 14px;
+      }
+      .footer-second {
+        margin-left: 40px;
+      }
+      address span {
+        display: block;
+        margin-bottom: 10px;
+        margin-left: 40px;
+      }
+      .footer-start-start div img {
+        width: 32px;
+        height: 32px;
+        border-radius: 20px;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-left: 40px;
+      }
+      .footer-start-start span {
+        margin-left: 60px;
+      }
+      .footer-start-start div {
+        display: flex;
+        flex-direction: row;
+      }
+      .footer-title + ul {
+        list-style: none;
+        padding-right: 0px;
+        margin: 0;
+      }
+      .footer-second ul li,
+      .footer-third ul li,
+      .footer-fourth ul li {
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+      .footer-second ul li a,
+      .footer-third ul li a,
+      .footer-fourth ul li a {
+        text-decoration: none;
+        color: #e9efe6;
+      }
+      .footer-second ul li a:hover,
+      .footer-third ul li a:hover,
+      .footer-fourth ul li a:hover {
+        color: #cfe3c3;
+      }
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          align-items: stretch;
+          padding: 10px;
+          margin: 0;
+        }
+
+        .navigation {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .brand-title {
+          margin: 0;
+          font-size: 24px;
+        }
+
+        .header-nav {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        nav span {
+          font-size: 13px;
+          padding: 5px;
+        }
+
+        .search {
+          width: 100%;
+          margin: 10px 0;
+        }
+
+        .short-cuts {
+          justify-content: space-around;
+          width: 100%;
+        }
+
+        footer {
+          grid-template-columns: 1fr;
+          padding: 20px;
+          margin: 0;
+        }
+
+        .footer-one,
+        .footer-two {
+          grid-template-columns: 1fr;
+          margin: 0;
+        }
+
+        .footer-title,
+        .footer-title ~ span,
+        .para,
+        address span {
+          margin-left: 10px;
+        }
+
+        .footer-second,
+        .footer-third,
+        .footer-fourth,
+        .footer-fifth {
+          margin-bottom: 20px;
+        }
+
+        section {
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="navigation">
+        <img src="images/logo1.ico" />
+        <nav class="header-nav">
+          <span>Fresh Vegetables & Fruits </span>
+          <span>Grains & Pulses </span>
+          <span>Seeds & Fertilizers</span>
+          <span> Farm Tools & Equipment</span>
+        </nav>
+      </div>
+      <div class="search">
+        <div class="search-bar">
+          <span class="bi bi-search"></span>
+          <span>Search for the products </span>
+        </div>
+      </div>
+      <div class="short-cuts">
+        <div><span class="bi bi-person"></span><span>Profile</span></div>
+        <div><span class="bi bi-heart"></span><span>WhishList</span></div>
+        <div><span class="bi bi-cart"></span><span>Cart</span></div>
+      </div>
+    </header>
+    <section>
+      <main class="home">
+        <div class="hero">
+          <div class="hero-media"><img src="images/bag.jpg" /></div>
+          <div class="hero-overlay">
+            <div class="hero-card">
+              <h1 class="hero-title">Fresh Farm Products<br />for You</h1>
+              <a class="btn-primary" href="#best-sellers">Shop Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="features">
+          <div class="feature">
+            <span class="bi bi-flower1"></span>
+            <span>Organic Products</span>
+          </div>
+          <div class="feature">
+            <span class="bi bi-truck"></span>
+            <span>Fast Delivery</span>
+          </div>
+          <div class="feature">
+            <span class="bi bi-shield-check"></span>
+            <span>Best Quality</span>
+          </div>
+          <div class="feature">
+            <span class="bi bi-headset"></span>
+            <span>24/7 Support</span>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-title">Featured Categories</h2>
+            <a class="muted-link" href="#">&#9675; &#9675; &#9675;</a>
+          </div>
+
+          <div class="cards">
+            <div class="card">
+              <div class="card-media bg-seeds">
+                <img src="images/home-pages pics/seeds.jpg" />
+              </div>
+              <div class="card-label">Seeds</div>
+            </div>
+            <div class="card">
+              <div class="card-media bg-fertilizers">
+                <img src="images/home-pages pics/fertilizer.jpg" />
+              </div>
+              <div class="card-label">Fertilizers</div>
+            </div>
+            <div class="card">
+              <div class="card-media bg-tools">
+                <img src="images/home-pages pics/tools&equipment.jpg" />
+              </div>
+              <div class="card-label">Tools &amp; Equipment</div>
+            </div>
+            <div class="card">
+              <div class="card-media bg-livestock">
+                <img src="images/home-pages pics/live-stock.jpg" />
+              </div>
+              <div class="card-label">Livestock</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container" id="best-sellers">
+          <div class="section-head">
+            <h2 class="section-title">Best Sellers</h2>
+            <a class="muted-link" href="#">Add to Cart</a>
+          </div>
+
+          <div class="products">
+            <div class="product">
+              <div class="product-media bg-seeds">
+                <img src="images/home-pages pics/tomato-seeds.jpg" />
+              </div>
+              <div class="product-body">
+                <p class="product-name">Organic Tomato Seeds</p>
+                <div class="product-price">$4.99</div>
+              </div>
+            </div>
+
+            <div class="product">
+              <div class="product-media bg-fertilizers">
+                <img src="images/home-pages pics/allpurpose.jpg" />
+              </div>
+              <div class="product-body">
+                <p class="product-name">All-Purpose Fertilizer</p>
+                <div class="product-price">$23.99</div>
+              </div>
+            </div>
+
+            <div class="product">
+              <div class="product-media bg-tools">
+                <img src="images/home-pages pics/gardenhandsettools.jpg" />
+              </div>
+              <div class="product-body">
+                <p class="product-name">Garden Hand Tools Set</p>
+                <div class="product-price">$33.99</div>
+              </div>
+            </div>
+
+            <div class="product">
+              <div class="product-media bg-livestock">
+                <img src="images/home-pages pics/rangeeggs.jpg" />
+              </div>
+              <div class="product-body">
+                <p class="product-name">Free Range Eggs</p>
+                <div class="product-price">$5.99</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+    <footer>
+      <div class="footer-one">
+        <div class="footer-start">
+          <div class="footer-start-start">
+            <div>
+              <img src="images/logo2.ico" />
+              <h3 class="footer-title-">YourAgroStore</h3>
+            </div>
+            <span>- &nbsp;Fresh From Farm to Your Home &nbsp; -</span>
+          </div>
+          <div class="para">
+            <span
+              >We Provide <span>100% fresh and organic</span><br />
+              products directly from our trusted farmers</span
+            >
+          </div>
+        </div>
+        <div class="footer-second">
+          <h4 class="footer-title">Quick Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">Offers</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+          <!-- <span>Home</span>
+            <span>Shop</span>
+            <span>Categories</span>
+            <span>Offers</span>
+            <span>Blog</span>
+            <span>Contact Us</span> -->
+        </div>
+      </div>
+      <div class="footer-two">
+        <div class="footer-third">
+          <h4 class="footer-title">Customer Support</h4>
+
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Shipping And Delivery</a></li>
+            <li><a href="#">Return Policy</a></li>
+            <li><a href="#">Payment Options</a></li>
+          </ul>
+          <!-- <span>FAQ</span>
+            <span>Shipping And Delivery</span>
+            <span>Return Policy</span>
+            <span>Payment Options</span> -->
+        </div>
+        <div class="footer-fourth">
+          <h4 class="footer-title">Farmer & Business</h4>
+
+          <ul>
+            <li><a href="#">Bulk Orders</a></li>
+            <li><a href="#">Partner With Us</a></li>
+            <li><a href="#">Certifications</a></li>
+          </ul>
+          <!-- <span>Bulk Orders</span>
+            <span>Partner With Us</span>
+            <span>Certifications</span> -->
+        </div>
+        <div class="footer-fifth">
+          <h4 class="footer-title">Contact Us</h4>
+          <address>
+            <span class="bi bi-telephone-fill"></span>
+            <span class="bi bi-envelope-fill"></span>
+            <span class="bi bi-geo-alt-fill"></span>
+            <span class="bi bi-info-circle"></span>
+          </address>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

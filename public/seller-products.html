@@ -1,0 +1,777 @@
+<!-- <!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>My Products - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <style>
+      .seller-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+
+      .seller-header {
+        background: linear-gradient(135deg, #3f7b1d, #4a9e2a);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: var(--radius);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .seller-header h1 {
+        margin-bottom: 0.5rem;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        background: var(--primary-light);
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .product-card {
+        background: var(--bg-white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        padding: 1.5rem;
+        transition: var(--transition);
+      }
+
+      .product-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-4px);
+      }
+
+      .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .product-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-light);
+        margin-bottom: 0.5rem;
+      }
+
+      .product-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-status.approved {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .product-status.pending {
+        background: #fff3e0;
+        color: #f57c00;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .btn-edit,
+      .btn-delete {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .btn-edit {
+        background: var(--primary-light);
+        color: white;
+      }
+
+      .btn-edit:hover {
+        background: var(--accent);
+      }
+
+      .btn-delete {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #c0392b;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: var(--radius);
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        margin: 2rem;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-header h2 {
+        color: var(--primary-dark);
+        font-size: 1.5rem;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: var(--transition);
+      }
+
+      .close-modal:hover {
+        color: var(--text-dark);
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #c5c5c5;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: var(--transition);
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(63, 123, 29, 0.15);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .category-options {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .category-option {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #c5c5c5;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .category-option.selected {
+        border-color: var(--primary-light);
+        background: var(--bg-light);
+      }
+
+      .custom-category-input {
+        display: none;
+      }
+
+      .custom-category-input.show {
+        display: block;
+      }
+
+      .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .success-message {
+        background: #efe;
+        color: #2d6a2d;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: none;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-light);
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <div class="seller-container">
+      <div class="seller-header">
+        <h1><i class="bi bi-shop"></i> My Products</h1>
+        <p style="margin-top: 0.5rem; opacity: 0.9;">Manage your product listings</p>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-primary" onclick="showAddProductModal()">
+          <i class="bi bi-plus-circle"></i> Add New Product
+        </button>
+      </div>
+
+      <div id="productsContainer" class="products-grid">
+        <div class="empty-state">
+          <i class="bi bi-box"></i>
+          <p>Loading your products...</p>
+        </div>
+      </div>
+    </div>-->
+
+    <!-- Add/Edit Product Modal -->
+    <!--<div id="productModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Add New Product</h2>
+          <button class="close-modal" onclick="closeProductModal()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="error-message" id="productError"></div>
+        <div class="success-message" id="productSuccess"></div>
+        <form id="productForm" onsubmit="handleProductSubmit(event)">
+          <input type="hidden" id="productId" name="productId" />
+          
+          <div class="form-group">
+            <label>Product Name *</label>
+            <input type="text" id="productName" name="name" required />
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="productDescription" name="description"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Price (₹) *</label>
+            <input type="number" id="productPrice" name="price" min="0" step="0.01" required />
+          </div>
+
+          <div class="form-group">
+            <label>Stock Quantity</label>
+            <input type="number" id="productStock" name="stock" min="0" value="0" />
+          </div>
+
+          <div class="form-group">
+            <label>Image URL</label>
+            <input type="text" id="productImage" name="image" placeholder="https://example.com/image.jpg" />
+          </div>
+
+          <div class="form-group">
+            <label>Category Type *</label>
+            <div class="category-options">
+              <div class="category-option selected" onclick="selectCategoryType('predefined')">
+                <i class="bi bi-list-ul" style="font-size: 1.5rem; display: block; margin-bottom: 0.25rem;"></i>
+                <span>Predefined</span>
+              </div>
+              <div class="category-option" onclick="selectCategoryType('custom')">
+                <i class="bi bi-pencil" style="font-size: 1.5rem; display: block; margin-bottom: 0.25rem;"></i>
+                <span>Custom</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" id="predefinedCategoryGroup">
+            <label>Category *</label>
+            <select id="productCategory" name="category">
+              <option value="">Loading categories...</option>
+            </select>
+          </div>
+
+          <div class="form-group custom-category-input" id="customCategoryGroup">
+            <label>Custom Category *</label>
+            <input type="text" id="customCategory" placeholder="Enter new category name" />
+          </div>
+
+          <div class="form-group" id="predefinedSubcategoryGroup">
+            <label>Subcategory</label>
+            <select id="productSubcategory" name="subcategory">
+              <option value="">Select category first</option>
+            </select>
+          </div>
+
+          <div class="form-group custom-category-input" id="customSubcategoryGroup">
+            <label>Custom Subcategory</label>
+            <input type="text" id="customSubcategory" name="subcategory" placeholder="Enter subcategory (optional)" />
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%;">
+            <i class="bi bi-check-circle"></i> <span id="submitButtonText">Add Product</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+      let categories = { predefined: [], custom: [] };
+      let currentCategoryType = 'predefined';
+      let editingProductId = null;
+
+      async function loadCategories() {
+        try {
+          const response = await fetch('/api/categories');
+          if (!response.ok) throw new Error('Failed to load categories');
+          
+          categories = await response.json();
+          
+          const categorySelect = document.getElementById('productCategory');
+          categorySelect.innerHTML = '<option value="">Select a category</option>';
+          
+          categories.predefined.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.value;
+            option.textContent = cat.label;
+            option.dataset.subcategories = JSON.stringify(cat.subcategories || []);
+            categorySelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error('Error loading categories:', error);
+        }
+      }
+
+      function selectCategoryType(type) {
+        currentCategoryType = type;
+        
+        document.querySelectorAll('.category-option').forEach(opt => opt.classList.remove('selected'));
+        event.target.closest('.category-option').classList.add('selected');
+        
+        if (type === 'predefined') {
+          document.getElementById('predefinedCategoryGroup').style.display = 'block';
+          document.getElementById('predefinedSubcategoryGroup').style.display = 'block';
+          document.getElementById('customCategoryGroup').classList.remove('show');
+          document.getElementById('customSubcategoryGroup').classList.remove('show');
+        } else {
+          document.getElementById('predefinedCategoryGroup').style.display = 'none';
+          document.getElementById('predefinedSubcategoryGroup').style.display = 'none';
+          document.getElementById('customCategoryGroup').classList.add('show');
+          document.getElementById('customSubcategoryGroup').classList.add('show');
+        }
+      }
+
+      document.getElementById('productCategory').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const subcategories = JSON.parse(selectedOption.dataset.subcategories || '[]');
+        
+        const subcategorySelect = document.getElementById('productSubcategory');
+        subcategorySelect.innerHTML = '<option value="">None</option>';
+        
+        subcategories.forEach(sub => {
+          const option = document.createElement('option');
+          option.value = sub;
+          option.textContent = sub;
+          subcategorySelect.appendChild(option);
+        });
+      });
+
+      async function loadProducts() {
+        try {
+          const response = await fetch('/api/products/seller', { credentials: 'include' });
+          if (!response.ok) throw new Error('Failed to load products');
+          
+          const products = await response.json();
+          const container = document.getElementById('productsContainer');
+          
+          if (products.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="bi bi-box"></i>
+                <p>You haven't added any products yet. Click "Add New Product" to get started!</p>
+              </div>
+            `;
+            return;
+          }
+          
+          container.innerHTML = products.map(product => `
+            <div class="product-card">
+              <img src="${product.image || 'images/home-pages pics/seeds.jpg'}" alt="${product.name}" />
+              <h3 class="product-name">${product.name}</h3>
+              <div class="product-price">₹${product.price.toLocaleString('en-IN')}</div>
+              <span class="product-status ${product.approved ? 'approved' : 'pending'}">
+                <i class="bi bi-${product.approved ? 'check-circle' : 'clock-history'}"></i>
+                ${product.approved ? 'Approved' : 'Pending Approval'}
+              </span>
+              <p style="color: var(--text-light); font-size: 0.9rem; margin: 0.5rem 0;">
+                Stock: ${product.stock} | Sold: ${product.sold} | Earnings: ₹${product.earnings.toLocaleString('en-IN')}
+              </p>
+              <p style="color: var(--text-light); font-size: 0.9rem;">${product.description || 'No description'}</p>
+              <div class="product-actions">
+                <button class="btn-edit" onclick="editProduct('${product._id}')">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn-delete" onclick="deleteProduct('${product._id}', '${product.name}')">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch (error) {
+          console.error('Error loading products:', error);
+          document.getElementById('productsContainer').innerHTML = `
+            <div class="empty-state">
+              <i class="bi bi-exclamation-circle"></i>
+              <p>Failed to load products</p>
+            </div>
+          `;
+        }
+      }
+
+      function showAddProductModal() {
+        editingProductId = null;
+        document.getElementById('modalTitle').textContent = 'Add New Product';
+        document.getElementById('submitButtonText').textContent = 'Add Product';
+        document.getElementById('productForm').reset();
+        document.getElementById('productId').value = '';
+        document.getElementById('productError').classList.remove('show');
+        document.getElementById('productSuccess').classList.remove('show');
+        selectCategoryType('predefined');
+        document.getElementById('productModal').classList.add('show');
+      }
+
+      function closeProductModal() {
+        document.getElementById('productModal').classList.remove('show');
+      }
+
+      async function editProduct(productId) {
+        try {
+          const response = await fetch('/api/products/seller', { credentials: 'include' });
+          const products = await response.json();
+          const product = products.find(p => p._id === productId);
+          
+          if (!product) {
+            alert('Product not found');
+            return;
+          }
+          
+          editingProductId = productId;
+          document.getElementById('modalTitle').textContent = 'Edit Product';
+          document.getElementById('submitButtonText').textContent = 'Update Product';
+          document.getElementById('productId').value = productId;
+          document.getElementById('productName').value = product.name;
+          document.getElementById('productDescription').value = product.description || '';
+          document.getElementById('productPrice').value = product.price;
+          document.getElementById('productStock').value = product.stock;
+          document.getElementById('productImage').value = product.image || '';
+          
+          // Check if category is predefined or custom
+          const isPredefined = categories.predefined.some(cat => cat.value === product.category);
+          
+          if (isPredefined) {
+            selectCategoryType('predefined');
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productCategory').dispatchEvent(new Event('change'));
+            setTimeout(() => {
+              document.getElementById('productSubcategory').value = product.subcategory || '';
+            }, 100);
+          } else {
+            selectCategoryType('custom');
+            document.getElementById('customCategory').value = product.category;
+            document.getElementById('customSubcategory').value = product.subcategory || '';
+          }
+          
+          document.getElementById('productModal').classList.add('show');
+        } catch (error) {
+          console.error('Error loading product:', error);
+          alert('Failed to load product details');
+        }
+      }
+
+      async function handleProductSubmit(event) {
+        event.preventDefault();
+        
+        const errorDiv = document.getElementById('productError');
+        const successDiv = document.getElementById('productSuccess');
+        errorDiv.classList.remove('show');
+        successDiv.classList.remove('show');
+        
+        const formData = new FormData(event.target);
+        
+        let category, subcategory;
+        if (currentCategoryType === 'predefined') {
+          category = formData.get('category');
+          subcategory = formData.get('subcategory');
+        } else {
+          category = document.getElementById('customCategory').value.trim();
+          subcategory = document.getElementById('customSubcategory').value.trim();
+        }
+        
+        if (!category) {
+          errorDiv.textContent = 'Please select or enter a category';
+          errorDiv.classList.add('show');
+          return;
+        }
+        
+        const data = {
+          name: formData.get('name'),
+          description: formData.get('description'),
+          price: parseFloat(formData.get('price')),
+          stock: parseInt(formData.get('stock')) || 0,
+          image: formData.get('image'),
+          category: category,
+          subcategory: subcategory || ''
+        };
+        
+        try {
+          const url = editingProductId ? `/api/products/${editingProductId}` : '/api/products';
+          const method = editingProductId ? 'PUT' : 'POST';
+          
+          const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(data)
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok) {
+            successDiv.textContent = editingProductId ? 'Product updated successfully!' : 'Product added successfully! It will be visible after admin approval.';
+            successDiv.classList.add('show');
+            
+            setTimeout(() => {
+              closeProductModal();
+              loadProducts();
+              loadCategories(); // Reload to include new custom categories
+            }, 2000);
+          } else {
+            errorDiv.textContent = result.error || 'Failed to save product';
+            errorDiv.classList.add('show');
+          }
+        } catch (error) {
+          console.error('Error saving product:', error);
+          errorDiv.textContent = 'Failed to save product';
+          errorDiv.classList.add('show');
+        }
+      }
+
+      async function deleteProduct(productId, productName) {
+        if (!confirm(`Are you sure you want to delete "${productName}"?`)) return;
+        
+        try {
+          const response = await fetch(`/api/products/${productId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+          
+          if (response.ok) {
+            alert('Product deleted successfully!');
+            loadProducts();
+          } else {
+            const error = await response.json();
+            alert(error.error || 'Failed to delete product');
+          }
+        } catch (error) {
+          console.error('Error deleting product:', error);
+          alert('Failed to delete product');
+        }
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadCategories();
+        await loadProducts();
+      });
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+          event.target.classList.remove('show');
+        }
+      };
+    </script>
+  </body>
+</html> -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Products - AgroMart Seller</title>
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <style>
+      .seller-container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+      .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+      .status-approved { background: #e8f5e9; color: #2e7d32; }
+      .status-pending { background: #fff3e0; color: #ef6c00; }
+      .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+      .seller-card { background: white; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 1.5rem; border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+    
+    <div class="seller-container">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>My Inventory</h1>
+        <a href="profile.html" class="btn-primary">Add New Product</a>
+      </div>
+
+      <div id="sellerProductList" class="product-grid">
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      async function loadSellerProducts() {
+        try {
+          const response = await fetch('/api/products/seller', { credentials: 'include' });
+          const products = await response.json();
+          const container = document.getElementById('sellerProductList');
+
+          if (products.length === 0) {
+            container.innerHTML = '<p>No products listed yet. Start by adding one from your profile!</p>';
+            return;
+          }
+
+          container.innerHTML = products.map(p => `
+            <div class="seller-card">
+              <img src="${p.image || 'images/home-pages pics/seeds.jpg'}" style="width:100%; height:180px; object-fit:cover; border-radius:8px;">
+              <h3 style="margin: 1rem 0 0.5rem;">${p.name}</h3>
+              <p style="color:var(--primary-light); font-weight:800;">₹${p.price.toLocaleString('en-IN')}</p>
+              <div style="margin: 1rem 0;">
+                <span class="status-badge ${p.approved ? 'status-approved' : 'status-pending'}">
+                  ${p.approved ? '✓ Live' : '⏳ Awaiting Approval'}
+                </span>
+              </div>
+              <div style="display: flex; gap: 10px; font-size: 0.9rem; color: #666;">
+                <span>Stock: ${p.stock}</span> | <span>Sold: ${p.sold}</span>
+              </div>
+            </div>
+          `).join('');
+        } catch (err) {
+          console.error("Failed to load seller products", err);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', loadSellerProducts);
+    </script>
+  </body>
+</html>

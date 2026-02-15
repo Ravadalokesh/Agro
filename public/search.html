@@ -1,0 +1,259 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Search Results - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <link rel="stylesheet" href="styles/product-cards.css" />
+    <style>
+      .search-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+
+      .search-header {
+        margin-bottom: 2rem;
+      }
+
+      .search-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .search-query {
+        color: var(--primary-light);
+      }
+
+      .search-count {
+        color: var(--text-light);
+        font-size: 1rem;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-light);
+      }
+
+      .no-results i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .products-grid > div {
+        display: flex;
+      }
+
+      .products-grid .product-card {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .products-grid .product-media {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+      }
+
+      .products-grid .product-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .products-grid .product-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .products-grid .product-actions {
+        margin-top: auto;
+      }
+
+      .stock-state {
+        margin: 0.5rem 0 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .stock-state.in {
+        color: #2e7d32;
+      }
+
+      .stock-state.out {
+        color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <div class="search-container">
+      <div class="search-header">
+        <h1 class="search-title">
+          Search Results for "<span class="search-query" id="searchQuery"></span>"
+        </h1>
+        <p class="search-count" id="searchCount">Loading...</p>
+      </div>
+
+      <div id="searchResults" class="products-grid">
+        <!-- Search results will be loaded here -->
+      </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-restrictions.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/reviews.js"></script>
+
+    <script>
+      function getSearchQuery() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('q') || '';
+      }
+
+      function stars(v) {
+        v = Number(v) || 0;
+        var full = Math.floor(v), half = (v - full) >= 0.5 ? 1 : 0, empty = 5 - full - half;
+        return '\u2605'.repeat(full) + (half ? '\u00BD' : '') + '\u2606'.repeat(empty);
+      }
+
+      async function searchProducts() {
+        const query = getSearchQuery();
+        
+        if (!query) {
+          window.location.href = 'home.html';
+          return;
+        }
+
+        document.getElementById('searchQuery').textContent = query;
+
+        try {
+          const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`, {
+            credentials: 'include'
+          });
+          
+          if (!response.ok) {
+            throw new Error('Search failed');
+          }
+
+          const finalProducts = await response.json();
+
+          const resultsContainer = document.getElementById('searchResults');
+          const countElement = document.getElementById('searchCount');
+
+          if (finalProducts.length === 0) {
+            countElement.textContent = 'No results found';
+            resultsContainer.innerHTML = `
+              <div class="no-results" style="grid-column: 1 / -1;">
+                <i class="bi bi-search"></i>
+                <p>No products found for "${query}"</p>
+                <p style="margin-top: 0.5rem;">Try different keywords or browse our categories</p>
+              </div>
+            `;
+            return;
+          }
+
+          countElement.textContent = `Found ${finalProducts.length} product${finalProducts.length !== 1 ? 's' : ''}`;
+
+          // Check if user is logged in
+          const userResponse = await fetch('/api/user', { credentials: 'include' });
+          const isUserLoggedIn = userResponse.ok;
+
+          resultsContainer.innerHTML = finalProducts.map(p => {
+            const sellerLabel = (p.isAgroMart || !p.sellerId) ? 'AgroMart' : (p.sellerId.username || 'Seller');
+            const img = p.image || 'images/home-pages pics/seeds.jpg';
+            const isOutOfStock = Number(p.stock || 0) <= 0;
+            
+            const reviewButton = isUserLoggedIn ? `
+              <button class="btn-review" onclick="reviewManager.openReviewModal('${p._id}', '${(p.name || '').replace(/'/g, "\\'")}')" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-light); border: 2px solid var(--primary-light); border-radius: 8px; color: var(--primary-light); font-weight: 600; cursor: pointer;">
+                <i class="bi bi-star"></i> Write Review
+              </button>
+            ` : '';
+            
+            return `
+              <div data-product-id="${p._id}" data-price="${p.price}" data-rating="${p.rating || 0}">
+                <div class="product-card">
+                  <button class="btn-wishlist" title="Add to Wishlist">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                  <div class="product-media">
+                    <img src="${img}" alt="${p.name}" />
+                  </div>
+                  <div class="product-body">
+                    <div class="seller-badge text-muted small">${sellerLabel}</div>
+                    <h3 class="product-name">${p.name}</h3>
+                    <div class="product-rating">
+                      <span class="stars" style="color:#ffc107">${stars(p.rating)}</span>
+                      <span class="count">(${p.reviews ? p.reviews.length : 0})</span>
+                    </div>
+                    <div class="product-price">&#8377;${p.price.toLocaleString('en-IN')}</div>
+                    <div class="stock-state ${isOutOfStock ? 'out' : 'in'}">
+                      ${isOutOfStock ? 'Out of stock' : `In stock: ${Number(p.stock || 0)}`}
+                    </div>
+                    ${reviewButton}
+                    <div class="product-actions">
+                      <button class="btn-add-cart" ${isOutOfStock ? 'disabled' : ''}>
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                      </button>
+                      <button class="btn-buy-now" ${isOutOfStock ? 'disabled' : ''}>
+                        <i class="bi bi-bag-check"></i> Buy Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          // Update wishlist buttons state
+          if (typeof wishlistManager !== 'undefined') {
+            wishlistManager.updateWishlistButtons();
+          }
+        } catch (error) {
+          console.error('Error searching products:', error);
+          document.getElementById('searchCount').textContent = 'Error loading results';
+          document.getElementById('searchResults').innerHTML = `
+            <div class="no-results" style="grid-column: 1 / -1;">
+              <i class="bi bi-exclamation-circle"></i>
+              <p>Failed to load search results</p>
+            </div>
+          `;
+        }
+      }
+
+      // Initialize search on page load
+      document.addEventListener('DOMContentLoaded', searchProducts);
+    </script>
+  </body>
+</html>
+
+
+
+
+

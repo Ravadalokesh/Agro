@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - AgroMart</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <style>
+      .dashboard-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+        width:100%;
+        box-sizing:border-box;
+      }
+
+      .dashboard-header {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: var(--radius);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: var(--bg-white);
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--primary-light);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: var(--text-light);
+        font-size: 1rem;
+      }
+
+      .dashboard-section {
+        background: var(--bg-white);
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid var(--primary-light);
+      }
+
+      .admin-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .info-item {
+        padding: 1rem;
+        background: var(--bg-light);
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-light);
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .info-value {
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        font-weight: 600;
+	word-break:break-word;
+      }
+
+      .pending-products-list {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .pending-product-card {
+        display: grid;
+        grid-template-columns: 150px 1fr auto;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        align-items: center;
+        transition: var(--transition);
+      }
+
+      .pending-product-card:hover {
+        border-color: var(--primary-light);
+        box-shadow: var(--shadow-md);
+      }
+
+      .product-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .product-details {
+        flex: 1;
+      }
+
+      .product-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+	word-break:break-word;
+      }
+
+      .product-seller {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+	word-break:break-word;
+      }
+
+      .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-light);
+        margin: 0.5rem 0;
+      }
+
+      .product-meta {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .meta-badge {
+        padding: 0.25rem 0.75rem;
+        background: var(--bg-light);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: var(--text-light);
+      }
+
+      .product-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .btn-approve,
+      .btn-reject {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .btn-approve {
+        background: var(--accent);
+        color: white;
+      }
+
+      .btn-approve:hover {
+        background: #3d8520;
+        transform: translateY(-2px);
+      }
+
+      .btn-reject {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .btn-reject:hover {
+        background: #c0392b;
+        transform: translateY(-2px);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-light);
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        min-width:700px;
+      }
+       .table-wrapper{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+      }	
+
+      .users-table th,
+      .users-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .users-table th {
+        background: var(--bg-light);
+        font-weight: 700;
+        color: var(--text-dark);
+        position: sticky;
+        top: 0;
+      }
+
+      .users-table tr:hover {
+        background: var(--bg-light);
+      }
+
+      .user-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .user-badge.user {
+        background: #e3f2fd;
+        color: #1976d2;
+      }
+
+      .user-badge.seller {
+        background: #fff3e0;
+        color: #f57c00;
+      }
+
+      .seller-stats {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+      }
+
+      .seller-stat {
+        font-size: 0.85rem;
+        color: var(--text-light);
+      }
+
+      .seller-stat strong {
+        color: var(--primary-light);
+      }
+      @media(max-width:1024px) {
+          .dashboard-container{
+          padding:0 1.25rem;
+          }
+          .dashboard-header{
+          padding:2.25rem 1.5 rem;
+          }
+          .dashboard-section{
+          padding:1.5rem;
+          }
+          .pending-product-card{
+          grid-template-columns:120px 1fr auto;
+          gap:1rem;
+          }
+          .product-image{
+          width:120px;
+          height:120px;
+          }
+      }
+      @media (max-width: 768px) {
+        .pending-product-card {
+          grid-template-columns: 1fr;
+        }
+
+        .product-image {
+          width: 100%;
+          height: 200px;
+        }
+
+        .product-actions {
+          flex-direction: row;
+        }
+
+        .users-table {
+          font-size: 0.85rem;
+        }
+
+        .users-table th,
+        .users-table td {
+          padding: 0.75rem 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1><i class="bi bi-shield-check"></i> Admin Dashboard</h1>
+        <p style="margin-top: 0.5rem; opacity: 0.9;">Manage AgroMart platform and user products</p>
+      </div>
+
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="pendingCount">0</div>
+          <div class="stat-label">Pending Products</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="approvedCount">0</div>
+          <div class="stat-label">Approved Products</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalUsers">0</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalSellers">0</div>
+          <div class="stat-label">Total Sellers</div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2 class="section-title">Admin Information</h2>
+        <div class="admin-info">
+          <div class="info-item">
+            <div class="info-label">Username</div>
+            <div class="info-value" id="adminUsername">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Name</div>
+            <div class="info-value" id="adminFullName">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Email</div>
+            <div class="info-value" id="adminEmail">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Role</div>
+            <div class="info-value">Administrator</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Member Since</div>
+            <div class="info-value" id="adminSince">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2 class="section-title">Pending Product Approvals</h2>
+        <div id="pendingProductsList" class="pending-products-list">
+          <div class="empty-state">
+            <i class="bi bi-hourglass-split"></i>
+            <p>Loading pending products...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2 class="section-title">All Users</h2>
+        <div id="usersList">
+          <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <p>Loading users...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2 class="section-title">All Sellers</h2>
+        <div id="sellersList">
+          <div class="empty-state">
+            <i class="bi bi-shop"></i>
+            <p>Loading sellers...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2 class="section-title">All Products</h2>
+        <div id="allProductsList">
+          <div class="empty-state">
+            <i class="bi bi-box-seam"></i>
+            <p>Loading products...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+      let currentAdmin = null;
+
+      async function loadAdminData() {
+        try {
+          const userResponse = await fetch('/api/user', { credentials: 'include' });
+          if (!userResponse.ok || userResponse.status === 401) {
+            window.location.href = '/';
+            return;
+          }
+
+          currentAdmin = await userResponse.json();
+          
+          if (currentAdmin.userType !== 'admin') {
+            alert('Admin access required');
+            window.location.href = 'home.html';
+            return;
+          }
+
+          // Load admin info from database record (includes first/last name)
+          document.getElementById('adminUsername').textContent = currentAdmin.username;
+          document.getElementById('adminEmail').textContent = currentAdmin.email;
+          document.getElementById('adminSince').textContent = new Date(currentAdmin.createdAt).toLocaleDateString();
+          const fullName = `${currentAdmin.firstName || ''} ${currentAdmin.lastName || ''}`.trim();
+          document.getElementById('adminFullName').textContent = fullName || currentAdmin.username;
+
+          // Load pending products
+          await loadPendingProducts();
+
+          // Load statistics
+          await loadStatistics();
+
+          // Load users and sellers
+          await loadUsers();
+          await loadSellers();
+          await loadAllProducts();
+        } catch (error) {
+          console.error('Error loading admin data:', error);
+          window.location.href = '/';
+        }
+      }
+
+      async function loadPendingProducts() {
+        try {
+          const response = await fetch('/api/products/pending', { credentials: 'include' });
+          if (!response.ok) {
+            throw new Error('Failed to load pending products');
+          }
+
+          const products = await response.json();
+          const container = document.getElementById('pendingProductsList');
+
+          if (products.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="bi bi-check-circle"></i>
+                <p>No pending products. All products have been reviewed!</p>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = products.map(product => `
+            <div class="pending-product-card" data-product-id="${product._id}">
+              <div class="product-image">
+                <img src="${product.image || 'images/home-pages pics/seeds.jpg'}" alt="${product.name}" />
+              </div>
+              <div class="product-details">
+                <h3 class="product-name">${product.name}</h3>
+                <div class="product-seller">
+                  <i class="bi bi-person"></i> 
+                  Seller: ${product.sellerId ? product.sellerId.username : 'Unknown'} 
+                  ${product.sellerId && product.sellerId.email ? `(${product.sellerId.email})` : ''}
+                </div>
+                <div class="product-price">₹${product.price.toLocaleString('en-IN')}</div>
+                <p style="color: var(--text-light); margin: 0.5rem 0;">${product.description || 'No description'}</p>
+                <div class="product-meta">
+                  <span class="meta-badge"><i class="bi bi-box"></i> Stock: ${product.stock}</span>
+                  <span class="meta-badge"><i class="bi bi-tag"></i> ${product.category}</span>
+                  ${product.subcategory ? `<span class="meta-badge">${product.subcategory}</span>` : ''}
+                </div>
+              </div>
+              <div class="product-actions">
+                <button class="btn-approve" onclick="approveProduct('${product._id}')">
+                  <i class="bi bi-check-circle"></i> Approve
+                </button>
+                <button class="btn-reject" onclick="rejectProduct('${product._id}')">
+                  <i class="bi bi-x-circle"></i> Reject
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch (error) {
+          console.error('Error loading pending products:', error);
+          document.getElementById('pendingProductsList').innerHTML = `
+            <div class="empty-state">
+              <i class="bi bi-exclamation-circle"></i>
+              <p>Failed to load pending products</p>
+            </div>
+          `;
+        }
+      }
+
+      async function loadStatistics() {
+        try {
+          const response = await fetch('/api/admin/statistics', { credentials: 'include' });
+          if (!response.ok) {
+            throw new Error('Failed to load statistics');
+          }
+          
+          const stats = await response.json();
+          
+          document.getElementById('pendingCount').textContent = stats.pendingProducts;
+          document.getElementById('approvedCount').textContent = stats.approvedProducts;
+          document.getElementById('totalUsers').textContent = stats.totalUsers;
+          document.getElementById('totalSellers').textContent = stats.totalSellers;
+        } catch (error) {
+          console.error('Error loading statistics:', error);
+        }
+      }
+
+      async function loadUsers() {
+        try {
+          const response = await fetch('/api/admin/users', { credentials: 'include' });
+          if (!response.ok) {
+            throw new Error('Failed to load users');
+          }
+
+          const users = await response.json();
+          const container = document.getElementById('usersList');
+
+          if (users.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="bi bi-people"></i>
+                <p>No users found</p>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = `
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Phone</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${users.map(user => `
+                  <tr>
+                    <td><strong>${user.username}</strong></td>
+                    <td>${user.email}</td>
+                    <td>${user.firstName || ''} ${user.lastName || ''}</td>
+                    <td><span class="user-badge ${user.userType}">${user.userType}</span></td>
+                    <td>${user.phone || '-'}</td>
+                    <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        } catch (error) {
+          console.error('Error loading users:', error);
+          document.getElementById('usersList').innerHTML = `
+            <div class="empty-state">
+              <i class="bi bi-exclamation-circle"></i>
+              <p>Failed to load users</p>
+            </div>
+          `;
+        }
+      }
+
+      async function loadSellers() {
+        try {
+          const response = await fetch('/api/admin/sellers', { credentials: 'include' });
+          if (!response.ok) {
+            throw new Error('Failed to load sellers');
+          }
+
+          const sellers = await response.json();
+          const container = document.getElementById('sellersList');
+
+          if (sellers.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="bi bi-shop"></i>
+                <p>No sellers found</p>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = `
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Name</th>
+                  <th>Products</th>
+                  <th>Earnings</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sellers.map(seller => `
+                  <tr>
+                    <td><strong>${seller.username}</strong></td>
+                    <td>${seller.email}</td>
+                    <td>${seller.firstName || ''} ${seller.lastName || ''}</td>
+                    <td>
+                      <div class="seller-stats">
+                        <span class="seller-stat"><strong>${seller.totalProducts}</strong> Total</span>
+                        <span class="seller-stat"><strong>${seller.approvedProducts}</strong> Approved</span>
+                        <span class="seller-stat"><strong>${seller.pendingProducts}</strong> Pending</span>
+                      </div>
+                    </td>
+                    <td><strong>₹${seller.totalEarnings.toLocaleString('en-IN')}</strong></td>
+                    <td>${new Date(seller.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        } catch (error) {
+          console.error('Error loading sellers:', error);
+          document.getElementById('sellersList').innerHTML = `
+            <div class="empty-state">
+              <i class="bi bi-exclamation-circle"></i>
+              <p>Failed to load sellers</p>
+            </div>
+          `;
+        }
+      }
+
+      async function loadAllProducts() {
+        try {
+          const response = await fetch('/api/products', { credentials: 'include' });
+          if (!response.ok) {
+            throw new Error('Failed to load products');
+          }
+
+          const products = await response.json();
+          const container = document.getElementById('allProductsList');
+
+          if (!products.length) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="bi bi-box-seam"></i>
+                <p>No products found</p>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = products.map(p => `
+            <div class="pending-product-card">
+              <div class="product-image">
+                <img src="${p.image || 'images/home-pages pics/seeds.jpg'}" alt="${p.name}" />
+              </div>
+              <div class="product-details">
+                <h3 class="product-name">${p.name}</h3>
+                <div class="product-seller">
+                  <i class="bi bi-person-circle"></i>
+                  Seller: ${p.isAgroMart || !p.sellerId ? 'AgroMart' : (p.sellerId.username || 'Seller')}
+                </div>
+                <div class="product-price">₹${(p.price || 0).toLocaleString('en-IN')}</div>
+                <div class="product-meta">
+                  <span class="meta-badge"><i class="bi bi-box"></i> Stock: ${p.stock || 0}</span>
+                  <span class="meta-badge"><i class="bi bi-bag-check"></i> Sold: ${p.sold || 0}</span>
+                  <span class="meta-badge"><i class="bi bi-cash-stack"></i> Earned: ₹${(p.earnings || 0).toLocaleString('en-IN')}</span>
+                  <span class="meta-badge"><i class="bi bi-tag"></i> ${p.category}</span>
+                  ${p.subcategory ? `<span class="meta-badge">${p.subcategory}</span>` : ''}
+                  <span class="meta-badge"><i class="bi bi-check-circle"></i> ${p.approved ? 'Approved' : 'Pending'}</span>
+                </div>
+              </div>
+              <div class="product-actions">
+                <button class="btn-reject" onclick="adminDeleteProduct('${p._id}', '${(p.name || '').replace(/'/g, "\\'")}')">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch (error) {
+          console.error('Error loading all products:', error);
+          document.getElementById('allProductsList').innerHTML = `
+            <div class="empty-state">
+              <i class="bi bi-exclamation-circle"></i>
+              <p>Failed to load products</p>
+            </div>
+          `;
+        }
+      }
+
+      async function adminDeleteProduct(productId, productName) {
+        if (!confirm(`Are you sure you want to delete "${productName}"?`)) return;
+
+        try {
+          const response = await fetch(`/api/products/${productId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            alert('Product deleted successfully!');
+            await loadAllProducts();
+            await loadStatistics();
+          } else {
+            const error = await response.json();
+            alert(error.error || 'Failed to delete product');
+          }
+        } catch (error) {
+          console.error('Error deleting product:', error);
+          alert('Failed to delete product');
+        }
+      }
+
+      async function approveProduct(productId) {
+        if (!confirm('Are you sure you want to approve this product?')) return;
+
+        try {
+          const response = await fetch(`/api/products/${productId}/approve`, {
+            method: 'PUT',
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            alert('Product approved successfully!');
+            await loadPendingProducts();
+            await loadStatistics();
+          } else {
+            const error = await response.json();
+            alert(error.error || 'Failed to approve product');
+          }
+        } catch (error) {
+          console.error('Error approving product:', error);
+          alert('Failed to approve product');
+        }
+      }
+
+      
+      async function rejectProduct(productId) {
+        if (!confirm('Are you sure you want to reject and delete this product?')) return;
+
+        try {
+          const response = await fetch(`/api/products/${productId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            alert('Product rejected and deleted successfully!');
+            await loadPendingProducts();
+            await loadStatistics();
+          } else {
+            const error = await response.json();
+            alert(error.error || 'Failed to reject product');
+          }
+        } catch (error) {
+          console.error('Error rejecting product:', error);
+          alert('Failed to reject product');
+        }
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', loadAdminData);
+    </script>
+  </body>
+</html>

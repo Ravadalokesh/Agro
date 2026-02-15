@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta charset="UTF-8" />
+    <title>AgroMart - Fresh and Farm-grown Products</title>
+    <link rel="icon" href="images/convertico-logo2.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <!-- External CSS Files (served from src/ at root) -->
+    <link rel="stylesheet" href="styles/variables.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <link rel="stylesheet" href="styles/home.css" />
+    <link rel="stylesheet" href="styles/product-cards.css" />
+    <style>
+      .rate-product .star { cursor: pointer; color: #ddd; }
+      .rate-product .star:hover { color: #ffc107; }
+    </style>
+  </head>
+  <body>
+    <!-- Header will be loaded by header.js -->
+    <div id="header-placeholder"></div>
+
+    <main>
+      <section class="hero">
+        <div class="hero-media">
+          <img src="images/bag.jpg" alt="Fresh Farm Products" />
+        </div>
+        <div class="hero-content">
+          <div class="hero-card">
+            <h1 class="hero-title">Fresh Farm Products<br />for You</h1>
+            <p class="hero-subtitle">
+              100% Organic & Natural Products Directly from Trusted Farmers
+            </p>
+            <a href="#best-sellers" class="btn-primary">
+              Shop Now <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="bi bi-flower1"></i>
+          </div>
+          <h3 class="feature-title">Organic Products</h3>
+          <p class="feature-desc">100% certified organic</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="bi bi-truck"></i>
+          </div>
+          <h3 class="feature-title">Fast Delivery</h3>
+          <p class="feature-desc">Same day delivery available</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <h3 class="feature-title">Best Quality</h3>
+          <p class="feature-desc">Premium quality guaranteed</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="bi bi-headset"></i>
+          </div>
+          <h3 class="feature-title">24/7 Support</h3>
+          <p class="feature-desc">Always here to help</p>
+        </div>
+      </section>
+
+      <div class="container">
+        <section>
+          <div class="section-header">
+            <h2 class="section-title">Featured Categories</h2>
+            <a href="#" class="section-link">
+              View All <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="cards-grid">
+            <a
+              href="seeds-fertilizers.html?category=seeds"
+              class="card"
+              style="text-decoration: none; color: inherit"
+            >
+              <div class="card-media">
+                <img src="images/home-pages pics/seeds.jpg" alt="Seeds" />
+              </div>
+              <div class="card-label">Seeds</div>
+            </a>
+            <a
+              href="seeds-fertilizers.html?category=fertilizers"
+              class="card"
+              style="text-decoration: none; color: inherit"
+            >
+              <div class="card-media">
+                <img
+                  src="images/home-pages pics/fertilizer.jpg"
+                  alt="Fertilizers"
+                />
+              </div>
+              <div class="card-label">Fertilizers</div>
+            </a>
+            <a
+              href="tools-equipment.html?category=tools"
+              class="card"
+              style="text-decoration: none; color: inherit"
+            >
+              <div class="card-media">
+                <img
+                  src="images/home-pages pics/tools&equipment.jpg"
+                  alt="Tools & Equipment"
+                />
+              </div>
+              <div class="card-label">Tools & Equipment</div>
+            </a>
+            <a
+              href="livestock.html?category=livestock"
+              class="card"
+              style="text-decoration: none; color: inherit"
+            >
+              <div class="card-media">
+                <img
+                  src="images/home-pages pics/live-stock.jpg"
+                  alt="Livestock"
+                />
+              </div>
+              <div class="card-label">Livestock</div>
+            </a>
+          </div>
+        </section>
+
+        <section id="best-sellers">
+          <div class="section-header">
+            <h2 class="section-title">Best Sellers</h2>
+            <a href="#" class="section-link">
+              View All <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="products-grid">
+            <div
+              data-product-id="tomato-seeds-001"
+              data-price="414"
+              data-rating="5"
+            >
+              <div class="product-card">
+                <button class="btn-wishlist" title="Add to Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <div class="product-media">
+                  <img
+                    src="images/home-pages pics/tomato-seeds.jpg"
+                    alt="Organic Tomato Seeds"
+                  />
+                </div>
+                <div class="product-body">
+                  <h3 class="product-name">Organic Tomato Seeds</h3>
+                  <div class="product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(124)</span>
+                  </div>
+                  <div class="product-price">₹414</div>
+                  <button class="btn-review" onclick="reviewManager.openReviewModal('tomato-seeds-001', 'Organic Tomato Seeds')" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-light); border: 2px solid var(--primary-light); border-radius: 8px; color: var(--primary-light); font-weight: 600; cursor: pointer; transition: var(--transition);">
+                    <i class="bi bi-star"></i> Write Review
+                  </button>
+                  <div class="product-actions">
+                    <button class="btn-add-cart">
+                      <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                    <button class="btn-buy-now">
+                      <i class="bi bi-bag-check"></i> Buy Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              data-product-id="fertilizer-allpurpose-001"
+              data-price="1992"
+              data-rating="5"
+            >
+              <div class="product-card">
+                <button class="btn-wishlist" title="Add to Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <div class="product-media">
+                  <img
+                    src="images/home-pages pics/allpurpose.jpg"
+                    alt="All-Purpose Fertilizer"
+                  />
+                </div>
+                <div class="product-body">
+                  <h3 class="product-name">All-Purpose Fertilizer</h3>
+                  <div class="product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(89)</span>
+                  </div>
+                  <div class="product-price">₹1,992</div>
+                  <button class="btn-review" onclick="reviewManager.openReviewModal('fertilizer-allpurpose-001', 'All-Purpose Fertilizer')" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-light); border: 2px solid var(--primary-light); border-radius: 8px; color: var(--primary-light); font-weight: 600; cursor: pointer; transition: var(--transition);">
+                    <i class="bi bi-star"></i> Write Review
+                  </button>
+                  <div class="product-actions">
+                    <button class="btn-add-cart">
+                      <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                    <button class="btn-buy-now">
+                      <i class="bi bi-bag-check"></i> Buy Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              data-product-id="tools-handset-001"
+              data-price="2822"
+              data-rating="4"
+            >
+              <div class="product-card">
+                <button class="btn-wishlist" title="Add to Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <div class="product-media">
+                  <img
+                    src="images/home-pages pics/gardenhandsettools.jpg"
+                    alt="Garden Hand Tools Set"
+                  />
+                </div>
+                <div class="product-body">
+                  <h3 class="product-name">Garden Hand Tools Set</h3>
+                  <div class="product-rating">
+                    <span class="stars">★★★★☆</span>
+                    <span class="count">(67)</span>
+                  </div>
+                  <div class="product-price">₹2,822</div>
+                  <button class="btn-review" onclick="reviewManager.openReviewModal('tools-handset-001', 'Garden Hand Tools Set')" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-light); border: 2px solid var(--primary-light); border-radius: 8px; color: var(--primary-light); font-weight: 600; cursor: pointer; transition: var(--transition);">
+                    <i class="bi bi-star"></i> Write Review
+                  </button>
+                  <div class="product-actions">
+                    <button class="btn-add-cart">
+                      <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                    <button class="btn-buy-now">
+                      <i class="bi bi-bag-check"></i> Buy Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              data-product-id="eggs-range-001"
+              data-price="497"
+              data-rating="5"
+            >
+              <div class="product-card">
+                <button class="btn-wishlist" title="Add to Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <div class="product-media">
+                  <img
+                    src="images/home-pages pics/rangeeggs.jpg"
+                    alt="Free Range Eggs"
+                  />
+                </div>
+                <div class="product-body">
+                  <h3 class="product-name">Free Range Eggs</h3>
+                  <div class="product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(203)</span>
+                  </div>
+                  <div class="product-price">₹497</div>
+                  <button class="btn-review" onclick="reviewManager.openReviewModal('eggs-range-001', 'Free Range Eggs')" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-light); border: 2px solid var(--primary-light); border-radius: 8px; color: var(--primary-light); font-weight: 600; cursor: pointer; transition: var(--transition);">
+                    <i class="bi bi-star"></i> Write Review
+                  </button>
+                  <div class="product-actions">
+                    <button class="btn-add-cart">
+                      <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                    <button class="btn-buy-now">
+                      <i class="bi bi-bag-check"></i> Buy Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="marketplace" class="mt-5">
+          <div class="section-header">
+            <h2 class="section-title">Marketplace – Sellers & AgroMart</h2>
+          </div>
+          <div id="marketplace-products" class="products-grid">
+            <p class="text-muted">Loading products…</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer will be loaded by footer.js -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Component Scripts (served from src/ at root) -->
+    <script src="js/auth.js"></script>
+    <script src="components/header.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/admin-restrictions.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/reviews.js"></script>
+    <script>
+      (function() {
+        function stars(v) {
+          v = Number(v) || 0;
+          var full = Math.floor(v), half = (v - full) >= 0.5 ? 1 : 0, empty = 5 - full - half;
+          return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+        }
+        function renderMarketplace(products, user) {
+          var container = document.getElementById('marketplace-products');
+          if (!container) return;
+          if (!products || products.length === 0) {
+            container.innerHTML = '<p class="text-muted">No products yet. Sellers and AgroMart will list here.</p>';
+            return;
+          }
+          
+          var isLoggedIn = !!(user && user._id);
+          var isAdmin = !!(user && user.userType === 'admin');
+          
+          container.innerHTML = products.map(function(p) {
+            var sellerLabel = (p.isAgroMart || !p.sellerId) ? 'AgroMart' : (p.sellerId.username || 'Seller');
+            var img = (p.image || 'images/home-pages pics/seeds.jpg');
+            var ratingHtml = '<div class="product-rating"><span class="stars" style="color:#ffc107">' + stars(p.rating) + '</span><span class="count">(' + (p.reviews ? p.reviews.length : 0) + ')</span></div>';
+            
+            // Only show review button for logged-in non-admin users
+            if (isLoggedIn && !isAdmin) {
+              ratingHtml += '<button class="btn-review" onclick="reviewManager.openReviewModal(\'' + p._id + '\', \'' + (p.name || '').replace(/'/g, "\\'") + '\')" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-light); border: 2px solid var(--primary-light); border-radius: 8px; color: var(--primary-light); font-weight: 600; cursor: pointer; transition: var(--transition);"><i class="bi bi-star"></i> Write Review</button>';
+            }
+            
+            // Wishlist button (hide for admin)
+            var wishlistBtn = isAdmin ? '' : '<button class="btn-wishlist" title="Add to Wishlist"><i class="bi bi-heart"></i></button>';
+            
+            // Product actions (hide for admin)
+            var productActions = isAdmin ? '' : '<div class="product-actions">' +
+              '<button class="btn-add-cart" data-id="' + p._id + '" data-name="' + (p.name || '') + '" data-price="' + p.price + '" data-image="' + img + '"><i class="bi bi-cart-plus"></i> Add to Cart</button>' +
+              '<button class="btn-buy-now"><i class="bi bi-bag-check"></i> Buy Now</button>' +
+              '</div>';
+            
+            return '<div class="product-card-wrapper" data-product-id="' + p._id + '" data-price="' + p.price + '" data-rating="' + (p.rating || 0) + '">' +
+              '<div class="product-card">' +
+              wishlistBtn +
+              '<div class="product-media"><img src="' + img + '" alt="' + (p.name || '') + '" /></div>' +
+              '<div class="product-body">' +
+              '<div class="seller-badge text-muted small">' + sellerLabel + '</div>' +
+              '<h3 class="product-name">' + (p.name || '') + '</h3>' +
+              ratingHtml +
+              '<div class="product-price">₹' + (p.price ? p.price.toLocaleString('en-IN') : '0') + '</div>' +
+              productActions +
+              '</div></div></div>';
+          }).join('');
+
+          container.querySelectorAll('.star-rating').forEach(function(el) {
+            el.addEventListener('click', function(ev) {
+              var star = ev.target.closest('.star');
+              if (!star) return;
+              var rating = parseInt(star.getAttribute('data-value'), 10);
+              var productId = ev.target.closest('.rate-product').getAttribute('data-product-id');
+              if (!productId) return;
+              fetch('/api/products/' + productId + '/rate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ rating: rating })
+              }).then(function(r) { return r.json(); }).then(function(data) {
+                if (data.rating != null) {
+                  var card = star.closest('.product-card-wrapper');
+                  var starsEl = card.querySelector('.product-rating .stars');
+                  if (starsEl) starsEl.textContent = stars(data.rating);
+                  var countEl = card.querySelector('.product-rating .count');
+                  if (countEl && data.count != null) countEl.textContent = '(' + data.count + ')';
+                }
+              }).catch(function() {});
+            });
+          });
+
+          container.querySelectorAll('.btn-add-cart[data-id]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              // cart.js already handles add-to-cart globally; avoid duplicate API inserts.
+              if (window.cartManager) return;
+              if (typeof addToCartFromMarketplace === 'function') addToCartFromMarketplace(btn);
+              else if (window.authUser) {
+                fetch('/api/cart', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  credentials: 'include',
+                  body: JSON.stringify({
+                    productId: btn.getAttribute('data-id'),
+                    name: btn.getAttribute('data-name'),
+                    price: btn.getAttribute('data-price'),
+                    image: btn.getAttribute('data-image')
+                  })
+                }).then(async function(response) {
+                  if (!response.ok) {
+                    var err = await response.json().catch(function() { return {}; });
+                    alert(err.error || 'Could not add product to cart');
+                    return;
+                  }
+                  alert('Added to cart');
+                }).catch(function() {});
+              } else { window.location.href = '/'; }
+            });
+          });
+        }
+        function loadMarketplace() {
+          var container = document.getElementById('marketplace-products');
+          if (!container) return;
+          Promise.all([
+            fetch('/api/products', { credentials: 'include' }).then(function(r) { return r.json(); }),
+            fetch('/api/user', { credentials: 'include' }).then(function(r) { return r.ok ? r.json() : null; }).catch(function() { return null; })
+          ]).then(function(results) {
+            var products = Array.isArray(results[0]) ? results[0] : [];
+            var user = results[1];
+            renderMarketplace(products, user);
+            
+            // Hide static product buttons for admin
+            if (user && user.userType === 'admin') {
+              document.querySelectorAll('.btn-review, .btn-add-cart, .btn-buy-now, .btn-wishlist').forEach(function(btn) {
+                btn.style.display = 'none';
+              });
+            }
+          }).catch(function() { container.innerHTML = '<p class="text-muted">Could not load products.</p>'; });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+          if (document.readyState === 'loading') return;
+          loadMarketplace();
+        });
+        if (document.readyState !== 'loading') loadMarketplace();
+      })();
+    </script>
+  </body>
+</html>
