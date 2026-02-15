@@ -1373,55 +1373,50 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
       return res.status(403).json({ error: "Admin access required" });
     }
 
-    const DELIVERY_CHARGE = 50;
+    const DELIVERY_CHARGE_PER_ORDER = 50;
 
-    // ===============================
-    // 1️⃣ DELIVERY FROM ALL ORDERS
-    // ===============================
     const orders = await Order.find();
+    const adminProducts = await Product.find({ isAgroMart: true });
 
-    let totalDeliveryRevenue = 0;
+    const adminProductIds = adminProducts.map(p => p._id.toString());
+
+    let totalAdminEarnings = 0;
+    let totalAdminItemsSold = 0;
 
     for (const order of orders) {
+
+      let adminOrderAmount = 0;
+      let hasAdminProduct = false;
+
       for (const item of order.products) {
-        const qty = Number(item.quantity) || 1;
-        totalDeliveryRevenue += qty * DELIVERY_CHARGE;
+
+        if (adminProductIds.includes(item.productId)) {
+          const qty = Number(item.quantity) || 1;
+          const price = Number(item.price) || 0;
+
+          adminOrderAmount += price * qty;
+          totalAdminItemsSold += qty;
+          hasAdminProduct = true;
+        }
+      }
+
+      // If order contains at least one admin product
+      if (hasAdminProduct) {
+        totalAdminEarnings += adminOrderAmount + DELIVERY_CHARGE_PER_ORDER;
       }
     }
 
-    // ===============================
-    // 2️⃣ ADMIN PRODUCTS ONLY
-    // ===============================
-    const adminProducts = await Product.find({ isAgroMart: true });
-
-    let adminProductEarnings = 0;
-    let adminProductsSold = 0;
-
-    adminProducts.forEach((product) => {
-      adminProductEarnings += product.earnings || 0;
-      adminProductsSold += product.sold || 0;
-    });
-
-    // ===============================
-    // 3️⃣ FINAL ADMIN EARNINGS
-    // ===============================
-    const totalAdminEarnings =
-      adminProductEarnings + totalDeliveryRevenue;
-
     res.json({
-      adminProductEarnings,      // Only admin products
-      totalDeliveryRevenue,      // All products delivery
-      totalAdminEarnings,        // Final
-      totalItemsSold: adminProductsSold,  // Only admin products sold
+      totalAdminEarnings,
+      totalItemsSold: totalAdminItemsSold,
       totalAdminProducts: adminProducts.length,
-      deliveryChargePerItem: DELIVERY_CHARGE,
+      products: adminProducts,
     });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
 // app.get("/api/admin/statistics", requireAuth, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.userId);
