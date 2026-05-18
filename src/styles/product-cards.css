@@ -1,4 +1,3 @@
-/* Product Card Enhancements */
 .product-card {
   position: relative;
 }
@@ -83,7 +82,6 @@
   box-shadow: 0 4px 12px rgba(74, 158, 42, 0.3);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .product-actions {
     flex-direction: column;
