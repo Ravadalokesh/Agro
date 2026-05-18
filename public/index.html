@@ -6,7 +6,6 @@
     <title>Login / Signup - AgroMart</title>
     <link rel="icon" href="images/convertico-logo2.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <!-- External CSS Files (served from src/ at root) -->
     <link rel="stylesheet" href="styles/variables.css" />
     <link rel="stylesheet" href="styles/common.css" />
     <style>
@@ -377,7 +376,6 @@
           <button class="auth-tab" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
         </div>
 
-        <!-- Login Form -->
         <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
           <input type="hidden" name="loginType" id="loginTypeInput" value="user" />
           <div class="error-message" id="loginError"></div>
@@ -395,8 +393,6 @@
           </div>
           <button type="submit" class="submit-btn">Login</button>
         </form>
-
-        <!-- Signup Form -->
         <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
           <div class="error-message" id="signupError"></div>
           <div class="success-message" id="signupSuccess"></div>
@@ -437,8 +433,6 @@
         </form>
       </div>
     </div>
-
-    <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -466,8 +460,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Forgot Username Modal -->
     <div id="forgotUsernameModal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -494,7 +486,6 @@
       </div>
     </div>
 
-    <!-- Server notice (shown when opened as file) -->
     <div
       id="serverNotice"
       style="
@@ -517,7 +508,7 @@
     </div>
 
     <script>
-      // API base URL: use current origin when served from server (e.g. http://localhost:3000), else fallback for file://
+     
       const API_BASE =
         window.location.protocol === "http:" ||
         window.location.protocol === "https:"
@@ -593,7 +584,6 @@
           const result = await response.json().catch(() => ({}));
 
           if (response.ok) {
-            // Redirect admin to admin dashboard, others to home
             if (result.user && result.user.userType === 'admin') {
               window.location.href = "admin-dashboard.html";
             } else {
@@ -659,8 +649,6 @@
           errorDiv.classList.add("show");
         }
       }
-
-      // Forgot Password Modal Functions
       function showForgotPasswordModal() {
         document.getElementById("forgotPasswordModal").classList.add("show");
         document.getElementById("forgotPasswordForm").style.display = "block";
@@ -707,8 +695,6 @@
           errorDiv.classList.add("show");
         }
       }
-
-      // Forgot Username Modal Functions
       function showForgotUsernameModal() {
         document.getElementById("forgotUsernameModal").classList.add("show");
         document.getElementById("forgotUsernameForm").style.display = "block";
@@ -759,14 +745,12 @@
           closeForgotUsernameModal();
           switchTab("login");
         }).catch(() => {
-          // Fallback if clipboard API not available
           document.getElementById("loginUsername").value = username;
           closeForgotUsernameModal();
           switchTab("login");
         });
       }
 
-      // Close modals when clicking outside
       window.onclick = function(event) {
         if (event.target.classList.contains("modal")) {
           event.target.classList.remove("show");
@@ -790,7 +774,7 @@
             }
           }
         } catch (error) {
-          // Not logged in or server not running, stay on login page
+       
         }
       });
     </script>
