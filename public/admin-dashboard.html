@@ -468,8 +468,6 @@
             window.location.href = "home.html";
             return;
           }
-
-          // Load admin info from database record (includes first/last name)
           document.getElementById("adminUsername").textContent =
             currentAdmin.username;
           document.getElementById("adminEmail").textContent =
@@ -481,14 +479,8 @@
             `${currentAdmin.firstName || ""} ${currentAdmin.lastName || ""}`.trim();
           document.getElementById("adminFullName").textContent =
             fullName || currentAdmin.username;
-
-          // Load pending products
           await loadPendingProducts();
-
-          // Load statistics
           await loadStatistics();
-
-          // Load users and sellers
           await loadUsers();
           await loadSellers();
           await loadAllProducts();
@@ -862,7 +854,6 @@
         }
       }
 
-      // Initialize
       document.addEventListener("DOMContentLoaded", loadAdminData);
     </script>
   </body>
