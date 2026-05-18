@@ -1,16 +1,12 @@
-// Header Component Loader
 async function loadHeader() {
   const currentPage = window.location.pathname.split('/').pop() || 'home.html';
   const currentTab = new URLSearchParams(window.location.search).get('tab') || '';
   
-  // Check user type
   let userType = 'user';
   try {
     const response = await fetch('/api/user', { credentials: 'include' });
     if (response.ok) {
       const user = await response.json();
-      // Expose full user object so other scripts (profile, cart, wishlist, admin pages)
-      // can access firstName, lastName, etc. from the same DB source.
       window.authUser = user;
       userType = user.userType || 'user';
     }
@@ -122,8 +118,6 @@ async function loadHeader() {
     document.body.insertAdjacentHTML('afterbegin', headerHTML);
   }
 
-  // Keep cart badge accurate on every page, even when page-specific scripts
-  // initialize later or are not present.
   async function refreshHeaderCartCount() {
     try {
       const response = await fetch('/api/cart', { credentials: 'include' });
@@ -155,7 +149,6 @@ async function loadHeader() {
   refreshHeaderCartCount();
   document.dispatchEvent(new CustomEvent('header:loaded'));
 
-  // Initialize mobile menu
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
   const navMenu = document.getElementById('navMenu');
   const menuIcon = document.getElementById('menuIcon');
@@ -181,7 +174,6 @@ async function loadHeader() {
       }
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', function(event) {
       if (window.innerWidth <= 768) {
         if (!event.target.closest('.header-container') && navMenu.classList.contains('mobile-open')) {
@@ -190,7 +182,6 @@ async function loadHeader() {
       }
     });
 
-    // Close menu when clicking on a link
     navMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', function() {
         if (window.innerWidth <= 768) {
@@ -207,7 +198,6 @@ async function loadHeader() {
     });
   }
 
-  // Header scroll effect
   const header = document.getElementById('header');
   if (header) {
     window.addEventListener('scroll', () => {
@@ -219,7 +209,6 @@ async function loadHeader() {
     });
   }
 
-  // Search functionality
   const searchInput = document.getElementById('searchInput');
   if (searchInput) {
     searchInput.addEventListener('keypress', function(e) {
@@ -233,7 +222,6 @@ async function loadHeader() {
   }
 }
 
-// Load header when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadHeader);
 } else {
