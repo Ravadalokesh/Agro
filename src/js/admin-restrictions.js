@@ -1,7 +1,6 @@
 // Admin Restrictions - Hide cart, wishlist, and review features for admin users
 
 (function() {
-  // Check if user is admin and hide appropriate UI elements
   async function applyAdminRestrictions() {
     try {
       const response = await fetch('/api/user', { credentials: 'include' });
@@ -10,10 +9,7 @@
       const user = await response.json();
       
       if (user && user.userType === 'admin') {
-        // Hide all wishlist, cart, buy now, and review buttons
         hideAdminRestrictedElements();
-        
-        // Apply observer to handle dynamically loaded content
         observeDOMChanges();
       }
     } catch (error) {
@@ -37,12 +33,10 @@
   }
   
   function observeDOMChanges() {
-    // Create an observer to watch for dynamically added elements
     const observer = new MutationObserver(function(mutations) {
       hideAdminRestrictedElements();
     });
     
-    // Observe the document body for changes
     observer.observe(document.body, {
       childList: true,
       subtree: true
