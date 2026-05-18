@@ -182,7 +182,6 @@ const requireAuth = (req, res, next) => {
 };
 
 // Routes
-
 // Serve index.html for root
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -237,7 +236,6 @@ app.post("/api/login", async (req, res) => {
     const { username, password, loginType } = req.body;
 
     if (loginType === "admin") {
-      // Admin must supply both correct admin username and password
       const user = await User.findOne({ username, userType: "admin" });
       if (!user) {
         return res.status(401).json({ error: "Invalid admin credentials" });
@@ -307,14 +305,12 @@ app.post("/api/forgot-password", async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
     await user.save();
 
-    // In production, send email with reset link
-    // For development, return the token
     const resetUrl = `${process.env.APP_BASE_URL}/reset-password.html?token=${resetToken}`;
 
     res.json({
       success: true,
       message: "Password reset link generated",
-      resetUrl: resetUrl, // In production, this would be sent via email
+      resetUrl: resetUrl,
       email: user.email,
     });
   } catch (error) {
@@ -1094,56 +1090,6 @@ app.post("/api/orders", requireAuth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// app.post("/api/orders", requireAuth, async (req, res) => {
-//   try {
-//     const user = await User.findById(req.session.userId);
-
-//     // Admin cannot place orders
-//     if (user.userType === "admin") {
-//       return res.status(403).json({ error: "Admin cannot place orders" });
-//     }
-
-//     const products = (req.body.products || []).map((item) => ({
-//       productId: String(item.productId != null ? item.productId : ""),
-//       name: item.name,
-//       price: Number(item.price) || 0,
-//       quantity: Number(item.quantity) || 1,
-//     }));
-//     const order = new Order({
-//       userId: req.session.userId,
-//       products,
-//       total: Number(req.body.total) || 0,
-//       deliveryAddress: req.body.deliveryAddress || {},
-//       paymentMethod: req.body.paymentMethod || "Cash on Delivery",
-//     });
-
-//     await order.save();
-
-//     // Update seller earnings only for products that exist in DB (valid ObjectId)
-//     const isValidObjectId = (id) =>
-//       mongoose.Types.ObjectId.isValid(id) && String(id).length === 24;
-//     for (const item of req.body.products) {
-//       if (item.productId && isValidObjectId(item.productId)) {
-//         const product = await Product.findById(item.productId);
-//         if (product) {
-//           const qty = Number(item.quantity) || 1;
-//           product.sold += qty;
-//           product.earnings += (Number(item.price) || 0) * qty;
-//           product.stock = Math.max(0, (product.stock || 0) - qty);
-//           await product.save();
-//         }
-//       }
-//     }
-
-//     // Clear cart
-//     user.cart = [];
-//     await user.save();
-
-//     res.json(order);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
 
 app.get("/api/orders", requireAuth, async (req, res) => {
   try {
@@ -1324,48 +1270,6 @@ app.get("/api/admin/statistics", requireAuth, async (req, res) => {
   }
 });
 
-// Admin: Total earnings (platform earnings)
-// app.get("/api/admin/earnings", requireAuth, async (req, res) => {
-//   try {
-//     const admin = await User.findById(req.session.userId);
-//     if (!admin || admin.userType !== "admin") {
-//       return res.status(403).json({ error: "Admin access required" });
-//     }
-
-//     const orders = await Order.find();
-
-//     let totalRevenue = 0;
-//     let totalItemsSold = 0;
-
-//     for (const order of orders) {
-//       for (const item of order.products) {
-//         totalRevenue += (Number(item.price) || 0) * (Number(item.quantity) || 1);
-//         totalItemsSold += Number(item.quantity) || 1;
-//       }
-//     }
-
-//     const agroMartProducts = await Product.find({ isAgroMart: true });
-//     let totalEarnings = 0;
-//     let totalSold = 0;
-//     agroMartProducts.forEach((p) => {
-//       totalEarnings += p.earnings || 0;
-//       totalSold += p.sold || 0;
-//     });
-
-//     res.json({
-//       totalEarnings,
-//       totalRevenue,
-//       totalOrders: orders.length,
-//       totalItemsSold,
-//       totalSold,
-//       totalProducts: agroMartProducts.length,
-//       products: agroMartProducts,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
 app.get("/api/admin/earnings", requireAuth, async (req, res) => {
   try {
     const admin = await User.findById(req.session.userId);
@@ -1375,8 +1279,6 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
     }
 
     const DELIVERY_CHARGE_PER_ORDER = 50;
-
-    // ✅ Get products created by admin
     const adminProducts = await Product.find({
       sellerId: admin._id
     });
@@ -1407,8 +1309,6 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
           hasAdminProduct = true;
         }
       }
-
-      // Add ₹50 once per order if it contains admin product
       if (hasAdminProduct) {
         totalAdminEarnings += adminOrderAmount + DELIVERY_CHARGE_PER_ORDER;
       }
@@ -1424,37 +1324,10 @@ app.get("/api/admin/earnings", requireAuth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});// app.get("/api/admin/statistics", requireAuth, async (req, res) => {
-//   try {
-//     const user = await User.findById(req.session.userId);
-//     if (user.userType !== "admin") {
-//       return res.status(403).json({ error: "Admin access required" });
-//     }
-
-//     const totalUsers = await User.countDocuments({ userType: "user" });
-//     const totalSellers = await User.countDocuments({ userType: "seller" });
-//     const totalProducts = await Product.countDocuments();
-//     const approvedProducts = await Product.countDocuments({ approved: true });
-//     const pendingProducts = await Product.countDocuments({ approved: false });
-//     const totalOrders = await Order.countDocuments();
-
-//     res.json({
-//       totalUsers,
-//       totalSellers,
-//       totalProducts,
-//       approvedProducts,
-//       pendingProducts,
-//       totalOrders,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
+});
 // Get predefined categories
 app.get("/api/categories", async (req, res) => {
   try {
-    // Predefined categories
     const predefinedCategories = [
       {
         value: "vegetables-fruits",
