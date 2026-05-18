@@ -181,7 +181,6 @@
 
           countElement.textContent = `Found ${finalProducts.length} product${finalProducts.length !== 1 ? 's' : ''}`;
 
-          // Check if user is logged in
           const userResponse = await fetch('/api/user', { credentials: 'include' });
           const isUserLoggedIn = userResponse.ok;
 
@@ -231,7 +230,6 @@
             `;
           }).join('');
 
-          // Update wishlist buttons state
           if (typeof wishlistManager !== 'undefined') {
             wishlistManager.updateWishlistButtons();
           }
@@ -247,7 +245,6 @@
         }
       }
 
-      // Initialize search on page load
       document.addEventListener('DOMContentLoaded', searchProducts);
     </script>
   </body>
