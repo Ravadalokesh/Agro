@@ -45,7 +45,6 @@ class ReviewManager {
       
       document.body.insertAdjacentHTML('beforeend', modalHTML);
       
-      // Add modal styles
       const style = document.createElement('style');
       style.textContent = `
         .modal {
@@ -220,7 +219,6 @@ class ReviewManager {
         alert('Review submitted successfully!');
         this.closeReviewModal();
         
-        // Reload the page to show updated ratings
         window.location.reload();
       } else if (response.status === 401) {
         alert('Please login to submit a review');
