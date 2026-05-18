@@ -1,4 +1,3 @@
-// Wishlist Management System with MongoDB
 class WishlistManager {
   constructor() {
     this.wishlist = [];
@@ -17,7 +16,6 @@ class WishlistManager {
         this.updateWishlistBadge();
         this.updateWishlistButtons();
       } else if (response.status === 401) {
-        // Not authenticated, use empty wishlist
         this.wishlist = [];
       }
     } catch (error) {
@@ -135,7 +133,6 @@ class WishlistManager {
   }
 }
 
-// Initialize wishlist manager
 const wishlistManager = new WishlistManager();
 
 // Wishlist button handler
@@ -179,7 +176,6 @@ document.addEventListener('click', async function(e) {
   }
 });
 
-// Update wishlist badge and button states on page load
 document.addEventListener('DOMContentLoaded', function() {
   wishlistManager.loadWishlist();
 });
