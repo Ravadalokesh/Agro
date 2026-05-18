@@ -9,7 +9,6 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
-    <!-- External CSS Files (served from src/ at root) -->
     <link rel="stylesheet" href="styles/variables.css" />
     <link rel="stylesheet" href="styles/common.css" />
     <link rel="stylesheet" href="styles/header.css" />
@@ -168,7 +167,6 @@
         transform: translateY(-2px);
       }
 
-      /* Seller specific styles */
       .earnings-card {
         background: linear-gradient(135deg, #4a9e2a, #3f7b1d);
         color: white;
@@ -327,7 +325,6 @@
     </style>
   </head>
   <body>
-    <!-- Header will be loaded by header.js -->
     <div id="header-placeholder"></div>
 
     <div class="profile-container">
@@ -388,7 +385,6 @@
         </button>
       </div>
 
-      <!-- Profile Info Tab -->
       <div id="infoTab" class="profile-content active">
         <div
           id="becomeSellerSection"
@@ -479,27 +475,21 @@
         </div>
       </div>
 
-      <!-- Cart Tab -->
       <div id="cartTab" class="profile-content">
         <div class="profile-section">
           <h2 class="section-title">My Cart</h2>
           <div id="cartContent">
-            <!-- Cart items will be loaded here -->
           </div>
         </div>
       </div>
 
-      <!-- Wishlist Tab -->
       <div id="wishlistTab" class="profile-content">
         <div class="profile-section">
           <h2 class="section-title">My Wishlist</h2>
           <div id="wishlistContent">
-            <!-- Wishlist items will be loaded here -->
           </div>
         </div>
       </div>
-
-      <!-- Products Tab (Seller only) -->
       <div id="productsTab" class="profile-content">
         <div class="profile-section">
           <h2 class="section-title">My Products</h2>
@@ -507,12 +497,10 @@
             <i class="bi bi-plus-circle"></i> Add New Product
           </button>
           <div id="productsContent">
-            <!-- Products will be loaded here -->
           </div>
         </div>
       </div>
 
-      <!-- Earnings Tab (Seller only) -->
       <div id="earningsTab" class="profile-content">
         <div class="earnings-card">
           <h2 style="margin-bottom: 1rem">Total Earnings</h2>
@@ -534,13 +522,11 @@
         <div class="profile-section">
           <h2 class="section-title">Product Earnings</h2>
           <div id="earningsContent">
-            <!-- Earnings breakdown will be loaded here -->
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Add Product Modal -->
     <div class="modal" id="productModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -631,17 +617,14 @@
       </div>
     </div>
 
-    <!-- Footer will be loaded by footer.js -->
     <div id="footer-placeholder"></div>
 
-    <!-- Component Scripts -->
     <script src="components/header.js"></script>
     <script src="components/footer.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/wishlist.js"></script>
 
-    <!-- Profile Page Script -->
     <script>
       let currentUser = null;
       let editingProductId = null;
@@ -679,10 +662,8 @@
         }
       }
 
-      // Load user profile
       async function loadUserProfile() {
         try {
-          // const response = await fetch('/api/user');
           const response = await fetch("/api/user", {
             credentials: "include",
           });
@@ -737,8 +718,6 @@
         );
         const sellerTabs = document.querySelectorAll(".seller-tab");
         const adminTabs = document.querySelectorAll(".admin-tab");
-
-        // Get cart and wishlist tab buttons
         const cartTab = document.querySelector(
           "[onclick=\"switchTab('cart')\"]",
         );
@@ -752,7 +731,6 @@
             el.style.display = "block";
           });
           if (becomeSellerSection) becomeSellerSection.style.display = "none";
-          // Show cart and wishlist for sellers
           if (cartTab) cartTab.style.display = "block";
           if (wishlistTab) wishlistTab.style.display = "block";
         } else if (currentUser.userType === "admin") {
@@ -764,18 +742,15 @@
             el.style.display = "block";
           });
           if (becomeSellerSection) becomeSellerSection.style.display = "none";
-          // Hide cart and wishlist tabs for admin
           if (cartTab) cartTab.style.display = "none";
           if (wishlistTab) wishlistTab.style.display = "none";
         } else {
           badge.textContent = "Customer";
           if (becomeSellerSection) becomeSellerSection.style.display = "block";
-          // Show cart and wishlist for regular users
           if (cartTab) cartTab.style.display = "block";
           if (wishlistTab) wishlistTab.style.display = "block";
         }
 
-        // Fill form
         document.getElementById("firstName").value =
           currentUser.firstName || "";
         document.getElementById("lastName").value = currentUser.lastName || "";
@@ -946,15 +921,10 @@
     let totalSold = 0;
     let totalProducts = 0;
 
-    // ================================
-    // ✅ ADMIN LOGIC
-    // ================================
     if (currentUser && currentUser.userType === "admin") {
 
       totalEarnings = Number(earnings.totalAdminEarnings ?? 0);
       totalSold = Number(earnings.totalItemsSold ?? 0);
-
-      // For admin, fetch their own added products
       const adminProductsRes = await fetch("/api/products/seller", {
         credentials: "include",
       });
@@ -968,9 +938,6 @@
       }
 
     }
-    // ================================
-    // ✅ SELLER LOGIC
-    // ================================
     else {
 
       totalEarnings = Number(earnings.totalEarnings ?? 0);
@@ -978,10 +945,6 @@
       totalProducts = Number(earnings.totalProducts ?? 0);
 
     }
-
-    // ================================
-    // ✅ UPDATE UI
-    // ================================
     document.getElementById("totalEarnings").textContent =
       `₹${totalEarnings.toLocaleString("en-IN")}`;
 
@@ -1022,80 +985,6 @@
     console.error("Error loading earnings:", error);
   }
 }
-      // async function loadEarnings() {
-      //   try {
-      //     const endpoint =
-      //       currentUser && currentUser.userType === "admin"
-      //         ? "/api/admin/earnings"
-      //         : "/api/seller/earnings";
-      //     const response = await fetch(endpoint, { credentials: "include" });
-      //     const earnings = await response.json().catch(() => ({}));
-
-      //     if (!response.ok) {
-      //       throw new Error(earnings.error || "Failed to load earnings");
-      //     }
-
-      //     let list = earnings.productsList || earnings.products || [];
-      //     const totalEarnings = Number(
-      //       currentUser && currentUser.userType === "admin"
-      //         ? (earnings.totalRevenue ?? earnings.totalEarnings ?? 0)
-      //         : (earnings.totalEarnings ?? earnings.totalRevenue ?? 0),
-      //     );
-      //     const totalSold = Number(
-      //       currentUser && currentUser.userType === "admin"
-      //         ? (earnings.totalItemsSold ?? 0)
-      //         : (earnings.totalSold ?? earnings.totalItemsSold ?? 0),
-      //     );
-      //     let totalProducts = Array.isArray(list)
-      //       ? list.length
-      //       : Number(earnings.totalProducts ?? earnings.products ?? 0);
-
-      //     // Keep admin earnings product count aligned with "My Products" tab source.
-      //     if (currentUser && currentUser.userType === "admin") {
-      //       const adminProductsRes = await fetch("/api/products/seller", {
-      //         credentials: "include",
-      //       });
-      //       if (adminProductsRes.ok) {
-      //         const adminProducts = await adminProductsRes.json();
-      //         if (Array.isArray(adminProducts)) {
-      //           list = adminProducts;
-      //           totalProducts = adminProducts.length;
-      //         }
-      //       }
-      //     }
-
-      //     document.getElementById("totalEarnings").textContent =
-      //       `\u20B9${totalEarnings.toLocaleString("en-IN")}`;
-      //     document.getElementById("totalSold").textContent = totalSold;
-      //     document.getElementById("totalProducts").textContent = totalProducts;
-
-      //     const earningsContent = document.getElementById("earningsContent");
-      //     if (!Array.isArray(list) || list.length === 0) {
-      //       earningsContent.innerHTML = "<p>No products yet.</p>";
-      //       return;
-      //     }
-
-      //     earningsContent.innerHTML = `
-      //       <div class="product-list">
-      //         ${list
-      //           .map(
-      //             (product) => `
-      //           <div class="product-item">
-      //             <div class="product-item-details">
-      //               <h3>${product.name}</h3>
-      //               <p>Sold: ${Number(product.sold || 0)} units | Earnings: \u20B9${Number(product.earnings || 0).toLocaleString("en-IN")}</p>
-      //             </div>
-      //           </div>
-      //         `,
-      //           )
-      //           .join("")}
-      //       </div>
-      //     `;
-      //   } catch (error) {
-      //     console.error("Error loading earnings:", error);
-      //   }
-      // }
-
       async function updateCartQuantity(productId, quantity) {
         try {
           await fetch(`/api/cart/${productId}`, {
@@ -1278,18 +1167,13 @@
             console.error("Error updating profile:", error);
           }
         });
-
-      // Close modal on outside click
       document.getElementById("productModal").addEventListener("click", (e) => {
         if (e.target.id === "productModal") {
           closeProductModal();
         }
       });
 
-      // Initialize
       loadUserProfile();
-
-      // Toggle custom category input based on dropdown selection
       (function () {
         const categorySelect = document.getElementById("productCategorySelect");
         const customGroup = document.getElementById("customCategoryGroup");
