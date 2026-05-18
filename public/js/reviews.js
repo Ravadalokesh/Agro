@@ -1,4 +1,3 @@
-// Product Review System
 class ReviewManager {
   constructor() {
     this.currentProductId = null;
@@ -7,7 +6,6 @@ class ReviewManager {
   }
 
   initializeModal() {
-    // Create review modal if it doesn't exist
     if (!document.getElementById('reviewModal')) {
       const modalHTML = `
         <div class="modal" id="reviewModal">
@@ -44,8 +42,6 @@ class ReviewManager {
       `;
       
       document.body.insertAdjacentHTML('beforeend', modalHTML);
-      
-      // Add modal styles
       const style = document.createElement('style');
       style.textContent = `
         .modal {
@@ -109,16 +105,13 @@ class ReviewManager {
         }
       `;
       document.head.appendChild(style);
-      
-      // Add star rating interaction
       const starInput = document.getElementById('starInput');
       if (starInput) {
         starInput.addEventListener('click', (e) => {
           if (e.target.classList.contains('star-btn')) {
             const value = e.target.getAttribute('data-value');
             document.getElementById('ratingInput').value = value;
-            
-            // Update star display
+        
             starInput.querySelectorAll('.star-btn').forEach((star, index) => {
               if (index < value) {
                 star.classList.add('active');
@@ -139,13 +132,10 @@ class ReviewManager {
     document.getElementById('reviewModalTitle').textContent = `Review: ${productName}`;
     document.getElementById('reviewForm').reset();
     document.getElementById('ratingInput').value = '';
-    
-    // Reset star display
     document.querySelectorAll('.star-btn').forEach(star => {
       star.classList.remove('active');
     });
-    
-    // Load existing reviews
+
     await this.loadReviews(productId);
     
     document.getElementById('reviewModal').classList.add('active');
@@ -219,8 +209,7 @@ class ReviewManager {
         const result = await response.json();
         alert('Review submitted successfully!');
         this.closeReviewModal();
-        
-        // Reload the page to show updated ratings
+ 
         window.location.reload();
       } else if (response.status === 401) {
         alert('Please login to submit a review');
@@ -236,10 +225,7 @@ class ReviewManager {
   }
 }
 
-// Initialize review manager
 const reviewManager = new ReviewManager();
-
-// Close modal on outside click
 document.addEventListener('click', (e) => {
   if (e.target.id === 'reviewModal') {
     reviewManager.closeReviewModal();
